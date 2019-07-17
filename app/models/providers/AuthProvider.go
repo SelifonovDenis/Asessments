@@ -1,12 +1,13 @@
 package providers
 
 import (
+	"Asessments/app/models/entity"
+	"Asessments/app/models/mappers"
 	"database/sql"
-	"fmt"
 	_ "github.com/lib/pq"
 )
 
-func main() {
+func Login(user entity.User) (entity.User,error) {
 
 	connStr := "user=admin password=zxcvqwer dbname=asessments sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
@@ -15,11 +16,9 @@ func main() {
 	}
 	defer db.Close()
 
-	result, err := db.Exec("SELECT * FROM asessment")
-	if err != nil{
-		panic(err)
+	user, err = mappers.Get(db, user)
+	if err != nil {
+		return user,err
 	}
-
-	fmt.Println(result.LastInsertId())  // не поддерживается
-	fmt.Println(result.RowsAffected())  // количество добавленных строк
+	return user,nil
 }

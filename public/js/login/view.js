@@ -4,17 +4,17 @@ webix.ready(function(){
 
     webix.ui({
         view:"window",
-        id:"changeWindow",
+        id:"loginWindow",
         position:"center",
         width: 500,
         head:"Добро пожаловать",
         body:{
             type:"space",
             rows:[
-                {view:"text", id:"changeFamily", label:"Логин"},
-                {view:"text", id:"changeName", label:"Пароль"},
+                {view:"text", id:"login", label:"Логин"},
+                {view:"text", id:"password", label:"Пароль"},
                 {height:20},
-                {view:"button", value:"Войти"}
+                {view:"button", id:"Auth", value:"Войти"}
             ]
         }
     }).show();
