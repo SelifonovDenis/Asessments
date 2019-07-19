@@ -7,18 +7,18 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func Login(user entity.User) (entity.User,error) {
+func Login(user entity.User) (u entity.User, err error) {
 
 	connStr := "user=admin password=zxcvqwer dbname=asessments sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
-		panic(err)
+		return
 	}
 	defer db.Close()
 
-	user, err = mappers.Get(db, user)
+	u, err = mappers.Get(db, user)
 	if err != nil {
-		return user,err
+		return
 	}
-	return user,nil
+	return
 }

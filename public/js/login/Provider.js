@@ -1,18 +1,19 @@
-function loginJSON(str)
+import {loginResult} from "./component";
+
+export function loginJSON(data)
 {
-    webix.ready(function ()
-    {
-        $.ajax({
-            url: "login",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            datatype: 'json',
-            data: {"json":JSON.stringify(str)},
-            success:function(data){
-                var id = JSON.parse(data[0]);
-                var id_employee = JSON.parse(data[0]);
-                loginResult(id, id_employee);
-            }
-        });
-    });
+    var url = 'login';
+
+    fetch(url, {
+        method: 'POST', // или 'PUT'
+        body: JSON.stringify(data), // data может быть типа `string` или {object}!
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json())
+        .then(response => loginResult(JSON.stringify(response)))
+        .catch(error => alert('Ошибка:', error));
+
 }
+
+

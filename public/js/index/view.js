@@ -1,5 +1,5 @@
 //Кандидаты
-var candidate = [];
+export var candidate = [];
 	candidate [0] = {
 		id: 1,
 		active:0,
@@ -36,7 +36,7 @@ var candidate = [];
 
 
 
-webix.ready(function(){
+export function welcome(){
 	var heightScreen = document.body.clientHeight;
 	var widthScreen = document.body.clientWidth;
     webix.ui({
@@ -236,7 +236,7 @@ webix.ready(function(){
 			]
 		}
 	}).hide();
-});
+}
 
 
 

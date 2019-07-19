@@ -3,24 +3,30 @@ package mappers
 import (
 	"Asessments/app/models/entity"
 	"database/sql"
-	"fmt"
 	_ "github.com/lib/pq"
 )
 
+func Get(db *sql.DB, user entity.User) (u entity.User, err error) {
+	u = entity.User{}
+	rows, err := db.Query(`
+		SELECT * FROM asessment.login
+		WHERE 
+		      login = $1 
+		  AND 
+		      password = $2
+	`, user.Login, user.Password)
 
-func Get(db *sql.DB, user entity.User) (entity.User, error){
-	rows, err := db.Query("select * from asessments.Logins WHERE login = $1 AND password = $2", user.Login, user.Password)
 	if err != nil {
-		return user,err
+		return
 	}
 	defer rows.Close()
-	u:=entity.User{}
-	for rows.Next(){
-		err := rows.Scan(&u.Id, &u.Login, &u.Password, &u.Role, &u.Id_employ)
-		if err != nil{
-			fmt.Println(err)
-			continue
+
+	for rows.Next() {
+		err = rows.Scan(&u.Id, &u.Login, &u.Password, &u.Role, &u.Id_employ)
+		if err != nil {
+			return
 		}
+
 	}
-	return u,err
+	return
 }

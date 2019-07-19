@@ -2,27 +2,27 @@ package controllers
 
 import (
 	"Asessments/app/models/entity"
-	"fmt"
-	"github.com/revel/revel"
 	"Asessments/app/models/providers"
+	"github.com/revel/revel"
 )
-
-
 
 func (c App) Login() revel.Result {
 	return c.Render()
 }
 
-func (c App) Auth() revel.Result{
-
-	login := "admin"
-	password:= "admin"
-	user, err := providers.Login(entity.User{0,login,password,"",0})
+func (c App) Auth() revel.Result {
+	user := entity.User{}
+	err := c.Params.BindJSON(&user) //уточнить
 	if err != nil {
-		fmt.Println("код ошибки 500")
-		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
 	}
-	fmt.Println("код 200")
-	fmt.Println(user)
-	return c.Render()
+
+	user, err = providers.Login(user)
+	if err != nil {
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+
+	return c.RenderJSON(user)
 }

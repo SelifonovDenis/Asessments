@@ -1,31 +1,30 @@
+import {candidate} from "./view";
 
-function redirect(){
-    window.location.href = "workers.html";
+export function redirect(str){
+    window.location.href = str;
 }
-function redirect2(){
-    window.location.href = "asessments.html";
-}
-function viewAdd(){
+
+export function viewAdd(){
     $$("add").show();
 }
 
-function windowchange() {
+export function windowchange() {
     $$("changeWindow").show();
 }
 
 //отображение атрибутов кандидата в окне изменения
-function viewChange(){
-    $$("changeFamily").setValue($$("rfamily").getInputNode().value);
-    $$("changeName").setValue($$("rname").getInputNode().value);
-    $$("changeSubname").setValue($$("rsubname").getInputNode().value);
-    $$("changePhone").setValue($$("rphone").getInputNode().value);
-    $$("changeEmail").setValue($$("remail").getInputNode().value);
-    $$("changeStatus").setValue($$("rstatus").getInputNode().value);
-    $$("changeDate").setValue($$("rdate").getInputNode().value);
+export function viewChange(){
+    $$("changeFamily").setValue($$("rfamily").getValue());
+    $$("changeName").setValue($$("rname").getValue());
+    $$("changeSubname").setValue($$("rsubname").getValue());
+    $$("changePhone").setValue($$("rphone").getValue());
+    $$("changeEmail").setValue($$("remail").getValue());
+    $$("changeStatus").setValue($$("rstatus").getValue());
+    $$("changeDate").setValue($$("rdate").getValue());
 }
 
 //отображение атрибутов выбранного кандидата в правой части
-function view(id){
+export function view(id){
     $$("changeButton").enable();
     $$("butAddDate").enable();
     candidate.forEach(function(elem, index){
@@ -42,6 +41,6 @@ function view(id){
     });
 }
 
-function viewAddDate(){
+export function viewAddDate(){
     $$("addDate").show();
 }
