@@ -1,0 +1,27 @@
+{
+  "name": "asessments",
+  "version": "1.0.0",
+  "description": "A high-productivity web framework for the [Go language](http://www.golang.org/).",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p",
+    "watch": "webpack --watch --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SelifonovDenis/Asessments.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SelifonovDenis/Asessments/issues"
+  },
+  "homepage": "https://github.com/SelifonovDenis/Asessments#readme",
+  "devDependencies": {
+    "webpack": "^4.36.1"
+  }
+}
