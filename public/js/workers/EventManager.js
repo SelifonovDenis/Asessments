@@ -1,10 +1,16 @@
-webix.ready(function(){
-    //клик по кнопке "справочная информация"
+import {viewAdd} from "./component";
+import {redirect} from "./component";
+import {view} from "./component";
+import {viewAddDate} from "./component";
+import {viewChange} from "./component";
+
+export function Manager(){
+
     $$("redirect").attachEvent("onItemClick",function(){
-        redirect();
+        redirect("index.html")
     });
     $$("redirect2").attachEvent("onItemClick",function(){
-        redirect2();
+        redirect("asessments.html");
     });
     //клик по кнопке "добавить кандидата" на тулбаре
     $$("viewAdd").attachEvent("onItemClick",function(){
@@ -22,4 +28,4 @@ webix.ready(function(){
     $$("butAddDate").attachEvent("onItemClick",function(){
         viewAddDate();
     });
-});
+}

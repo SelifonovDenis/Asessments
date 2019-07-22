@@ -6,6 +6,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+//Get Проверка логина и пароля по БД
 func Get(db *sql.DB, user entity.User) (u entity.User, err error) {
 	u = entity.User{}
 	rows, err := db.Query(`

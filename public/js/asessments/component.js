@@ -1,19 +1,16 @@
 
-function viewAdd(){
+export function viewAdd(){
     $$("add").show();
 }
-function viewAddDate(){
+export function viewAddDate(){
     $$("addDate").show();
 }
-function redirect(){
-    window.location.href = "index.html";
-}
-function redirect2(){
-    window.location.href = "workers.html";
+export function redirect(str){
+    window.location.href = str;
 }
 
 //отображение атрибутов кандидата в окне изменения
-function viewChange(id){
+export function viewChange(id){
     asessment.forEach(function(elem, index){
         if(id === elem.id)
         {
@@ -25,7 +22,6 @@ function viewChange(id){
     });
 
 }
-
 //Кандидаты
 var candidate = [];
 candidate [0] = {
@@ -63,7 +59,7 @@ candidate [2] = {
 }
 
 //отображение назначенных дат собеседований выбранного сотрудника в правой части
-function view(id){
+export function view(id){
     $$("changeButton").enable();
     $$("butAddDate").enable();
     $$("candidates").clearAll();

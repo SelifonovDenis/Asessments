@@ -23,5 +23,8 @@
   "homepage": "https://github.com/SelifonovDenis/Asessments#readme",
   "devDependencies": {
     "webpack": "^4.36.1"
+  },
+  "dependencies": {
+    "webpack-cli": "^3.3.6"
   }
 }

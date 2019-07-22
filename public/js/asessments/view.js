@@ -1,5 +1,5 @@
 //Собеседования
-var asessment = [];
+export var asessment = [];
 asessment [0] = {
 	id: 1,
 	active:0,
@@ -23,7 +23,7 @@ asessment [2] = {
 }
 
 //Сотрудники
-var worker = [];
+export var worker = [];
 worker [0] = {
 	id: 1,
 	active:0,
@@ -56,7 +56,7 @@ worker [2] = {
 }
 
 
-webix.ready(function(){
+export function welcome(){
 	var heightScreen = document.body.clientHeight;
 	var widthScreen = document.body.clientWidth;
 	//Левая часть
@@ -247,7 +247,7 @@ webix.ready(function(){
 		})
 	})
 
-});
+}
 
 
 

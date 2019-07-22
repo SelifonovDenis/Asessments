@@ -1,6 +1,6 @@
 
 import {welcome} from "./view";
-import {auth, Manager} from "./EventManager"
+import {Manager} from "./EventManager"
 webix.ready(function () {
     welcome();
     Manager();

@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+//Login - создание подключения к безе данных для проверки логина и пароля
 func Login(user entity.User) (u entity.User, err error) {
 
 	connStr := "user=admin password=zxcvqwer dbname=asessments sslmode=disable"

@@ -2,11 +2,14 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        login: './public/js/login/main.js',
-        index: './public/js/index/main.js'
+        'js/login/bundle.js': './public/js/login/main.js',
+        'js/index/bundle.js': './public/js/index/main.js',
+        'js/asessments/bundle.js': './public/js/asessments/main.js',
+        'js/workers/bundle.js': './public/js/workers/main.js',
     },
     output: {
-        filename: '[name].js',
-        path: path.resolve(__dirname, 'dist')
-    }
+        filename: '[name]',
+        path: path.resolve(__dirname, 'public')
+    },
+
 };

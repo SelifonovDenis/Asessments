@@ -1,18 +1,16 @@
-
-function viewAdd(){
+import {worker} from "./view"
+export function viewAdd(){
     $$("add").show();
 }
-function viewAddDate(){
+export function viewAddDate(){
     $$("addDate").show();
 }
-function redirect(){
-    window.location.href = "index.html";
+export function redirect(str){
+    window.location.href = str;
 }
-function redirect2(){
-    window.location.href = "asessments.html";
-}
+
 //отображение атрибутов кандидата в окне изменения
-function viewChange(id){
+export function viewChange(id){
     worker.forEach(function(elem, index){
         if(id === elem.id)
         {
@@ -26,7 +24,7 @@ function viewChange(id){
     });
 
 }
-var asessment = [];
+export var asessment = [];
 asessment [0] = {
     id: 1,
     active:0,
@@ -49,7 +47,7 @@ asessment [2] = {
     id_worker:1,
 }
 //отображение назначенных дат собеседований выбранного сотрудника в правой части
-function view(id){
+export function view(id){
     $$("changeButton").enable();
     $$("butAddDate").enable();
     $$("dates").clearAll();

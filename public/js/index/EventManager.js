@@ -16,7 +16,7 @@ export function Manager(){
     });
     //клик по кнопке "добавить кандидата" на тулбаре
     $$("viewAdd").attachEvent("onItemClick",function(){
-        viewAdd()
+        viewAdd();
     });
 //клик по кнопке "изменить" на тулбаре
     $$("changeButton").attachEvent("onItemClick",function(){
