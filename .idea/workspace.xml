@@ -2,44 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2fcf4645-5937-410f-87c8-e17830bb12d1" name="Default Changelist" comment="Connected webpack. Modified the bundle mapper-provider-controller">
-      <change afterPath="$PROJECT_DIR$/app/controllers/CAsessment.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/CCandidate.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/controllers/CEmployee.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/entity/Asessment.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/entity/Candidate.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/entity/Employee.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/mappers/AsessmentMapper.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/mappers/CandidateMapper.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/mappers/EmployeeMapper.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/providers/AsessmentProvider.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/providers/CandidateProvider.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/providers/EmployeeProvider.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/js/asessments/main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/js/workers/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/CAuth.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/CAuth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/mappers/AuthMapper.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/mappers/AuthMapper.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/providers/AuthProvider.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/providers/AuthProvider.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/App/Index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/App/Index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/App/Login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/App/Login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/App/asessments.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/App/asessments.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/App/workers.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/App/workers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/routes" beforeDir="false" afterPath="$PROJECT_DIR$/conf/routes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/bundle.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/login.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/asessments/EventManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/asessments/EventManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/asessments/component.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/asessments/component.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/asessments/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/asessments/view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/index/EventManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/index/EventManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/index/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/index/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/workers/EventManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/workers/EventManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/workers/component.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/workers/component.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/workers/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/workers/view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/CAsessment.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/CAsessment.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -113,11 +76,50 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/CAuth.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+            <state relative-caret-position="77">
+              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/controllers/CCandidate.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/controllers/CEmployee.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/models/mappers/CandidateMapper.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1054">
+              <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+              <folding>
+                <element signature="e#17#75#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/controllers/CAsessment.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="43" lean-forward="true" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -159,28 +161,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/conf/routes">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="58" lean-forward="true" selection-start-line="9" selection-start-column="58" selection-end-line="9" selection-end-column="58" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/app.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/js/index/view.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="99" column="44" lean-forward="true" selection-start-line="99" selection-start-column="44" selection-end-line="99" selection-end-column="44" />
+            <state relative-caret-position="119">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -253,10 +237,10 @@
         <option value="$PROJECT_DIR$/app/models/mappers/CandidateMapper.go" />
         <option value="$PROJECT_DIR$/app/controllers/app.go" />
         <option value="$PROJECT_DIR$/conf/routes" />
-        <option value="$PROJECT_DIR$/app/controllers/CAsessment.go" />
         <option value="$PROJECT_DIR$/app/models/providers/AuthProvider.go" />
         <option value="$PROJECT_DIR$/app/models/mappers/AuthMapper.go" />
         <option value="$PROJECT_DIR$/app/controllers/CAuth.go" />
+        <option value="$PROJECT_DIR$/app/controllers/CAsessment.go" />
       </list>
     </option>
   </component>
@@ -298,21 +282,7 @@
               <item name="Asessments" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="models" type="462c0819:PsiDirectoryNode" />
-              <item name="entity" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Asessments" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Asessments" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
               <item name="mappers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Asessments" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Asessments" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-              <item name="providers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Asessments" type="b2602c69:ProjectViewProjectNode" />
@@ -416,7 +386,7 @@
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1625964" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1625964" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Database Console" order="0" sideWeight="0.49807197" weight="0.3293011" />
@@ -430,7 +400,7 @@
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.4993573" weight="0.3293011" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.4903599" visible="true" weight="0.23790322" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4903599" visible="true" weight="0.23790322" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5096401" side_tool="true" visible="true" weight="0.23790322" />
       <window_info anchor="bottom" id="TypeScript" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -699,13 +669,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/CEmployee.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/index/view.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -720,41 +683,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/mappers/CandidateMapper.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="828">
-          <caret line="112" column="10" lean-forward="true" selection-start-line="112" selection-start-column="10" selection-end-line="112" selection-end-column="10" />
-          <folding>
-            <element signature="e#17#75#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/CCandidate.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="19" selection-start-column="19" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/app.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/CAsessment.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="50" lean-forward="true" selection-start-line="9" selection-start-column="50" selection-end-line="9" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -800,10 +732,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/mappers/CandidateMapper.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+          <folding>
+            <element signature="e#17#75#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/CAsessment.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="43" lean-forward="true" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/CAuth.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+        <state relative-caret-position="77">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/app.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/CEmployee.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/CCandidate.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
