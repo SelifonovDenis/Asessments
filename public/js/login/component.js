@@ -9,7 +9,7 @@ export function loginResult(user){
     user = JSON.parse(user);
     if (typeof user['Message'] == "undefined") {
         if(user.Id!="0") {
-            var url = "/candidates";
+            var url = "/candidateWorkspace";
             document.location.href = url;
         }
         else{

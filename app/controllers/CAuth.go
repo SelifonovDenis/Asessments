@@ -6,17 +6,12 @@ import (
 	"github.com/revel/revel"
 )
 
-type Auth struct {
+type Login struct {
 	*revel.Controller
 }
 
-func (c Auth) Login() revel.Result {
-	return c.RenderTemplate("App/Login.html")
-
-}
-
 //Auth Проверка логина и пароля
-func (c App) Auth() revel.Result {
+func (c Login) Auth() revel.Result {
 	user := entity.User{}
 	err := c.Params.BindJSON(&user) //уточнить
 	if err != nil {

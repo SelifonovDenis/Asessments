@@ -1,41 +1,3 @@
-//Кандидаты
-export var candidate = [];
-	candidate [0] = {
-		id: 1,
-		active:0,
-		family: "Иванов",
-		name: "Иван",
-		subname:"Иванович",
-		phone:"8 800 555 35 35",
-		email:"Ivan@mail.ru",
-		status:"Назначено собеседование",
-		date:"25.07.19"
-	}
-	candidate [1] = {
-		id: 2,
-		active:0,
-		family: "Петров",
-		name: "Петр",
-		subname:"Петрович",
-		phone:"8 500 444 44 44",
-		email:"petya@mail.ru",
-		status:"Принят на стажировку",
-		date:""
-	}
-	candidate [2] = {
-		id: 3,
-		active:0,
-		family: "Николаев",
-		name: "Игорь",
-		subname:"Николаевич",
-		phone:"8 333 333 22 22",
-		email:"Ivan@mail.ru",
-		status:"Отправлен оффер",
-		date:"25.07.19"
-	}
-
-
-
 export function welcome(){
 	var heightScreen = document.body.clientHeight;
 	var widthScreen = document.body.clientWidth;
@@ -51,9 +13,8 @@ export function welcome(){
 					],
 					css:"nav"
 				},
-				{view:"toolbar", elements:[
-					
-						{view:"button", value:"Кандидаты"},
+					{view:"toolbar", elements:[
+						{view:"button", id:"getTable", value:"Кандидаты"},
 						{view:"button", value:"Добавить кандидата", height:50, id:"viewAdd"},
 						{view:"button", id:"changeButton", value:"Изменить", disabled:true},
 						{view:"button", value:"Архив"},
@@ -89,15 +50,14 @@ export function welcome(){
 							view:"datatable",
 							id:"datatable",
 							columns:[
-								{ id:"active", header: "", template:"{common.checkbox()}", width:30},
-								{ id:"id",    header:"Id", width:30},
-								{ id:"family", header:"Фамилия",fillspace:true},
-								{ id:"name", header:"Имя",fillspace:true},
-								{ id:"subname", header:"Отчество",fillspace:true},
-								{ id:"status", header:["Статус", {content:"selectFilter"}], width:250},
-								{ id:"date", header:["Дата собеседования", {content:"selectFilter"}], width:200}
+
+								{ id:"Id",    header:"Id", width:30},
+								{ id:"First_name",  header:"Фамилия",fillspace:true},
+								{ id:"Last_name", header:"Имя",fillspace:true},
+								{ id:"Middle_name", header:"Отчество",fillspace:true},
+								{ id:"Status", header:["Статус", {content:"selectFilter"}], width:250},
+								{ id:"Date", header:["Дата собеседования", {content:"selectFilter"}], width:200}
 							],
-							data: candidate,
 							select:"row",
 							height: heightScreen-100	
 						}
@@ -218,21 +178,21 @@ export function welcome(){
 		body:{
 			type:"space",
 			rows:[
-				{view:"text", name:"family", label:"Фамилия"},
-				{view:"text", name:"name", label:"Имя"},
-				{view:"text", name:"subname", label:"Отчество"},
-				{view:"text", name:"phone", label:"Телефон"},
-				{view:"text", name:"address", label:"Почта"},
+				{view:"text", id:"addFirstName", label:"Фамилия"},
+				{view:"text", id:"addLastName", label:"Имя"},
+				{view:"text", id:"addMiddleName", label:"Отчество"},
+				{view:"text", id:"addPhone", label:"Телефон"},
+				{view:"text", id:"addEmail", label:"Почта"},
 				{
 					view:"combo",
 					label: 'Статус',
-					id:"status",
+					id:"addStatus",
 					options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку"]
 				},
-				{view:"text", name:"date", label:"Дата собеседования", labelWidth: 150},
+				{view:"text", id:"addDate", label:"Дата собеседования", labelWidth: 150},
 				{height:20},
 				{view:"button", value:"Назначить дату собеседования"},
-				{view:"button", value:"Добавить кандидата"},
+				{view:"button", id:"addCandidat", value:"Добавить кандидата"},
 			]
 		}
 	}).hide();

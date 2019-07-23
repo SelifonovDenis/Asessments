@@ -7,10 +7,10 @@ import {viewChange} from "./component";
 export function Manager(){
 
     $$("redirect").attachEvent("onItemClick",function(){
-        redirect("index.html")
+        redirect("candidateWorkspace")
     });
     $$("redirect2").attachEvent("onItemClick",function(){
-        redirect("asessments.html");
+        redirect("assessmentWorkspace");
     });
     //клик по кнопке "добавить кандидата" на тулбаре
     $$("viewAdd").attachEvent("onItemClick",function(){

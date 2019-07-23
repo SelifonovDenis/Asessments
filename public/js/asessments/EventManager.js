@@ -7,10 +7,10 @@ import {viewChange} from "./component";
 export function Manager(){
     //клик по кнопке "справочная информация"
     $$("redirect").attachEvent("onItemClick",function(){
-        redirect("index.html");
+        redirect("candidateWorkspace");
     });
     $$("redirect2").attachEvent("onItemClick",function(){
-        redirect("workers.html");
+        redirect("workerWorkspace");
     });
     //клик по кнопке "добавить кандидата" на тулбаре
     $$("viewAdd").attachEvent("onItemClick",function(){

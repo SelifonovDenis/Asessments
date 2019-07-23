@@ -7,9 +7,15 @@ module:testrunner
 # module:jobs
 
 
-GET     /                                       Auth.Login
-GET     /candidates                             App.Index
-POST    /login                                  App.Auth
+GET     /                                       App.Login
+GET     /candidateWorkspace                     App.Index
+GET     /workerWorkspace                        App.Worker
+GET     /assessmentWorkspace                    App.Assessment
+POST    /login                                  Login.Auth
+GET     /candidate                              CCandidate.GetCandidateTable
+PUT     /candidate                              CCandidate.AddCandidate
+GET     /candidate/:id                          CCandidate.GetCandidate
+
 
 
 # Ignore favicon requests

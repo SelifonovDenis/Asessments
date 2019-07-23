@@ -6,122 +6,108 @@ import (
 )
 
 //GetCandidateTable получить данные о кандидате нужные только для таблицы
-func GetCandidateTable(db *sql.DB) (Candidates []entity.Candidate, err error) {
-	rows, err := db.Query(`SELECT id, first_name, last_name, middle_name, status, id_asessment FROM asessment.candidate`)
+func GetCandidateTable(db *sql.DB) (*[]entity.CandidateTable, error) {
+
+	Candidates := []entity.CandidateTable{}
+
+	rows, err := db.Query(`
+	  	SELECT candidate.id, first_name, last_name, middle_name, status, date 
+	  	FROM asessments.asessment.candidate
+		LEFT JOIN asessments.asessment.asessment
+		ON id_asessment = asessment.id
+		ORDER BY candidate.id
+	  	`)
 	if err != nil {
-		return
+		return &Candidates, err
 	}
 	defer rows.Close()
 
-	Candidates = []entity.Candidate{}
+
 	for rows.Next() {
-		candidate := entity.Candidate{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Id_asessment)
+		candidate := entity.CandidateTable{}
+		date :=sql.NullString{}
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &date)
 		if err != nil {
-			return
+			return &Candidates, err
+		}
+		if date.Valid{
+			candidate.Date = date.String
 		}
 		Candidates = append(Candidates,candidate)
 	}
-	return
+	return &Candidates, err
 }
+
+
+
 //GetCandidate Прлучить кандидата по id
-func GetCandidate(db *sql.DB, Candidate entity.Candidate) (candidate entity.Candidate, err error) {
+func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, error) {
 	rows, err := db.Query(`
-		SELECT * FROM asessment.candidate
+		SELECT * FROM asessments.asessment.candidate
 		WHERE 
 			id = $1
-		`, Candidate.Id)
+		`, candidate.Id)
 	if err != nil {
-		return
+		return candidate,err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		candidate = entity.Candidate{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Id_asessment)
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status, &candidate.Id_asessment)
 		if err != nil {
-			return
+			return candidate,err
 		}
 	}
-	return
+	return candidate,err
 }
 
 //AddCandidate Добавить кандидата
 func AddCandidate(db *sql.DB, candidate entity.Candidate) (int, error){
 	var id int
-	err := db.QueryRow(`INSERT INTO asessments.candidate
+
+	err := db.QueryRow(`
+	INSERT INTO asessments.asessment.candidate
 		(first_name, last_name, middle_name, phone, email, status)
-	values
+	VALUES 
 		($1, $2, $3, $4, $5 ,$6)
+	RETURNING id;
 	`,	candidate.First_name, candidate.Last_name, candidate.Middle_name, candidate.Phone, candidate.Email, candidate.Status).Scan(&id)
 
 	if err != nil{
 		return 0, err
 	}
+
  	return id, nil
 }
 
-// UpdateIdAsessment Изменить дату собеседования
-func UpdateIdAsessment(db *sql.DB, candidate entity.Candidate, asessment entity.Asessment) (int, error){
-	result, err := db.Exec(`
-		update asessments.candidate
+// UpdateCandidate изсенить данные о кандидате
+func UpdateCandidate(db *sql.DB, column, result string, id int ) (err error){
+	_, err = db.Exec(`
+		update asessments.asessments.candidate
 		set 
-			id_asessment = $1 
+			`+column+` = $1 
 		where 
 			id = $2
-	`, asessment.Id, candidate.Id)
+	`, result, id)
 
 	if err != nil{
-		return 0, err
+		return
 	}
-
-	id, err:=result.RowsAffected()
-	if err != nil{
-		return 0, err
-	}
-
-	return int(id), nil
+	return
 }
 
-// UpdateStatus изменить статус кандидата
-func UpdateStatus(db *sql.DB, candidate entity.Candidate) (int, error){
-	result, err := db.Exec(`
-		update asessments.candidate
+// UpdateCandidate изсенить данные о кандидате
+func UpdateIdAssessmentCandidate(db *sql.DB, column string, result int, id int ) (err error){
+	_, err = db.Exec(`
+		update asessments.asessments.candidate
 		set 
-			status = $1 
+			`+column+` = $1 
 		where 
 			id = $2
-	`, candidate.Status, candidate.Id)
+	`, result, id)
 
 	if err != nil{
-		return 0, err
+		return
 	}
-
-	id, err:=result.RowsAffected()
-	if err != nil{
-		return 0, err
-	}
-
-	return int(id), nil
-}
-
-//DeleteCandidate удалить кандидата по id
-func DeleteCandidate(db *sql.DB, candidate entity.Candidate) (int, error){
-
-	result, err := db.Exec(`
-	DELETE FROM Products 
-	where 
-		id = $1
-	`, candidate.Id)
-
-	if err != nil{
-		return 0, err
-	}
-
-	id, err:=result.RowsAffected()
-	if err != nil{
-		return 0, err
-	}
-
-	return int(id), nil
+	return
 }

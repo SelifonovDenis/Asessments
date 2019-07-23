@@ -3,3 +3,7 @@ tmp/
 routes/
 .idea/
 node_modules/
+public/js/asessments/bundle.js
+public/js/index/bundle.js
+public/js/login/bundle.js
+public/js/workers/bundle.js
