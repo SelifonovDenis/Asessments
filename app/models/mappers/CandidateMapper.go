@@ -6,36 +6,38 @@ import (
 )
 
 //GetCandidateTable получить данные о кандидате нужные только для таблицы
-func GetCandidateTable(db *sql.DB) (*[]entity.CandidateTable, error) {
+func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 
-	Candidates := []entity.CandidateTable{}
+	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, status, date 
+	  	SELECT candidate.id, first_name, last_name, middle_name, status, id_asessment, date
 	  	FROM asessments.asessment.candidate
 		LEFT JOIN asessments.asessment.asessment
 		ON id_asessment = asessment.id
 		ORDER BY candidate.id
 	  	`)
 	if err != nil {
-		return &Candidates, err
+		return Candidates, err
 	}
 	defer rows.Close()
 
 
 	for rows.Next() {
-		candidate := entity.CandidateTable{}
-		date :=sql.NullString{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &date)
+		candidate := entity.Candidate{}
+		date := sql.NullString{}
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Asessment.Id, &date)
+
 		if err != nil {
-			return &Candidates, err
+			return Candidates, err
 		}
 		if date.Valid{
-			candidate.Date = date.String
+			candidate.Asessment.Date = date.String
 		}
-		Candidates = append(Candidates,candidate)
+
+		Candidates = append(Candidates,&candidate)
 	}
-	return &Candidates, err
+	return Candidates, err
 }
 
 
@@ -43,9 +45,11 @@ func GetCandidateTable(db *sql.DB) (*[]entity.CandidateTable, error) {
 //GetCandidate Прлучить кандидата по id
 func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, error) {
 	rows, err := db.Query(`
-		SELECT * FROM asessments.asessment.candidate
-		WHERE 
-			id = $1
+		SELECT candidate.id, first_name, last_name, middle_name, phone, email, status, id_asessment, date
+	  	FROM asessments.asessment.candidate		
+		LEFT JOIN asessments.asessment.asessment
+		ON id_asessment = asessment.id
+		WHERE candidate.id = $1	
 		`, candidate.Id)
 	if err != nil {
 		return candidate,err
@@ -53,42 +57,50 @@ func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, e
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status, &candidate.Id_asessment)
+		date := sql.NullString{}
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status, &candidate.Asessment.Id, &date)
 		if err != nil {
 			return candidate,err
+		}
+		if date.Valid{
+			candidate.Asessment.Date = date.String
 		}
 	}
 	return candidate,err
 }
 
 //AddCandidate Добавить кандидата
-func AddCandidate(db *sql.DB, candidate entity.Candidate) (int, error){
-	var id int
+func AddCandidate(db *sql.DB, candidate entity.Candidate) (err error){
 
-	err := db.QueryRow(`
+	_, err = db.Exec(`
 	INSERT INTO asessments.asessment.candidate
-		(first_name, last_name, middle_name, phone, email, status)
+		(first_name, last_name, middle_name, phone, email, status, id_asessment)
 	VALUES 
-		($1, $2, $3, $4, $5 ,$6)
+		($1, $2, $3, $4, $5 ,$6, $7)
 	RETURNING id;
-	`,	candidate.First_name, candidate.Last_name, candidate.Middle_name, candidate.Phone, candidate.Email, candidate.Status).Scan(&id)
+	`,	candidate.First_name, candidate.Last_name, candidate.Middle_name, candidate.Phone, candidate.Email, candidate.Status, candidate.Asessment.Id)
 
 	if err != nil{
-		return 0, err
+		return err
 	}
-
- 	return id, nil
+ 	return nil
 }
 
 // UpdateCandidate изсенить данные о кандидате
-func UpdateCandidate(db *sql.DB, column, result string, id int ) (err error){
+func UpdateCandidate(db *sql.DB, candidate *entity.Candidate) (err error){
 	_, err = db.Exec(`
-		update asessments.asessments.candidate
-		set 
-			`+column+` = $1 
-		where 
-			id = $2
-	`, result, id)
+		UPDATE asessments.asessment.candidate
+		SET 
+			first_name = $1, 
+		    last_name = $2,
+		    middle_name = $3,
+		    phone = $4,
+			email = $5,
+		    status = $6,
+		    id_asessment = $7
+		WHERE 
+			id = $8
+	`,candidate.First_name, candidate.Last_name, candidate.Middle_name, candidate.Phone, candidate.Email, candidate.Status, candidate.Asessment.Id)
 
 	if err != nil{
 		return
@@ -96,18 +108,3 @@ func UpdateCandidate(db *sql.DB, column, result string, id int ) (err error){
 	return
 }
 
-// UpdateCandidate изсенить данные о кандидате
-func UpdateIdAssessmentCandidate(db *sql.DB, column string, result int, id int ) (err error){
-	_, err = db.Exec(`
-		update asessments.asessments.candidate
-		set 
-			`+column+` = $1 
-		where 
-			id = $2
-	`, result, id)
-
-	if err != nil{
-		return
-	}
-	return
-}

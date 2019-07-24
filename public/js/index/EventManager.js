@@ -6,6 +6,7 @@ import {view} from "./component";
 import {viewAddDate} from "./component";
 import {GetTable} from "./component"
 import {GetCandidateAttr} from "./component"
+import {SaveChange} from "./component"
 
 export function Manager(){
     //клик по кнопке "справочная информация"
@@ -41,5 +42,9 @@ export function Manager(){
 
     $$("addCandidat").attachEvent("onItemClick",function(){
         GetCandidateAttr();
+    });
+
+    $$("saveChange").attachEvent("onItemClick",function(){
+        SaveChange();
     });
 }

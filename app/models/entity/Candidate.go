@@ -8,5 +8,5 @@ type Candidate struct {
 	Phone        string
 	Email        string
 	Status       string
-	Id_asessment int
+	Asessment    Asessment
 }

@@ -17,9 +17,9 @@ export function windowchange() {
 
 //отображение атрибутов кандидата в окне изменения
 export function viewChange(){
-    $$("changeFamily").setValue($$("rfamily").getValue());
-    $$("changeName").setValue($$("rname").getValue());
-    $$("changeSubname").setValue($$("rsubname").getValue());
+    $$("changeFirstName").setValue($$("rfamily").getValue());
+    $$("changeLastName").setValue($$("rname").getValue());
+    $$("changeMiddleName").setValue($$("rsubname").getValue());
     $$("changePhone").setValue($$("rphone").getValue());
     $$("changeEmail").setValue($$("remail").getValue());
     $$("changeStatus").setValue($$("rstatus").getValue());
@@ -31,6 +31,7 @@ export function viewChange(){
 export function view(id){
     $$("changeButton").enable();
     $$("butAddDate").enable();
+    $$("butRelocateArchive").enable();
     GetCandidate(id);
 
 }
@@ -44,7 +45,7 @@ export function viewCandidate(candidate){
         $$("rphone").setValue(candidate.Phone);
         $$("remail").setValue(candidate.Email);
         $$("rstatus").setValue(candidate.Status);
-        $$("rdate").setValue(candidate.Date);
+        $$("rdate").setValue(candidate.Asessment.Date);
     }
     else {
         alert(candidates.Message)
@@ -57,23 +58,20 @@ export function viewAddDate(){
 
 
 export function GetTable(){
-    GetCandidates();
+    var c;
+    GetCandidates().then(function (candidates){
+        if (typeof candidates['Message'] == "undefined") {
+            $$("datatable").clearAll();
+            candidates.forEach(function(elem, index){
+                $$("datatable").add(elem)
+            });
+        }
+        else {
+            alert(candidates.Message.value)
+        }
+    });
 }
 
-
-
-export function AddToTable(candidates){
-    candidates = JSON.parse(candidates);
-    if (typeof candidates['Message'] == "undefined") {
-        $$("datatable").clearAll();
-        candidates.forEach(function(elem, index){
-            $$("datatable").add(elem)
-        });
-    }
-    else {
-        alert(candidates.Message.value)
-    }
-}
 
 export function GetCandidateAttr(){
     var data = {
@@ -85,7 +83,8 @@ export function GetCandidateAttr(){
         Status:$$("addStatus").getValue(),
         Date:$$("addDate").getValue(),
     };
-    if (data.First_name !== "" && data.Last_name !== "" && data.Middle_name !== "" && data.Phone !== "" && data.Email !== "" && data.Status !== "")
+
+    if ($$("addForm").validate())
     {
         AddCandidate(data)
     }
@@ -99,4 +98,24 @@ export function GetCandidateAttr(){
 export function AddResult() {
     $$("add").hide();
     GetTable();
+}
+
+export function SaveChange(){
+    var data = {
+        First_name: $$("changeFirstName").getValue(),
+        Last_name: $$("changeLastName").getValue(),
+        Middle_name: $$("changeMiddleName").getValue(),
+        Phone:$$("changePhone").getValue(),
+        Email:$$("changeEmail").getValue(),
+        Status:$$("changeStatus").getValue(),
+        Date:$$("changeDate").getValue(),
+    };
+
+    if ($$("changeForm").validate())
+    {
+        ChangeCandidate(data)
+    }
+    else {
+        webix.message("Заполните все поля")
+    }
 }

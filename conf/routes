@@ -14,7 +14,9 @@ GET     /assessmentWorkspace                    App.Assessment
 POST    /login                                  Login.Auth
 GET     /candidate                              CCandidate.GetCandidateTable
 PUT     /candidate                              CCandidate.AddCandidate
+POST    /candidate                              CCandidate.UpdateCandidate
 GET     /candidate/:id                          CCandidate.GetCandidate
+GET     /employee                               CEmployee.GetEmployees
 
 
 

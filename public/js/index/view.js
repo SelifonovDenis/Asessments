@@ -8,7 +8,7 @@ export function welcome(){
 			{ rows:[
 				{
 					view:"toolbar", elements:[
-						{view:"button", value:"Меню", width:60, popup:"menu"},
+
 						{view:"label",type:"clean", label:"Учёт кандидатов", height:40, css:"logo", align:"center", margin:0},
 					],
 					css:"nav"
@@ -16,10 +16,11 @@ export function welcome(){
 					{view:"toolbar", elements:[
 						{view:"button", id:"getTable", value:"Кандидаты"},
 						{view:"button", value:"Добавить кандидата", height:50, id:"viewAdd"},
-						{view:"button", id:"changeButton", value:"Изменить", disabled:true},
 						{view:"button", value:"Архив"},
-						{view:"button", value:"Пройдено успешно"},
-						{view:"button", value:"Пройдено не успешно"}
+							{view:"button", value:"Учёт сотрудников", id:"redirect"},
+							{view:"button", value:"Собеседования", id:"redirect2"},
+							{view:"button", value:"Выход", id:"out"},
+
 					],
 					css:"nav"
 				},
@@ -55,8 +56,16 @@ export function welcome(){
 								{ id:"First_name",  header:"Фамилия",fillspace:true},
 								{ id:"Last_name", header:"Имя",fillspace:true},
 								{ id:"Middle_name", header:"Отчество",fillspace:true},
-								{ id:"Status", header:["Статус", {content:"selectFilter"}], width:250},
-								{ id:"Date", header:["Дата собеседования", {content:"selectFilter"}], width:200}
+								{ id:"Status", header:"Статус", width:250},
+								{
+									id:"Asessment",
+									header:"Дата собеседования",
+									template: function(candidate){
+
+										return candidate.Asessment.Date
+									},
+									width:200
+								}
 							],
 							select:"row",
 							height: heightScreen-100	
@@ -78,10 +87,16 @@ export function welcome(){
 							{view:"text", id:"remail", label:"Почта", readonly:true},
 							{view:"text", id:"rstatus", label:"Статус", readonly:true},
 							{view:"text", id:"rdate", label:"Дата собеседования", labelWidth: 150, readonly:true},
-							{height:40},
+							{view:"button", id:"changeButton", value:"Изменить", disabled:true},
 							{view:"button",id:"butAddDate", value:"Назначить дату собеседования", disabled:true},
-							{view:"button", value:"Переместить в архив"},
-							{view:"button", value:"Удалить кандидата"},
+							{view:"button", id:"butRelocateArchive", value:"Переместить в архив", disabled:true},
+							{view:"label", label:"Собеседование пройдено", align:"center"},
+							{
+								cols:[
+									{view:"button", value:"Успешно"},
+									{view:"button", value:"Не успешно"}
+								]
+							}
 
 						],
 						height:heightScreen-101
@@ -91,20 +106,6 @@ export function welcome(){
 		]
 	});
 
-	//меню
-	webix.ui({
-		view:"popup",
-		id:"menu",
-		height:250,
-		width:300,
-		body:{
-			rows:[
-				{view:"button", value:"Учёт сотрудников", id:"redirect"},
-				{view:"button", value:"Собеседования", id:"redirect2"},
-				{view:"button", value:"Выход", id:"out"},
-			]
-		}
-	}).hide();
 
 	//всплывающее окно "изменить"
 	webix.ui({
@@ -113,16 +114,19 @@ export function welcome(){
 		position:"center",
 		width: 500,
 		modal: true,
+		type:"space",
 		head:"Изменить",
 		close:true,
 		body:{
 			type:"space",
-			rows:[
-				{view:"text", id:"changeFamily", label:"Фамилия"},
-				{view:"text", id:"changeName", label:"Имя"},
-				{view:"text", id:"changeSubname", label:"Отчество"},
-				{view:"text", id:"changePhone", label:"Телефон"},
-				{view:"text", id:"changeEmail", label:"Почта"},
+			view:"form",
+			id:"changeForm",
+			elements:[
+				{view:"text",name:"cfirstName", id:"changeFirstName", label:"Фамилия"},
+				{view:"text",name:"clastName",  id:"changeLastName", label:"Имя"},
+				{view:"text",name:"cmiddleName", id:"changeMiddleName", label:"Отчество"},
+				{view:"text",name:"cphone",  id:"changePhone", label:"Телефон"},
+				{view:"text",name:"cemail",  id:"changeEmail", label:"Почта"},
 				{
 					view:"combo",
 					id:"changeStatus",
@@ -133,8 +137,16 @@ export function welcome(){
 				{view:"text", id:"changeDate", label:"Дата собеседования", labelWidth: 150},
 				{height:20},
 				{view:"button", value:"Назначить дату собеседования"},
-				{view:"button", value:"Сохранить изменения"},
-			]
+				{view:"button", id:"saveChange", value:"Сохранить изменения"},
+			],
+			rules:{
+				"cfirstName":webix.rules.isNotEmpty,
+				"clastName":webix.rules.isNotEmpty,
+				"cmiddleName":webix.rules.isNotEmpty,
+				"cphone":webix.rules.isNotEmpty,
+				"cemail":webix.rules.isEmail,
+				"changeStatus":webix.rules.isNotEmpty,
+			}
 		}
 	}).hide();
 
@@ -145,6 +157,7 @@ export function welcome(){
 		position:"center",
 		id:"addDate",
 		width: 500,
+
 		modal: true,
 		head:"Добавить",
 		close:true,
@@ -175,17 +188,21 @@ export function welcome(){
 		modal: true,
 		head:"Добавить",
 		close:true,
+
 		body:{
+			view:"form",
+			id:"addForm",
 			type:"space",
 			rows:[
-				{view:"text", id:"addFirstName", label:"Фамилия"},
-				{view:"text", id:"addLastName", label:"Имя"},
-				{view:"text", id:"addMiddleName", label:"Отчество"},
-				{view:"text", id:"addPhone", label:"Телефон"},
-				{view:"text", id:"addEmail", label:"Почта"},
+				{view:"text", name:"firstName", id:"addFirstName", label:"Фамилия"},
+				{view:"text", name:"lastName", id:"addLastName", label:"Имя"},
+				{view:"text", name:"middleName", id:"addMiddleName", label:"Отчество"},
+				{view:"text", name:"phone", id:"addPhone", label:"Телефон"},
+				{view:"text", name:"email", id:"addEmail", label:"Почта"},
 				{
 					view:"combo",
 					label: 'Статус',
+					name:"status",
 					id:"addStatus",
 					options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку"]
 				},
@@ -193,7 +210,15 @@ export function welcome(){
 				{height:20},
 				{view:"button", value:"Назначить дату собеседования"},
 				{view:"button", id:"addCandidat", value:"Добавить кандидата"},
-			]
+			],
+			rules:{
+				"firstName":webix.rules.isNotEmpty,
+				"lastName":webix.rules.isNotEmpty,
+				"middleName":webix.rules.isNotEmpty,
+				"phone":webix.rules.isNotEmpty,
+				"email":webix.rules.isEmail,
+				"status":webix.rules.isNotEmpty,
+			}
 		}
 	}).hide();
 }
