@@ -17,7 +17,8 @@ PUT     /candidate                              CCandidate.AddCandidate
 POST    /candidate                              CCandidate.UpdateCandidate
 GET     /candidate/:id                          CCandidate.GetCandidate
 GET     /employee                               CEmployee.GetEmployees
-
+GET     /assessment                             CAssessment.GetAssessments
+GET     /archive/candidate                      CCandidate.GetArchiveCandidates
 
 
 # Ignore favicon requests

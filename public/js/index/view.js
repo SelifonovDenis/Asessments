@@ -16,7 +16,7 @@ export function welcome(){
 					{view:"toolbar", elements:[
 						{view:"button", id:"getTable", value:"Кандидаты"},
 						{view:"button", value:"Добавить кандидата", height:50, id:"viewAdd"},
-						{view:"button", value:"Архив"},
+						{view:"button", id:"archive", value:"Архив"},
 							{view:"button", value:"Учёт сотрудников", id:"redirect"},
 							{view:"button", value:"Собеседования", id:"redirect2"},
 							{view:"button", value:"Выход", id:"out"},
@@ -80,21 +80,41 @@ export function welcome(){
 					{
 						type:"space",
 						rows:[
-							{view:"text", id:"rfamily", label:"Фамилия", readonly:true},
-							{view:"text", id:"rname", label:"Имя", readonly:true},
-							{view:"text", id:"rsubname", label:"Отчество", readonly:true},
-							{view:"text", id:"rphone", label:"Телефон", readonly:true},
-							{view:"text", id:"remail", label:"Почта", readonly:true},
-							{view:"text", id:"rstatus", label:"Статус", readonly:true},
-							{view:"text", id:"rdate", label:"Дата собеседования", labelWidth: 150, readonly:true},
-							{view:"button", id:"changeButton", value:"Изменить", disabled:true},
+							{
+								type:"space",
+								view:"form",
+								id:"changeForm",
+								elements:[
+									{view:"text",name:"cfirstName", id:"changeFirstName", label:"Фамилия"},
+									{view:"text",name:"clastName",  id:"changeLastName", label:"Имя"},
+									{view:"text",name:"cmiddleName", id:"changeMiddleName", label:"Отчество"},
+									{view:"text",name:"cphone",  id:"changePhone", label:"Телефон"},
+									{view:"text",name:"cemail",  id:"changeEmail", label:"Почта"},
+									{
+										view:"combo",
+										id:"changeStatus",
+										label: 'Статус',
+										options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Архив"]
+									},
+									{view:"text", id:"changeDate", label:"Дата собеседования", labelWidth: 150, readonly:true},
+								],
+								rules:{
+									"cfirstName":webix.rules.isNotEmpty,
+									"clastName":webix.rules.isNotEmpty,
+									"cmiddleName":webix.rules.isNotEmpty,
+									"cphone":webix.rules.isNotEmpty,
+									"cemail":webix.rules.isEmail,
+								}
+							},
+
+							{view:"button", id:"saveChange", value:"Сохранить изменения", disabled:true},
 							{view:"button",id:"butAddDate", value:"Назначить дату собеседования", disabled:true},
 							{view:"button", id:"butRelocateArchive", value:"Переместить в архив", disabled:true},
 							{view:"label", label:"Собеседование пройдено", align:"center"},
 							{
 								cols:[
-									{view:"button", value:"Успешно"},
-									{view:"button", value:"Не успешно"}
+									{view:"button", id:"successfully", value:"Успешно", disabled:true},
+									{view:"button",id:"notSuccessfully", value:"Не успешно", disabled:true}
 								]
 							}
 
@@ -107,57 +127,12 @@ export function welcome(){
 	});
 
 
-	//всплывающее окно "изменить"
-	webix.ui({
-		view:"window",
-		id:"changeWindow",
-		position:"center",
-		width: 500,
-		modal: true,
-		type:"space",
-		head:"Изменить",
-		close:true,
-		body:{
-			type:"space",
-			view:"form",
-			id:"changeForm",
-			elements:[
-				{view:"text",name:"cfirstName", id:"changeFirstName", label:"Фамилия"},
-				{view:"text",name:"clastName",  id:"changeLastName", label:"Имя"},
-				{view:"text",name:"cmiddleName", id:"changeMiddleName", label:"Отчество"},
-				{view:"text",name:"cphone",  id:"changePhone", label:"Телефон"},
-				{view:"text",name:"cemail",  id:"changeEmail", label:"Почта"},
-				{
-					view:"combo",
-					id:"changeStatus",
-					value:"",
-					label: 'Статус',
-					options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку"]
-				},
-				{view:"text", id:"changeDate", label:"Дата собеседования", labelWidth: 150},
-				{height:20},
-				{view:"button", value:"Назначить дату собеседования"},
-				{view:"button", id:"saveChange", value:"Сохранить изменения"},
-			],
-			rules:{
-				"cfirstName":webix.rules.isNotEmpty,
-				"clastName":webix.rules.isNotEmpty,
-				"cmiddleName":webix.rules.isNotEmpty,
-				"cphone":webix.rules.isNotEmpty,
-				"cemail":webix.rules.isEmail,
-				"changeStatus":webix.rules.isNotEmpty,
-			}
-		}
-	}).hide();
-
-	webix.Date.startOnMonday = true;
-	//добаить дату
+	//Окно назныить дату
 	webix.ui({
 		view:"window",
 		position:"center",
-		id:"addDate",
+		id:"DateWindow",
 		width: 500,
-
 		modal: true,
 		head:"Добавить",
 		close:true,
@@ -165,19 +140,22 @@ export function welcome(){
 			type:"space",
 			rows:[
 				{
-					view:"calendar",
-					id:"my_calendar",
-					date:new Date(),
-					weekHeader:true,
-					events:webix.Date.isHoliday,
-					width:300,
-					height:250
+					view:"datatable",
+					id:"Date",
+					columns:[
+						{ id:"Id",    header:"Id", width:30},
+						{ id:"Date",  header:"Дата",fillspace:true},
+						{ id:"Cabinet", header:"Кабинет",fillspace:true},
+					],
+					select:"row",
+					height: 400
 				},
-				{height:20},
-				{view:"button", value:"Добавить дату"},
+				{view:"button",id:"UpdateIdAsessment", value:"Назначить дату собеседования"},
+				{view:"button", id:"AddIdAsessment", value:"Назначить дату собеседования"},
 			]
 		}
 	}).hide();
+
 
 	//всплывающее окно "Добавить кандидата"
 	webix.ui({
@@ -186,9 +164,8 @@ export function welcome(){
 		id:"add",
 		width: 500,
 		modal: true,
-		head:"Добавить",
 		close:true,
-
+		head:"Добавить",
 		body:{
 			view:"form",
 			id:"addForm",
@@ -206,9 +183,8 @@ export function welcome(){
 					id:"addStatus",
 					options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку"]
 				},
-				{view:"text", id:"addDate", label:"Дата собеседования", labelWidth: 150},
 				{height:20},
-				{view:"button", value:"Назначить дату собеседования"},
+				{view:"button", id:"AddDateAsessment", value:"Назначить дату собеседования"},
 				{view:"button", id:"addCandidat", value:"Добавить кандидата"},
 			],
 			rules:{
@@ -222,9 +198,3 @@ export function welcome(){
 		}
 	}).hide();
 }
-
-
-
-
-
-	

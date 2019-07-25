@@ -64,3 +64,19 @@ func UpdateCandidate(candidate *entity.Candidate)(*entity.Candidate, error){
 	err = mappers.UpdateCandidate(db,candidate)
 	return candidate, err
 }
+
+func GetArchiveCandidate() ([]*entity.Candidate, error)  {
+
+	db, err := connection.ConnectToDB()
+	if err != nil {
+		return []*entity.Candidate{},err
+	}
+	defer db.Close()
+	candidatesTable, err := mappers.GetArchiveCandidate(db)
+	if err != nil {
+		return candidatesTable,err
+	}
+
+	return candidatesTable,err
+
+}

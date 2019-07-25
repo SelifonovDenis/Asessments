@@ -79,3 +79,16 @@ func (c *CCandidate) UpdateCandidate()revel.Result  {
 
 	return c.RenderJSON(candidate)
 }
+
+func (c *CCandidate) GetArchiveCandidates()revel.Result  {
+
+	candidates, err:=providers.GetArchiveCandidate()
+
+	if err!=nil {
+		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+
+	return c.RenderJSON(candidates)
+}
