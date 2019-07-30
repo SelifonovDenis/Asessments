@@ -63,3 +63,19 @@ func UpdateEmployee(employee *entity.Employee)(*entity.Employee, error){
 
 	return employee, err
 }
+
+func RemoveEmployee(employee *entity.Employee) (*entity.Employee, error) {
+
+	db, err := connection.ConnectToDB()
+	if err!=nil {
+		return employee,err
+	}
+	defer db.Close()
+
+	employee, err = mappers.RemoveEmployee(db, employee)
+	if err != nil {
+		return employee,err
+	}
+	return employee,err
+}
+

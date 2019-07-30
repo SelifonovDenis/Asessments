@@ -17,7 +17,24 @@ func GetAssessments() ([]*entity.Asessment, error)  {
 	if err != nil {
 		return assessments,err
 	}
-	return assessments,err
+
+	Assessments := []*entity.Asessment{}
+
+	for i:=0;i< len(assessments); i++  {
+		Assessments = append(Assessments, assessments[i])
+		step :=0;
+		for j := i+1; j < len(assessments); j++ {
+			if assessments[i].Id == assessments[j].Id {
+				Assessments[len(Assessments)-1].Fio = Assessments[len(Assessments)-1].Fio +", " + assessments[j].Fio
+				step++
+			} else {
+				i =  i + step
+				break
+			}
+		}
+	}
+
+	return Assessments,err
 }
 
 func GetAssessment(assessment *entity.Asessment) (*entity.Asessment, error) {
@@ -60,4 +77,42 @@ func UpdateAssessment(assessment *entity.Asessment)(*entity.Asessment, error){
 	err = mappers.UpdateAssessment(db,assessment)
 
 	return assessment, err
+}
+
+func GetEmployeeAssessments(id int) ([]*entity.Asessment, error)  {
+
+	db, err := connection.ConnectToDB()
+	if err != nil {
+		return []*entity.Asessment{},err
+	}
+	defer db.Close()
+	assessments, err := mappers.GetEmployeeAssessments(db, id)
+	if err != nil {
+		return assessments,err
+	}
+	return assessments,err
+}
+
+func RemoveEmployeeAssessment(assessment *entity.Asessment,employee *entity.Employee) error{
+	db, err := connection.ConnectToDB()
+	if err!=nil {
+		return err
+	}
+	defer db.Close()
+
+	err = mappers.RemoveEmployeeAssessment(db,assessment, employee)
+
+	return err
+}
+
+func AddEmployeeAssessment(assessment *entity.Asessment,employee *entity.Employee) error{
+	db, err := connection.ConnectToDB()
+	if err!=nil {
+		return err
+	}
+	defer db.Close()
+
+	err = mappers.AddEmployeeAssessment(db,assessment, employee)
+
+	return err
 }

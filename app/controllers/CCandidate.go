@@ -92,3 +92,19 @@ func (c *CCandidate) GetArchiveCandidates()revel.Result  {
 
 	return c.RenderJSON(candidates)
 }
+
+func (c *CCandidate) GetCandidates(id int64)revel.Result  {
+
+	candidate := new(entity.Candidate)
+	candidate.Asessment.Id = int(id)
+
+	Candidates, err:=providers.GetCandidates(candidate)
+
+	if err!=nil {
+		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+
+	return c.RenderJSON(Candidates)
+}

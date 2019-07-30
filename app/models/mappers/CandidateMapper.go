@@ -144,3 +144,27 @@ func GetArchiveCandidate(db *sql.DB) ([]*entity.Candidate, error) {
 	}
 	return Candidates, err
 }
+
+func GetCandidates(db *sql.DB, candidate *entity.Candidate) ([]*entity.Candidate, error) {
+	Candidates := []*entity.Candidate{}
+
+	rows, err := db.Query(`
+		SELECT id, first_name, last_name, middle_name, phone, email, status
+	  	FROM asessments.asessment.candidate		
+		WHERE id_asessment = $1	
+		`, candidate.Asessment.Id)
+	if err != nil {
+		return Candidates,err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		candidate := entity.Candidate{}
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status)
+		if err != nil {
+			return Candidates,err
+		}
+		Candidates = append(Candidates, &candidate)
+	}
+	return Candidates,err
+}

@@ -79,3 +79,18 @@ func (c *CEmployee) UpdateEmployee()revel.Result  {
 
 	return c.RenderJSON(employee)
 }
+
+
+func (c *CEmployee) RemoveEmployee(id int64)revel.Result  {
+
+	employee := new(entity.Employee)
+	employee.Id = int(id)
+	candidate, err := providers.RemoveEmployee(employee)
+	if err != nil {
+		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+	return c.RenderJSON(candidate)
+}
+

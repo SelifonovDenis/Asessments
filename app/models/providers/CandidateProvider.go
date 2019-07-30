@@ -80,3 +80,18 @@ func GetArchiveCandidate() ([]*entity.Candidate, error)  {
 	return candidatesTable,err
 
 }
+
+func GetCandidates(candidate *entity.Candidate) ([]*entity.Candidate, error) {
+
+	db, err := connection.ConnectToDB()
+	if err!=nil {
+		return []*entity.Candidate{},err
+	}
+	defer db.Close()
+
+	Candidates, err := mappers.GetCandidates(db, candidate)
+	if err != nil {
+		return Candidates,err
+	}
+	return Candidates,err
+}

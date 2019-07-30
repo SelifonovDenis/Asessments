@@ -13,13 +13,19 @@ import {SetIdChangeAssessment} from "./component";
 import {SetIdAddAssessment} from "./component";
 
 export function Manager(){
-    //клик по кнопке "справочная информация"
+
     $$("redirect").attachEvent("onItemClick",function(){
         redirect("workerWorkspace")
     });
     $$("redirect2").attachEvent("onItemClick",function(){
         redirect("assessmentWorkspace");
     });
+
+    //клик по кнопке выход
+    $$("out").attachEvent("onItemClick",function(){
+        redirect("/");
+    });
+
     //клик по кнопке "добавить кандидата" на тулбаре
     $$("viewAdd").attachEvent("onItemClick",function(){
         viewAdd();
@@ -63,19 +69,16 @@ export function Manager(){
     $$("UpdateIdAsessment").attachEvent("onItemClick",function(){
         SetIdChangeAssessment();
         UpdateIdAssessment();
-        $$("DateWindow").close();
+        $$("DateWindow").hide();
     });
 
     $$("AddIdAsessment").attachEvent("onItemClick",function(){
         SetIdAddAssessment();
-        $$("DateWindow").close();
+        $$("DateWindow").hide();
     });
 
 
-    //клик по кнопке выход
-    $$("out").attachEvent("onItemClick",function(){
-        redirect("/");
-    });
+
     //клик по кнопке переместить в архив
     $$("butRelocateArchive").attachEvent("onItemClick",function(){
         ChangeStatus("Архив");

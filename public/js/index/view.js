@@ -30,20 +30,22 @@ export function welcome(){
 						multi:true,
 						collapsed: true,
 						cols:[ //or rows 
-							{ header:"Поиск", body:{
-												type:"space",	
-												rows:[
-														{view:"text", id:"searchFamily", label:"Фамилия"},
-														{view:"text", id:"searchName", label:"Имя"},
-														{view:"text", id:"searchSubname", label:"Отчество"},
-														{view:"text", id:"searchPhone", label:"Телефон"},
-														{view:"text", id:"searchEmail", label:"Почта"},
-														{view:"text", id:"searchStatus", label:"Статус"},
-														{view:"text", id:"searchDate", label:"Дата собеседования", labelWidth: 150},
-														{height:20},
-														{view:"button", value:"Найти"},	
-													]
-												},				
+							{
+								header:"Поиск",
+								body:{
+								type:"space",
+									rows:[
+											{view:"text", id:"searchFamily", label:"Фамилия"},
+											{view:"text", id:"searchName", label:"Имя"},
+											{view:"text", id:"searchSubname", label:"Отчество"},
+											{view:"text", id:"searchPhone", label:"Телефон"},
+											{view:"text", id:"searchEmail", label:"Почта"},
+											{view:"text", id:"searchStatus", label:"Статус"},
+											{view:"text", id:"searchDate", label:"Дата собеседования", labelWidth: 150},
+											{height:20},
+											{view:"button", value:"Найти"},
+										]
+								},
 							width: widthScreen*0.2 
 							}
 						]},
@@ -127,7 +129,7 @@ export function welcome(){
 	});
 
 
-	//Окно назныить дату
+	//Окно назначить дату
 	webix.ui({
 		view:"window",
 		position:"center",

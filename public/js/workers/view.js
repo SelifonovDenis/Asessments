@@ -1,35 +1,3 @@
-//Сотрудники
-export var worker = [];
-worker [0] = {
-	id: 1,
-	active:0,
-	family: "Иванов",
-	name: "Иван",
-	subname:"Иванович",
-	phone:"8 800 555 35 35",
-	email:"Ivan@mail.ru",
-}
-worker [1] = {
-	id: 2,
-	active:0,
-	family: "Петров",
-	name: "Петр",
-	subname:"Петрович",
-	phone:"8 500 444 44 44",
-	email:"petya@mail.ru",
-}
-worker [2] = {
-	id: 3,
-	active:0,
-	family: "Николаев",
-	name: "Игорь",
-	subname:"Николаевич",
-	phone:"8 333 333 22 22",
-	email:"Ivan@mail.ru",
-}
-
-
-
 export function welcome(){
 	var heightScreen = document.body.clientHeight;
 	var widthScreen = document.body.clientWidth;
@@ -41,7 +9,6 @@ export function welcome(){
 			{ rows:[
 				{
 					view:"toolbar", elements:[
-						{view:"button", value:"Меню", width:60, popup:"menus"},
 						{view:"label",type:"clean", label:"Сотрудники", height:40, css:"logo", align:"center", margin:0},
 					],
 					css:"nav"
@@ -50,7 +17,10 @@ export function welcome(){
 						{view:"button", value:"Сотрудники"},
 						{view:"button", value:"Добавить сотрудника", height:50, id:"viewAdd"},
 						{view:"button", id:"changeButton", value:"Изменить", disabled:true},
-						{view:"button", value:"Удалить"},
+						{view:"button", id:"removeEmployee", value:"Удалить",disabled:true},
+						{view:"button", value:"Учет кандидатов", id:"redirect"},
+						{view:"button", value:"Собеседования", id:"redirect2"},
+						{view:"button", value:"Выход", id:"out"},
 					],
 					css:"nav"
 				},
@@ -80,15 +50,13 @@ export function welcome(){
 							view:"datatable",
 							id:"datatable",
 							columns:[
-								{ id:"active", header: "", template:"{common.checkbox()}", width:30},
-								{ id:"id",    header:"Id", width:30},
-								{ id:"family", header:"Фамилия",fillspace:true},
-								{ id:"name", header:"Имя",fillspace:true},
-								{ id:"subname", header:"Отчество",fillspace:true},
-								{ id:"phone", header:"Телефон", width:250},
-								{ id:"email", header:"Почта", width:200}
+								{ id:"Id",    header:"Id", width:30},
+								{ id:"First_name", header:"Фамилия",fillspace:true},
+								{ id:"Last_name", header:"Имя",fillspace:true},
+								{ id:"Middle_name", header:"Отчество",fillspace:true},
+								{ id:"Phone", header:"Телефон", width:250},
+								{ id:"Email", header:"Почта", width:200}
 							],
-							data: worker,
 							select:"row",
 							height: heightScreen-100	
 						}
@@ -108,34 +76,18 @@ export function welcome(){
 								height:400,
 								template:"#title#",
 								select:true,
-								id:"dates"
+								id:"dates",
 							},
 							{height:40},
 							{view:"button", id:"butAddDate",value:"Добавить дату собеседования", disabled:true},
-							{view:"button", value:"Удалить дату"},
+							{view:"button", id:"removeAssessment", value:"Удалить дату", disabled:true},
 						],
 						height:heightScreen-101
 					}	
 				]
 			}
 		]
-	});	
-	
-
-	//меню
-	webix.ui({
-		view:"popup",
-		id:"menus",
-		height:250,
-		width:300,
-		body:{
-			rows:[
-				{view:"button", value:"Учет кандидатов", id:"redirect"},
-				{view:"button", value:"Собеседования", id:"redirect2"},
-				{view:"button", value:"Выход", id:"out"},
-			]
-		}
-	}).hide();
+	});
 	
 	
 	//всплывающее окно "Добавить кандидата"
@@ -148,16 +100,25 @@ export function welcome(){
 	head:"Добавить",
     close:true,
     body:{
+		view:"form",
+		id:"addForm",
 		type:"space",
 		rows:[
-				{view:"text", name:"family", label:"Фамилия"},
-				{view:"text", name:"name", label:"Имя"},
-				{view:"text", name:"subname", label:"Отчество"},
-				{view:"text", name:"phone", label:"Телефон"},
-				{view:"text", name:"address", label:"Почта"},
-				{height:20},
-				{view:"button", value:"Добавить сотрудника"},
-			]
+			{view:"text", name:"firstName", id:"addFirstName", label:"Фамилия"},
+			{view:"text", name:"lastName", id:"addLastName", label:"Имя"},
+			{view:"text", name:"middleName", id:"addMiddleName", label:"Отчество"},
+			{view:"text", name:"phone", id:"addPhone", label:"Телефон"},
+			{view:"text", name:"email", id:"addEmail",label:"Почта"},
+			{height:20},
+			{view:"button", id:"addEmployee", value:"Добавить сотрудника"},
+		],
+		rules:{
+			"firstName":webix.rules.isNotEmpty,
+			"lastName":webix.rules.isNotEmpty,
+			"middleName":webix.rules.isNotEmpty,
+			"phone":webix.rules.isNotEmpty,
+			"email":webix.rules.isEmail,
+		}
 		}
 	}).hide();
 
@@ -170,21 +131,32 @@ export function welcome(){
 	modal: true,
 	head:"Изменить",
     close:true,
-    body:{
-		type:"space",	
-		rows:[
-				{view:"text", id:"changeFamily", label:"Фамилия"},
-				{view:"text", id:"changeName", label:"Имя"},
-				{view:"text", id:"changeSubname", label:"Отчество"},
-				{view:"text", id:"changePhone", label:"Телефон"},
-				{view:"text", id:"changeEmail", label:"Почта"},
-				{height:20},
-				{view:"button", value:"Сохранить изменения"},
-			]
+    body: {
+
+		type: "space",
+		view: "form",
+		id: "changeForm",
+		elements: [
+			{view: "text", name: "cfirstName", id: "changeFirstName", label: "Фамилия"},
+			{view: "text", name: "clastName", id: "changeLastName", label: "Имя"},
+			{view: "text", name: "cmiddleName", id: "changeMiddleName", label: "Отчество"},
+			{view: "text", name: "cphone", id: "changePhone", label: "Телефон"},
+			{view: "text", name: "cemail", id: "changeEmail", label: "Почта"},
+			{view: "button", id: "saveChange", value: "Сохранить изменения"},
+		],
+		rules: {
+			"cfirstName": webix.rules.isNotEmpty,
+			"clastName": webix.rules.isNotEmpty,
+			"cmiddleName": webix.rules.isNotEmpty,
+			"cphone": webix.rules.isNotEmpty,
+			"cemail": webix.rules.isEmail,
 		}
+	}
 	}).hide();
 
-//добаить дату
+
+
+//Окно назначить дату
 	webix.ui({
 		view:"window",
 		position:"center",
@@ -196,20 +168,21 @@ export function welcome(){
 		body:{
 			type:"space",
 			rows:[
-					{
-						view:"calendar",
-						id:"my_calendar",
-						date:new Date(),
-						weekHeader:true,
-						events:webix.Date.isHoliday,
-						width:300,
-						height:250
-					},
-					{height:20},
-					{view:"button", value:"Добавить дату"},
-				]
-			}
-		}).hide();
+				{
+					view:"datatable",
+					id:"Date",
+					columns:[
+						{ id:"Id",    header:"Id", width:30},
+						{ id:"Date",  header:"Дата",fillspace:true},
+						{ id:"Cabinet", header:"Кабинет",fillspace:true},
+					],
+					select:"row",
+					height: 400
+				},
+				{view:"button", id:"AddIdAsessment", value:"Назначить на собеседование"},
+			]
+		}
+	}).hide();
 }
 
 

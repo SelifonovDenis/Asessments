@@ -16,7 +16,9 @@ func (c *CAssessment) GetAssessments() revel.Result {
 	assessments, err:=providers.GetAssessments()
 
 	if err!=nil {
+		fmt.Println()
 		fmt.Println(err)
+		fmt.Println()
 		c.Response.Status = 500
 		return c.RenderJSON(err)
 	}
@@ -71,4 +73,49 @@ func (c *CAssessment) UpdateAssessment()revel.Result  {
 	}
 
 	return c.RenderJSON(assessment)
+}
+
+func (c *CAssessment) GetEmployeeAssessments(id int64)revel.Result  {
+
+	assessments, err := providers.GetEmployeeAssessments(int(id))
+	if err != nil {
+		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+	return c.RenderJSON(assessments)
+}
+
+func (c *CAssessment) RemoveEmployeeAssessment(idEmployee, idAssessment int64)revel.Result  {
+
+	assessment := new(entity.Asessment)
+	assessment.Id = int(idAssessment)
+	employee := new(entity.Employee)
+	employee.Id = int(idEmployee)
+
+	err := providers.RemoveEmployeeAssessment(assessment, employee)
+
+	if err != nil {
+		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+	return c.RenderJSON(employee)
+}
+
+func (c *CAssessment) AddEmployeeAssessment(idEmployee, idAssessment int64)revel.Result  {
+
+	assessment := new(entity.Asessment)
+	assessment.Id = int(idAssessment)
+	employee := new(entity.Employee)
+	employee.Id = int(idEmployee)
+
+	err := providers.AddEmployeeAssessment(assessment, employee)
+
+	if err != nil {
+		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+	return c.RenderJSON(employee)
 }

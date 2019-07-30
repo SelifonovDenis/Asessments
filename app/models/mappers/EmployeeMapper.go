@@ -13,6 +13,7 @@ func GetEmployees(db *sql.DB) ([]*entity.Employee, error) {
 	rows, err := db.Query(`
 	  	SELECT id, first_name, last_name, middle_name, phone, email
 	  	FROM asessments.asessment.employee
+		ORDER BY id
 	  	`)
 	if err != nil {
 		return employees, err
@@ -82,10 +83,26 @@ func UpdateEmployee(db *sql.DB, employee *entity.Employee) (err error){
 			email = $5
 		WHERE 
 			id = $6
-	`, employee.First_name,  employee.Last_name,  employee.Middle_name,  employee.Phone,  employee.Email)
+	`, employee.First_name,  employee.Last_name,  employee.Middle_name,  employee.Phone,  employee.Email, employee.Id)
 
 	if err != nil{
 		return
 	}
+
 	return
 }
+
+
+func RemoveEmployee(db *sql.DB, employee *entity.Employee) (*entity.Employee, error) {
+	_, err := db.Exec(`
+		DELETE FROM asessments.asessment.employee		
+		WHERE id = $1	
+		`, employee.Id)
+
+	if err != nil {
+		return employee,err
+	}
+
+	return employee,err
+}
+
