@@ -100,6 +100,7 @@ func (c *CCandidate) GetCandidates(id int64)revel.Result  {
 
 	Candidates, err:=providers.GetCandidates(candidate)
 
+
 	if err!=nil {
 		fmt.Println(err)
 		c.Response.Status = 500
@@ -107,4 +108,17 @@ func (c *CCandidate) GetCandidates(id int64)revel.Result  {
 	}
 
 	return c.RenderJSON(Candidates)
+}
+
+func (c *CCandidate) GetFreeCandidates()revel.Result  {
+
+	candidatesTable, err:=providers.GetFreeCandidates()
+
+	if err!=nil {
+		fmt.Println(err)
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+
+	return c.RenderJSON(candidatesTable)
 }

@@ -17,17 +17,19 @@ export function viewAddDate(){
     $$("DateWindow").show();
 }
 
-
+var lastid = 0;
+var latestAction = "main";
 //отображение атрибутов выбранного кандидата в правой части
-export function view(id){
+export function view(){
     $$("saveChange").enable();
     $$("butAddDate").enable();
     $$("butRelocateArchive").enable();
     $$("successfully").enable();
     $$("notSuccessfully").enable();
+    lastid = $$("datatable").getSelectedItem().Id;
     IdChangeAssessment = 0;
     var req = new Request();
-    req.Get('candidate/'+id).then(
+    req.Get('candidate/'+$$("datatable").getSelectedItem().Id).then(
         function (candidate) {
             if (typeof candidate['Message'] == "undefined") {
                 $$("changeFirstName").setValue(candidate.First_name);
@@ -65,6 +67,7 @@ function clearRightPart() {
 
 //получить и вывести кандидатов в таблицу
 export function GetTable(){
+    latestAction = "main";
     clearRightPart();
     var req = new Request();
     req.Get('candidate').then(function (res){
@@ -116,14 +119,13 @@ export function AddCandidate(){
 export function SaveChange() {
     if (IdChangeAssessment === 0) {
         candidates.forEach(function (elem) {
-            if (elem.Id === $$("datatable").getSelectedItem().Id) {
+            if (elem.Id === lastid) {
                 IdChangeAssessment = elem.Asessment.Id;
             }
         })
     }
-
     var data = {
-        Id: $$("datatable").getSelectedItem().Id,
+        Id: lastid,
         First_name: $$("changeFirstName").getValue(),
         Last_name: $$("changeLastName").getValue(),
         Middle_name: $$("changeMiddleName").getValue(),
@@ -134,20 +136,23 @@ export function SaveChange() {
             Id: IdChangeAssessment,
         }
     };
-
     if ($$("changeForm").validate()) {
         var req = new Request();
         req.Post('candidate', data).then(
             function (result) {
                 IdChangeAssessment = 0;
-                webix.message("Успешно обновлено");
-                GetTable();
+                if (latestAction === "main") {
+                    GetTable();
+                } else{
+                    GetArchive();
+                }
+
+                view();
             }
         )
     } else {
         webix.message("Заполните все поля")
     }
-
 }
 
 var assessments;
@@ -179,8 +184,9 @@ export function UpdateIdAssessment(){
     assessments.forEach(function (assessment) {
         if (assessment.Id === IdChangeAssessment) {
             $$("changeDate").setValue(assessment.Date);
+            $$("changeStatus").setValue("Назначенно собеседование");
         }
-    })
+    });
 }
 
 //Изменить статус
@@ -207,15 +213,20 @@ export function ChangeStatus(status){
     var req = new Request();
     req.Post('candidate',data).then(
         function (result) {
-            webix.message("Успешно обновлено");
-            GetTable();
+            if (latestAction === "main") {
+                GetTable();
+            } else{
+                GetArchive();
+            }
         }
     )
 
 }
 
+
 //получить кандидатов из архива
 export function GetArchive(){
+    latestAction = "archive";
     clearRightPart();
     var req = new Request();
     req.Get('archive/candidate').then(function (res){

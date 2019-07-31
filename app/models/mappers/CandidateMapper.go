@@ -11,11 +11,11 @@ func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, status, id_asessment, date
+	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_asessment, date
 	  	FROM asessments.asessment.candidate
 		LEFT JOIN asessments.asessment.asessment
 		ON id_asessment = asessment.id
-		WHERE status != $1 
+		WHERE candidate.status != $1 
 		ORDER BY candidate.id
 	  	`, "Архив")
 	if err != nil {
@@ -46,7 +46,7 @@ func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 //GetCandidate Прлучить кандидата по id
 func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, error) {
 	rows, err := db.Query(`
-		SELECT candidate.id, first_name, last_name, middle_name, phone, email, status, id_asessment, date
+		SELECT candidate.id, first_name, last_name, middle_name, phone, email, candidate.status, id_asessment, date
 	  	FROM asessments.asessment.candidate		
 		LEFT JOIN asessments.asessment.asessment
 		ON id_asessment = asessment.id
@@ -115,11 +115,11 @@ func GetArchiveCandidate(db *sql.DB) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, status, id_asessment, date
+	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_asessment, date
 	  	FROM asessments.asessment.candidate
 		LEFT JOIN asessments.asessment.asessment
 		ON id_asessment = asessment.id 
-	  	WHERE status = $1 
+	  	WHERE candidate.status = $1 
 		ORDER BY candidate.id
 	  	`,"Архив")
 	if err != nil {
@@ -167,4 +167,32 @@ func GetCandidates(db *sql.DB, candidate *entity.Candidate) ([]*entity.Candidate
 		Candidates = append(Candidates, &candidate)
 	}
 	return Candidates,err
+}
+
+func GetFreeCandidates(db *sql.DB) ([]*entity.Candidate, error) {
+
+	Candidates := []*entity.Candidate{}
+
+	rows, err := db.Query(`
+	  	SELECT id, first_name, last_name, middle_name, phone, email, status
+	  	FROM asessments.asessment.candidate
+		WHERE status != $1 AND id_asessment = $2
+	  	`, "Архив", 0)
+	if err != nil {
+		return Candidates, err
+	}
+	defer rows.Close()
+
+
+	for rows.Next() {
+		candidate := entity.Candidate{}
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status)
+
+		if err != nil {
+			return Candidates, err
+		}
+
+		Candidates = append(Candidates,&candidate)
+	}
+	return Candidates, err
 }

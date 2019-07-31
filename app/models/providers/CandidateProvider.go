@@ -95,3 +95,19 @@ func GetCandidates(candidate *entity.Candidate) ([]*entity.Candidate, error) {
 	}
 	return Candidates,err
 }
+
+func GetFreeCandidates() ([]*entity.Candidate, error)  {
+
+	db, err := connection.ConnectToDB()
+	if err != nil {
+		return []*entity.Candidate{},err
+	}
+	defer db.Close()
+	candidatesTable, err := mappers.GetFreeCandidates(db)
+	if err != nil {
+		return candidatesTable,err
+	}
+
+	return candidatesTable,err
+
+}

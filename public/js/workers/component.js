@@ -138,7 +138,6 @@ export function SaveChange() {
         var req = new Request();
         req.Post('employee', data).then(
             function (result) {
-                webix.message("Успешно обновлено");
                 GetTable();
                 $$("changeWindow").hide();
             }
@@ -153,8 +152,8 @@ export function RemoveAssessment() {
     var req = new Request();
     req.Delete('employee/'+$$("datatable").getSelectedItem().Id+'/assessment/'+$$('dates').getSelectedItem().Id).then(
         function (result) {
-            webix.message("Успешно");
-            GetTable();
+
+            GetEmployeeAssessments();
         }
     )
 }
@@ -163,7 +162,7 @@ export function RemoveEmployee() {
     var req = new Request();
     req.Delete('employee/'+$$("datatable").getSelectedItem().Id).then(
         function (result) {
-            webix.message("Успешно");
+
             GetTable();
         }
     )
@@ -174,8 +173,8 @@ export function AddEmployeeAssessment() {
     if (typeof $$("Date").getSelectedItem() != "undefined") {
         req.Put('employee/'+$$("datatable").getSelectedItem().Id+'/assessment/'+$$("Date").getSelectedItem().Id, "").then(
             function (result) {
-                webix.message("Успешно");
-                GetTable();
+
+                GetEmployeeAssessments();
                 $$("addDate").hide();
             }
         )

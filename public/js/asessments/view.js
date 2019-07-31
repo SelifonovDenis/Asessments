@@ -17,7 +17,7 @@ export function welcome(){
 						{view:"button", id:"GetAssessments", value:"Собеседования"},
 						{view:"button", value:"Добавить собеседование", height:50, id:"viewAdd"},
 						{view:"button", id:"changeButton", value:"Изменить", disabled:true},
-						{view:"button", value:"УдалитьАрхив?"},
+						{view:"button", id:"getArchive", value:"Архив"},
 						{view:"button", value:"Учёт кандидатов", id:"redirect"},
 						{view:"button", value:"Учёт сотрудников", id:"redirect2"},
 						{view:"button", value:"Выход", id:"out"},
@@ -79,7 +79,7 @@ export function welcome(){
 							},
 							
 							{height:40},
-							{view:"button", id:"butAddDate",value:"Добавить кандидата", disabled:true},
+							{view:"button", id:"butAddCandidate",value:"Добавить кандидата", disabled:true},
 							{view:"button", id:"removeCandidate", value:"Удалить кандидата", disabled:true},
 							{view:"button", id:"addToArchive",value:"Переместить в архив", disabled:true},
 
@@ -89,22 +89,7 @@ export function welcome(){
 				]
 			}
 		]
-	});	
-	
-
-	//меню
-	webix.ui({
-		view:"popup",
-		id:"menus",
-		height:250,
-		width:300,
-		body:{
-			rows:[
-
-			]
-		}
-	}).hide();
-	
+	});
 	
 	//всплывающее окно "Добавить собеседование"
 	webix.ui({
@@ -120,9 +105,17 @@ export function welcome(){
 			view: "form",
 			id: "addForm",
 			elements: [
-				{view:"text", name:"addDate",id:"addDate", label:"Дата", labelPosition:"top"},
+                {
+                    view:"datepicker",
+                    value: new Date(),
+                    format: webix.Date.dateToStr("%d.%m.%Y %H:%i"),
+                    label: "Дата",
+                    name:"addDate",
+                    id:"addDate",
+                    labelPosition:"top",
+					timepicker: true,
+                },
 				{view:"text", name:"addCabinet", id:"addCabinet", label:"Кабинет", labelPosition:"top"},
-				//{view:"text", id:"Worker", label:"Сотрудник", labelPosition:"top"},
 				{height:20},
 				{view:"button", id:"addAssessment", value:"Добавить Собеседование"},
 			],
@@ -149,18 +142,66 @@ export function welcome(){
 			view: "form",
 			id: "changeForm",
 			elements: [
-				{view:"text", name:"changeDate", id:"changeDate", label:"Дата", labelPosition:"top"},
+                {
+                    view:"datepicker",
+                    value: new Date(),
+                    format: webix.Date.dateToStr("%d.%m.%Y %H:%i"),
+                    label: "Дата",
+                    name:"changeDate",
+                    id:"changeDate",
+                    labelPosition:"top",
+					timepicker: true
+                },
+
 				{view:"text", name:"changeCabinet", id:"changeCabinet", label:"Кабинет", labelPosition:"top"},
-				//{view:"text", id:"changeWorker", label:"Сотрудник", labelPosition:"top"},
+                {
+                    view:"combo",
+                    label: 'Статус',
+                    name:"changeStatus",
+                    id:"changeStatus",
+                    labelPosition:"top",
+                    options:["Активно","Архив"],
+                },
 				{height:20},
 				{view:"button", id:"saveChange", value:"Сохранить изменения"},
 			],
 			rules: {
 				"changeDate": webix.rules.isNotEmpty,
 				"changeCabinet": webix.rules.isNotEmpty,
+                "changeStatus": webix.rules.isNotEmpty,
 			}
 		}
 	}).hide();
+
+
+    webix.ui({
+        view:"window",
+        position:"center",
+        id:"CandidateWindow",
+        width: 500,
+        modal: true,
+        head:"Добавить",
+        close:true,
+        body:{
+            type:"space",
+            rows:[
+                {
+                    view:"datatable",
+                    id:"CandidatesTable",
+                    columns:[
+                        { id:"Id",    header:"Id", width:30},
+                        { id:"First_name",  header:"Фамилия",fillspace:true},
+                        { id:"Last_name", header:"Имя",fillspace:true},
+                        { id:"Middle_name", header:"Отчество",fillspace:true},
+                    ],
+                    select:"row",
+                    height: 400,
+                },
+                {view:"button",id:"AddCandidate", value:"Добавить кандидата"},
+            ]
+        }
+    }).hide();
+
 
 
 }

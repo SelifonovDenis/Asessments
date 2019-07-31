@@ -13,9 +13,9 @@ type CAssessment struct {
 
 //GetPage открытие страницы "Собеседования"
 func (c *CAssessment) GetAssessments() revel.Result {
-	assessments, err:=providers.GetAssessments()
+	assessments, err := providers.GetAssessments()
 
-	if err!=nil {
+	if err != nil {
 		fmt.Println()
 		fmt.Println(err)
 		fmt.Println()
@@ -26,20 +26,18 @@ func (c *CAssessment) GetAssessments() revel.Result {
 	return c.RenderJSON(assessments)
 }
 
-func (c *CAssessment) GetAssessment(id int64)revel.Result  {
-
-	assessment := new(entity.Asessment)
-	assessment.Id = int(id)
-	assessment, err := providers.GetAssessment(assessment)
+func (c *CAssessment) GetAssessment(id int64) revel.Result {
+	assessment, err := providers.GetAssessment(&entity.Asessment{
+		Id: int(id),
+	})
 	if err != nil {
 		fmt.Println(err)
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 	return c.RenderJSON(assessment)
 }
 
-func (c *CAssessment) AddAssessment()revel.Result  {
+func (c *CAssessment) AddAssessment() revel.Result {
 	assessment := new(entity.Asessment)
 	err := c.Params.BindJSON(&assessment)
 	if err != nil {
@@ -57,7 +55,7 @@ func (c *CAssessment) AddAssessment()revel.Result  {
 	return c.RenderJSON(assessment)
 }
 
-func (c *CAssessment) UpdateAssessment()revel.Result  {
+func (c *CAssessment) UpdateAssessment() revel.Result {
 
 	assessment := new(entity.Asessment)
 	err := c.Params.BindJSON(&assessment)
@@ -75,7 +73,7 @@ func (c *CAssessment) UpdateAssessment()revel.Result  {
 	return c.RenderJSON(assessment)
 }
 
-func (c *CAssessment) GetEmployeeAssessments(id int64)revel.Result  {
+func (c *CAssessment) GetEmployeeAssessments(id int64) revel.Result {
 
 	assessments, err := providers.GetEmployeeAssessments(int(id))
 	if err != nil {
@@ -86,7 +84,7 @@ func (c *CAssessment) GetEmployeeAssessments(id int64)revel.Result  {
 	return c.RenderJSON(assessments)
 }
 
-func (c *CAssessment) RemoveEmployeeAssessment(idEmployee, idAssessment int64)revel.Result  {
+func (c *CAssessment) RemoveEmployeeAssessment(idEmployee, idAssessment int64) revel.Result {
 
 	assessment := new(entity.Asessment)
 	assessment.Id = int(idAssessment)
@@ -103,7 +101,7 @@ func (c *CAssessment) RemoveEmployeeAssessment(idEmployee, idAssessment int64)re
 	return c.RenderJSON(employee)
 }
 
-func (c *CAssessment) AddEmployeeAssessment(idEmployee, idAssessment int64)revel.Result  {
+func (c *CAssessment) AddEmployeeAssessment(idEmployee, idAssessment int64) revel.Result {
 
 	assessment := new(entity.Asessment)
 	assessment.Id = int(idAssessment)
@@ -118,4 +116,18 @@ func (c *CAssessment) AddEmployeeAssessment(idEmployee, idAssessment int64)revel
 		return c.RenderJSON(err)
 	}
 	return c.RenderJSON(employee)
+}
+
+func (c *CAssessment) GetArchiveAssessments() revel.Result {
+	assessments, err := providers.GetArchiveAssessments()
+
+	if err != nil {
+		fmt.Println()
+		fmt.Println(err)
+		fmt.Println()
+		c.Response.Status = 500
+		return c.RenderJSON(err)
+	}
+
+	return c.RenderJSON(assessments)
 }

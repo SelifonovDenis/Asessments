@@ -87,7 +87,9 @@ func (c *CEmployee) RemoveEmployee(id int64)revel.Result  {
 	employee.Id = int(id)
 	candidate, err := providers.RemoveEmployee(employee)
 	if err != nil {
+		fmt.Println()
 		fmt.Println(err)
+		fmt.Println()
 		c.Response.Status = 500
 		return c.RenderJSON(err)
 	}

@@ -12,6 +12,7 @@ import {GetArchive} from "./component";
 import {SetIdChangeAssessment} from "./component";
 import {SetIdAddAssessment} from "./component";
 
+
 export function Manager(){
 
     $$("redirect").attachEvent("onItemClick",function(){
@@ -33,7 +34,7 @@ export function Manager(){
 
 //клик по элементу таблицы
     $$("datatable").attachEvent("onItemClick",function(id){
-        view($$("datatable").getSelectedItem().Id)
+        view()
     });
 
 
@@ -69,6 +70,7 @@ export function Manager(){
     $$("UpdateIdAsessment").attachEvent("onItemClick",function(){
         SetIdChangeAssessment();
         UpdateIdAssessment();
+        SaveChange();
         $$("DateWindow").hide();
     });
 

@@ -5,4 +5,5 @@ type Asessment struct {
 	Date    string
 	Cabinet string
 	Fio     string
+	Status  string
 }

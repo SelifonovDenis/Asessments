@@ -6,13 +6,12 @@ body{
 }
 #leftPart{
 	float:left;
-	width: 100%;
+	width: 75%;
 	
 }
 #rightPart{
-	float:left;
+	float:right;
 	width: 25%;
-	
 }
 .logotype{
 	padding-top:10px;

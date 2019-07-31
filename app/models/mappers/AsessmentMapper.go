@@ -11,14 +11,15 @@ func GetAssessments(db *sql.DB) ([]*entity.Asessment, error) {
 	Assessments := []*entity.Asessment{}
 
 	rows, err := db.Query(`
-		SELECT asessment.id, date, cabinet, first_name, last_name, middle_name 
+		SELECT asessment.id, date, cabinet, first_name, last_name, middle_name, status 
 		FROM asessments.asessment.asessment 
   		LEFT JOIN asessments.asessment.employee_asessment 
    		ON fk_asessment = asessment.id 
   		LEFT JOIN asessments.asessment.employee 
     	ON fk_employee = employee.id 
+		WHERE status != $1
 		ORDER BY asessment.id
-`)
+`, "Архив")
 	if err != nil {
 		return Assessments, err
 	}
@@ -29,7 +30,7 @@ func GetAssessments(db *sql.DB) ([]*entity.Asessment, error) {
 		firstName := sql.NullString{}
 		lastName := sql.NullString{}
 		middleName := sql.NullString{}
-		err = rows.Scan(&assessment.Id, &assessment.Date, &assessment.Cabinet, &firstName, &lastName, &middleName )
+		err = rows.Scan(&assessment.Id, &assessment.Date, &assessment.Cabinet, &firstName, &lastName, &middleName, &assessment.Status )
 		if err != nil {
 			return Assessments, err
 		}
@@ -51,7 +52,7 @@ func GetAssessments(db *sql.DB) ([]*entity.Asessment, error) {
 //GetAssessment Прлучить сотрудника по id
 func GetAssessment(db *sql.DB, asessment *entity.Asessment) (*entity.Asessment, error) {
 	rows, err := db.Query(`
-		SELECT id, date, cabinet
+		SELECT id, date, cabinet, status
 	  	FROM asessments.asessment.asessment		
 		WHERE id = $1	
 		`, asessment.Id)
@@ -61,7 +62,7 @@ func GetAssessment(db *sql.DB, asessment *entity.Asessment) (*entity.Asessment, 
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&asessment.Id, &asessment.Date, &asessment.Cabinet)
+		err = rows.Scan(&asessment.Id, &asessment.Date, &asessment.Cabinet, &asessment.Status)
 		if err != nil {
 			return asessment,err
 		}
@@ -91,10 +92,11 @@ func UpdateAssessment(db *sql.DB, asessment *entity.Asessment) (err error){
 		UPDATE asessments.asessment.asessment
 		SET 
 			date = $1, 
-		    cabinet = $2
+		    cabinet = $2,
+			status = $3
 		WHERE 
-			id = $3
-	`, asessment.Date,  asessment.Cabinet, asessment.Id)
+			id = $4
+	`, asessment.Date,  asessment.Cabinet,asessment.Status, asessment.Id)
 
 	if err != nil{
 		return
@@ -105,12 +107,12 @@ func UpdateAssessment(db *sql.DB, asessment *entity.Asessment) (err error){
 
 func GetEmployeeAssessments(db *sql.DB, id int) ([]*entity.Asessment, error) {
 
-	Assessments := []*entity.Asessment{}
+	var Assessments []*entity.Asessment
 
 	rows, err := db.Query(`
-	  	SELECT asessment.id, date, cabinet
+	  	SELECT a.id, a.date, a.cabinet
 	  	FROM asessments.asessment.employee_asessment
-		LEFT JOIN asessments.asessment.asessment
+		LEFT JOIN asessments.asessment.asessment a
 		ON fk_asessment = asessment.id 
 	  	WHERE fk_employee = $1 
 		ORDER BY asessment.id
@@ -158,4 +160,66 @@ func AddEmployeeAssessment(db *sql.DB, asessment *entity.Asessment, employee *en
 }
 
 
+func GetArchiveAssessments(db *sql.DB) ([]*entity.Asessment, error) {
+
+	Assessments := []*entity.Asessment{}
+
+	rows, err := db.Query(`
+		SELECT asessment.id, date, cabinet, first_name, last_name, middle_name 
+		FROM asessments.asessment.asessment 
+  		LEFT JOIN asessments.asessment.employee_asessment 
+   		ON fk_asessment = asessment.id 
+  		LEFT JOIN asessments.asessment.employee 
+    	ON fk_employee = employee.id 
+		WHERE status = $1
+		ORDER BY asessment.id
+`, "Архив")
+	if err != nil {
+		return Assessments, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		assessment := entity.Asessment{}
+		firstName := sql.NullString{}
+		lastName := sql.NullString{}
+		middleName := sql.NullString{}
+		err = rows.Scan(&assessment.Id, &assessment.Date, &assessment.Cabinet, &firstName, &lastName, &middleName )
+		if err != nil {
+			return Assessments, err
+		}
+		if firstName.Valid{
+			assessment.Fio = assessment.Fio + firstName.String
+		}
+		if lastName.Valid{
+			assessment.Fio = assessment.Fio + " "+lastName.String
+		}
+		if middleName.Valid{
+			assessment.Fio = assessment.Fio + " "+middleName.String
+		}
+
+		Assessments = append(Assessments,&assessment)
+	}
+	return Assessments, err
+}
+
+func CheckEmployeeAssessment(db *sql.DB, asessment *entity.Asessment, employee *entity.Employee) (fkass, fkem sql.NullString,err error){
+	rows, err := db.Query(`
+		SELECT fk_asessment, fk_employee FROM asessments.asessment.employee_asessment
+		WHERE fk_asessment = $1 AND fk_employee = $2
+		`, asessment.Id,employee.Id)
+
+	if err != nil{
+		return
+	}
+	for rows.Next() {
+		fkass = sql.NullString{}
+		fkem = sql.NullString{}
+		err = rows.Scan(&fkass, &fkem)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
 

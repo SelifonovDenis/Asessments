@@ -7,6 +7,11 @@ import {GetCandidates} from "./component";
 import {GetTable} from "./component";
 import {AddAssessment} from "./component";
 import {SaveChange} from "./component";
+import {GetFreeCandidates} from "./component";
+import {AddCandidate} from "./component";
+import {GetArchive} from "./component";
+import {AddToArchive} from "./component";
+import {RemoveCandidate} from "./component";
 
 
 export function Manager(){
@@ -36,10 +41,7 @@ export function Manager(){
     $$("datatable").attachEvent("onItemClick",function(id){
         GetCandidates();
     });
-    //клик по кнопке "назначить дату собеседования"
-    $$("butAddDate").attachEvent("onItemClick",function(){
-        viewAddDate();
-    });
+
 
     $$("GetAssessments").attachEvent("onItemClick",function(){
         GetTable();
@@ -52,5 +54,26 @@ export function Manager(){
         SaveChange();
     });
 
+    $$("butAddCandidate").attachEvent("onItemClick",function(){
+        GetFreeCandidates();
+    });
+
+    $$("AddCandidate").attachEvent("onItemClick",function(){
+        AddCandidate();
+    });
+    $$("getArchive").attachEvent("onItemClick",function(){
+        GetArchive();
+    });
+    $$("addToArchive").attachEvent("onItemClick",function(){
+        AddToArchive();
+    });
+
+    $$("candidates").attachEvent("onItemClick",function(id){
+        $$("removeCandidate").enable();
+    });
+
+    $$("removeCandidate").attachEvent("onItemClick",function(id){
+        RemoveCandidate();
+    });
 
 }

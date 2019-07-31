@@ -4,8 +4,8 @@ export function welcome(){
     webix.ui({
 		type:"clean",
 		container:"leftPart",
-		cols:[
-			{ rows:[
+		id:"left",
+		 rows:[
 				{
 					view:"toolbar", elements:[
 
@@ -29,7 +29,7 @@ export function welcome(){
 						{view:"accordion",
 						multi:true,
 						collapsed: true,
-						cols:[ //or rows 
+						cols:[ //or rows
 							{
 								header:"Поиск",
 								body:{
@@ -46,7 +46,7 @@ export function welcome(){
 											{view:"button", value:"Найти"},
 										]
 								},
-							width: widthScreen*0.2 
+							width: widthScreen*0.2
 							}
 						]},
 						{
@@ -70,63 +70,74 @@ export function welcome(){
 								}
 							],
 							select:"row",
-							height: heightScreen-100	
+							height: heightScreen-100
 						}
 					]
-				
+
 				}
-			], width: widthScreen*0.75},
+			]
+
+
+	});
+
+	webix.ui({
+		type: "clean",
+		container: "rightPart",
+		id:"right",
+		rows:[
+			{view:"label", label:"<img src=\"../../../public/img/logo.png\">",height:99, align:"center", css:"logotype"},
 			{
-				rows:[				
-					{view:"label", label:"<img src=\"../../../public/img/logo.png\">",height:101, align:"center", css:"logotype"},	
+				type:"space",
+				rows:[
 					{
 						type:"space",
-						rows:[
+						view:"form",
+						id:"changeForm",
+						elements:[
+							{view:"text",name:"cfirstName", id:"changeFirstName", label:"Фамилия"},
+							{view:"text",name:"clastName",  id:"changeLastName", label:"Имя"},
+							{view:"text",name:"cmiddleName", id:"changeMiddleName", label:"Отчество"},
+							{view:"text",name:"cphone",  id:"changePhone", label:"Телефон"},
+							{view:"text",name:"cemail",  id:"changeEmail", label:"Почта"},
 							{
-								type:"space",
-								view:"form",
-								id:"changeForm",
-								elements:[
-									{view:"text",name:"cfirstName", id:"changeFirstName", label:"Фамилия"},
-									{view:"text",name:"clastName",  id:"changeLastName", label:"Имя"},
-									{view:"text",name:"cmiddleName", id:"changeMiddleName", label:"Отчество"},
-									{view:"text",name:"cphone",  id:"changePhone", label:"Телефон"},
-									{view:"text",name:"cemail",  id:"changeEmail", label:"Почта"},
-									{
-										view:"combo",
-										id:"changeStatus",
-										label: 'Статус',
-										options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Архив"]
-									},
-									{view:"text", id:"changeDate", label:"Дата собеседования", labelWidth: 150, readonly:true},
-								],
-								rules:{
-									"cfirstName":webix.rules.isNotEmpty,
-									"clastName":webix.rules.isNotEmpty,
-									"cmiddleName":webix.rules.isNotEmpty,
-									"cphone":webix.rules.isNotEmpty,
-									"cemail":webix.rules.isEmail,
-								}
+								view:"combo",
+								id:"changeStatus",
+								label: 'Статус',
+								options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования","Архив"]
 							},
-
-							{view:"button", id:"saveChange", value:"Сохранить изменения", disabled:true},
-							{view:"button",id:"butAddDate", value:"Назначить дату собеседования", disabled:true},
-							{view:"button", id:"butRelocateArchive", value:"Переместить в архив", disabled:true},
-							{view:"label", label:"Собеседование пройдено", align:"center"},
-							{
-								cols:[
-									{view:"button", id:"successfully", value:"Успешно", disabled:true},
-									{view:"button",id:"notSuccessfully", value:"Не успешно", disabled:true}
-								]
-							}
-
+							{view:"text", id:"changeDate", label:"Дата собеседования", labelWidth: 150, readonly:true},
 						],
-						height:heightScreen-101
-					}	
-				]
+						rules:{
+							"cfirstName":webix.rules.isNotEmpty,
+							"clastName":webix.rules.isNotEmpty,
+							"cmiddleName":webix.rules.isNotEmpty,
+							"cphone":webix.rules.isNotEmpty,
+							"cemail":webix.rules.isEmail,
+						}
+					},
+
+					{view:"button", id:"saveChange", value:"Сохранить изменения", disabled:true},
+					{view:"button",id:"butAddDate", value:"Назначить дату собеседования", disabled:true},
+					{view:"button", id:"butRelocateArchive", value:"Переместить в архив", disabled:true},
+					{view:"label", label:"Собеседование пройдено", align:"center"},
+					{
+						cols:[
+							{view:"button", id:"successfully", value:"Успешно", disabled:true},
+							{view:"button",id:"notSuccessfully", value:"Не успешно", disabled:true}
+						]
+					}
+
+				],
+				height:heightScreen-101
 			}
 		]
 	});
+
+
+	webix.event(window, "resize", function(){
+		$$("left").adjust();
+		$$("right").adjust();
+	})
 
 
 	//Окно назначить дату
