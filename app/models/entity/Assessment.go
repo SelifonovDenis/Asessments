@@ -1,6 +1,6 @@
 package entity
 
-type Asessment struct {
+type Assessment struct {
 	Id      int
 	Date    string
 	Cabinet string

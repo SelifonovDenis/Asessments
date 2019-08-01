@@ -1,4 +1,4 @@
-import Request from "./Provider";
+import Request from "../providers/Provider";
 
 export function viewAdd(){
     $$("add").show();
@@ -11,16 +11,20 @@ export function redirect(str){
     window.location.href = str;
 }
 
+var lastId = 0;
+var latestAction = "main";
+
 //отображение атрибутов кандидата в окне изменения
-export function viewChange(id){
+export function viewChange(){
     employees.forEach(function(elem, index){
-        if(id === elem.Id)
+        if(lastId === elem.Id)
         {
             $$("changeFirstName").setValue(elem.First_name);
             $$("changeLastName").setValue(elem.Last_name);
             $$("changeMiddleName").setValue(elem.Middle_name);
             $$("changePhone").setValue(elem.Phone);
             $$("changeEmail").setValue(elem.Email);
+            $$("changeStatus").setValue(elem.Status);
             $$("changeWindow").show();
         }
     });
@@ -29,7 +33,8 @@ export function viewChange(id){
 var employees;
 
 export function GetTable() {
-    clearRightPart();
+
+    latestAction= "main";
     var req = new Request();
     req.Get('employee').then(function (res){
         employees = res;
@@ -49,8 +54,9 @@ export function clearRightPart() {
     $$("changeButton").disable();
     $$("butAddDate").disable();
     $$("removeAssessment").disable();
-    $$("removeEmployee").disable();
+    $$("AddArchive").disable();
     $$("dates").clearAll();
+    lastId = 0;
 }
 
 var EmployeeAssessments;
@@ -58,12 +64,16 @@ var EmployeeAssessments;
 //отображение назначенных дат собеседований выбранного сотрудника в правой части
 export function GetEmployeeAssessments() {
     $$("changeButton").enable();
-    $$("removeAssessment").enable();
-    $$("removeEmployee").enable();
+    $$("AddArchive").enable();
     $$("butAddDate").enable();
     $$("dates").clearAll();
+
+    if (typeof $$("datatable").getSelectedItem() != "undefined") {
+        lastId = $$("datatable").getSelectedItem().Id;
+    }
+
     var req = new Request();
-    req.Get('employee/'+$$("datatable").getSelectedItem().Id+'/assessment/').then(function (res){
+    req.Get('employee/'+lastId+'/assessment/').then(function (res){
         EmployeeAssessments = res;
         if (typeof EmployeeAssessments['Message'] == "undefined") {
             $$("Date").clearAll();
@@ -126,44 +136,38 @@ export function AddEmployee() {
 //изменить
 export function SaveChange() {
     var data = {
-        Id: $$("datatable").getSelectedItem().Id,
+        Id: lastId,
         First_name: $$("changeFirstName").getValue(),
         Last_name: $$("changeLastName").getValue(),
         Middle_name: $$("changeMiddleName").getValue(),
         Phone: $$("changePhone").getValue(),
         Email: $$("changeEmail").getValue(),
+        Status: $$("changeStatus").getValue(),
     };
 
     if ($$("changeForm").validate()) {
         var req = new Request();
         req.Post('employee', data).then(
             function (result) {
-                GetTable();
+                if (latestAction === "main") {
+                    GetTable();
+                } else{
+                    GetArchive();
+                }
                 $$("changeWindow").hide();
             }
         )
     } else {
         webix.message("Заполните все поля")
     }
-
 }
 
 export function RemoveAssessment() {
     var req = new Request();
-    req.Delete('employee/'+$$("datatable").getSelectedItem().Id+'/assessment/'+$$('dates').getSelectedItem().Id).then(
+    req.Delete('employee/'+lastId+'/assessment/'+$$('dates').getSelectedItem().Id).then(
         function (result) {
-
             GetEmployeeAssessments();
-        }
-    )
-}
-
-export function RemoveEmployee() {
-    var req = new Request();
-    req.Delete('employee/'+$$("datatable").getSelectedItem().Id).then(
-        function (result) {
-
-            GetTable();
+            $$("removeAssessment").disable();
         }
     )
 }
@@ -171,9 +175,8 @@ export function RemoveEmployee() {
 export function AddEmployeeAssessment() {
     var req = new Request();
     if (typeof $$("Date").getSelectedItem() != "undefined") {
-        req.Put('employee/'+$$("datatable").getSelectedItem().Id+'/assessment/'+$$("Date").getSelectedItem().Id, "").then(
+        req.Put('employee/'+lastId+'/assessment/'+$$("Date").getSelectedItem().Id, "").then(
             function (result) {
-
                 GetEmployeeAssessments();
                 $$("addDate").hide();
             }
@@ -182,5 +185,53 @@ export function AddEmployeeAssessment() {
     else{
         webix.message("Дата не выбрана");
     }
+
+}
+
+export function GetArchive() {
+    latestAction = "archive";
+    var req = new Request();
+    req.Get('archive/employee').then(function (res){
+        employees = res;
+        if (typeof employees['Message'] == "undefined") {
+            $$("datatable").clearAll();
+            employees.forEach(function(elem, index){
+                $$("datatable").add(elem)
+            });
+        }
+        else {
+            console.log(candidates.Message.value)
+        }
+    });
+}
+
+export function AddArchive() {
+    var data;
+    employees.forEach(function (elem) {
+        if (elem.Id === lastId) {
+            data = {
+                Id: lastId,
+                First_name: elem.First_name,
+                Last_name: elem.Last_name,
+                Middle_name: elem.Middle_name,
+                Phone: elem.Phone,
+                Email: elem.Email,
+                Status: "Архив",
+            };
+        }
+    })
+
+
+    var req = new Request();
+    req.Post('employee', data).then(
+        function (result) {
+            if (latestAction === "main") {
+                GetTable();
+            } else{
+                GetArchive();
+            }
+            $$("changeWindow").hide();
+        }
+    )
 
 }

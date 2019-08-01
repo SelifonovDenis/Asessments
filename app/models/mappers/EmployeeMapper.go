@@ -11,10 +11,11 @@ func GetEmployees(db *sql.DB) ([]*entity.Employee, error) {
 	employees := []*entity.Employee{}
 
 	rows, err := db.Query(`
-	  	SELECT id, first_name, last_name, middle_name, phone, email
+	  	SELECT id, first_name, last_name, middle_name, phone, email, status
 	  	FROM asessments.asessment.employee
+	  	WHERE status != $1
 		ORDER BY id
-	  	`)
+	  	`, "Архив")
 	if err != nil {
 		return employees, err
 	}
@@ -23,7 +24,7 @@ func GetEmployees(db *sql.DB) ([]*entity.Employee, error) {
 
 	for rows.Next() {
 		employee := entity.Employee{}
-		err = rows.Scan(&employee.Id, &employee.First_name, &employee.Last_name, &employee.Middle_name, &employee.Phone, &employee.Email)
+		err = rows.Scan(&employee.Id, &employee.First_name, &employee.Last_name, &employee.Middle_name, &employee.Phone, &employee.Email, &employee.Status)
 
 		if err != nil {
 			return employees, err
@@ -80,10 +81,11 @@ func UpdateEmployee(db *sql.DB, employee *entity.Employee) (err error){
 		    last_name = $2,
 		    middle_name = $3,
 		    phone = $4,
-			email = $5
+			email = $5,
+			status = $6
 		WHERE 
-			id = $6
-	`, employee.First_name,  employee.Last_name,  employee.Middle_name,  employee.Phone,  employee.Email, employee.Id)
+			id = $7
+	`, employee.First_name,  employee.Last_name,  employee.Middle_name,  employee.Phone,  employee.Email, employee.Status, employee.Id)
 
 	if err != nil{
 		return
@@ -93,16 +95,58 @@ func UpdateEmployee(db *sql.DB, employee *entity.Employee) (err error){
 }
 
 
-func RemoveEmployee(db *sql.DB, employee *entity.Employee) (*entity.Employee, error) {
-	_, err := db.Exec(`
-		DELETE FROM asessments.asessment.employee		
-		WHERE id = $1	
-		`, employee.Id)
+func GetArchiveEmployees(db *sql.DB) ([]*entity.Employee, error) {
 
+	employees := []*entity.Employee{}
+
+	rows, err := db.Query(`
+	  	SELECT id, first_name, last_name, middle_name, phone, email, status
+	  	FROM asessments.asessment.employee
+	  	WHERE status = $1
+		ORDER BY id
+	  	`, "Архив")
 	if err != nil {
-		return employee,err
+		return employees, err
 	}
+	defer rows.Close()
 
-	return employee,err
+
+	for rows.Next() {
+		employee := entity.Employee{}
+		err = rows.Scan(&employee.Id, &employee.First_name, &employee.Last_name, &employee.Middle_name, &employee.Phone, &employee.Email, &employee.Status)
+
+		if err != nil {
+			return employees, err
+		}
+		employees = append(employees,&employee)
+	}
+	return employees, err
 }
 
+func GetAssessmentsEmployee(db *sql.DB, id int) ([]*entity.Employee, error) {
+
+	var Employees []*entity.Employee
+
+	rows, err := db.Query(`
+	  	SELECT e.id, e.first_name, e.last_name, e.middle_name
+	  	FROM asessments.asessment.employee e
+		LEFT JOIN asessments.asessment.employee_assessment
+		ON fk_employee = e.id 
+	  	WHERE fk_assessment = $1
+		ORDER BY e.id
+	  	`, id)
+	if err != nil {
+		return Employees, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		employee := entity.Employee{}
+		err = rows.Scan(&employee.Id, &employee.First_name, &employee.Last_name, &employee.Middle_name)
+		if err != nil {
+			return Employees, err
+		}
+		Employees = append(Employees,&employee)
+	}
+	return Employees, err
+}

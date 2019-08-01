@@ -1,7 +1,7 @@
 
 import {welcome} from "./view";
-import {Manager} from "./EventManager";
-import {GetTable} from "./component";
+import {Manager} from "../EventManagers/indexManager";
+import {GetTable} from "../components/indexComponent";
 webix.ready(function () {
     welcome();
     Manager();

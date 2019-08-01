@@ -23,7 +23,7 @@ func Get(db *sql.DB, user entity.User) (u entity.User, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&u.Id, &u.Login, &u.Password, &u.Role, &u.Id_employ)
+		err = rows.Scan(&u.Id, &u.Login, &u.Password, &u.Role, &u.Id_employee)
 		if err != nil {
 			return
 		}

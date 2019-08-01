@@ -1,4 +1,4 @@
-import Request from "./Provider";
+import Request from "../providers/Provider";
 
 export function viewAdd(){
     $$("add").show();
@@ -12,7 +12,7 @@ export function viewChange(id){
     assessments.forEach(function(elem, index){
         if(id === elem.id)
         {
-            var myparse = webix.Date.strToDate("%d.%m.%Y");
+            var myparse = webix.Date.strToDate("%d.%m.%Y %H:%i");
             var date = myparse(elem.Date);
             $$("changeDate").setValue(date);
             $$("changeCabinet").setValue(elem.Cabinet);
@@ -20,20 +20,23 @@ export function viewChange(id){
             $$("changeWindow").show();
         }
     });
-
 }
 
 var candidates;
+var latestAction = "main";
+var lastId = 0;
 
 export function GetCandidates(){
-
+    $$("removeCandidate").disable();
     $$("changeButton").enable();
     $$("butAddCandidate").enable();
     $$("addToArchive").enable();
     $$("candidates").clearAll();
-
+    if (typeof $$("datatable").getSelectedItem() != "undefined") {
+        lastId = $$("datatable").getSelectedItem().Id;
+    }
     var req = new Request();
-    req.Get('assessment/'+$$("datatable").getSelectedItem().Id+'/candidate').then(function (res){
+    req.Get('assessment/'+lastId+'/candidate').then(function (res){
         candidates = res;
         if (typeof candidates['Message'] == "undefined") {
             candidates.forEach(function(elem, index){
@@ -48,6 +51,9 @@ export function GetCandidates(){
         }
     });
 }
+
+
+
 
 var freeCandidates;
 export function GetFreeCandidates(){
@@ -85,7 +91,7 @@ export function AddCandidate() {
                     Email:elem.Email,
                     Status:"Назначено собеседование",
                     Asessment: {
-                        Id: $$("datatable").getSelectedItem().Id,
+                        Id: lastId,
                     }
                 }
             }
@@ -94,7 +100,6 @@ export function AddCandidate() {
         var req = new Request();
         req.Post('candidate', data).then(
             function (result) {
-
                 $$("CandidateWindow").hide();
                 GetCandidates();
             }
@@ -128,7 +133,6 @@ export function RemoveCandidate() {
     var req = new Request();
     req.Post('candidate', data).then(
         function (result) {
-
             GetCandidates();
         }
     )
@@ -141,12 +145,16 @@ export function clearRightPart() {
     $$("removeCandidate").disable();
     $$("addToArchive").disable();
     $$("candidates").clearAll();
+
+    $$("removeEmployee").disable();
+    $$("butAddEmployee").disable();
+    $$("employees").clearAll();
 }
 
 var assessments;
 
 export function GetTable() {
-    clearRightPart();
+    latestAction = "main";
     var req = new Request();
     req.Get('assessment').then(function (res){
         assessments = res;
@@ -158,23 +166,6 @@ export function GetTable() {
         }
         else {
             console.log(assessments.Message.value)
-        }
-    });
-}
-
-var employees;
-export function GetEmployees() {
-    var req = new Request();
-    req.Get('employee').then(function (res){
-        employees = res;
-        if (typeof employees['Message'] == "undefined") {
-            $$("datatable").clearAll();
-            employees.forEach(function(elem, index){
-                $$("datatable").add(elem)
-            });
-        }
-        else {
-            console.log(candidates.Message.value)
         }
     });
 }
@@ -212,7 +203,11 @@ export function SaveChange() {
         var req = new Request();
         req.Post('assessment', data).then(
             function (result) {
-                GetTable();
+                if (latestAction === "main") {
+                    GetTable();
+                } else{
+                    GetArchive();
+                }
                 $$("changeWindow").hide();
             }
         )
@@ -223,6 +218,7 @@ export function SaveChange() {
 
 
 export function GetArchive() {
+    latestAction = "archive";
     clearRightPart();
     var req = new Request();
     req.Get('archive/assessment').then(function (res){
@@ -255,9 +251,86 @@ export function AddToArchive() {
     var req = new Request();
     req.Post('assessment', data).then(
         function (result) {
-
-            GetTable();
+            if (latestAction === "main") {
+                GetTable();
+            } else{
+                GetArchive();
+            }
             $$("changeWindow").hide();
         }
     )
+}
+
+
+
+export function GetEmployees(){
+    $$("removeEmployee").disable();
+    $$("butAddEmployee").enable();
+    $$("employees").clearAll();
+
+    var req = new Request();
+    req.Get('assessment/'+lastId+'/employee').then(function (res){
+        var Employees = res;
+        if (typeof candidates['Message'] == "undefined" && Employees !=null) {
+            Employees.forEach(function(elem, index){
+                $$("employees").add({
+                    Id:elem.Id,
+                    title: elem.First_name+" "+elem.Last_name+" "+elem.Middle_name,
+                },0)
+            });
+        }
+    });
+}
+
+
+export function RemoveEmployee() {
+    var req = new Request();
+    req.Delete('employee/'+$$("employees").getSelectedItem().Id+'/assessment/'+lastId).then(
+        function (result) {
+            GetEmployees();
+            if (latestAction === "main") {
+                GetTable();
+            } else{
+                GetArchive();
+            }
+            $$("removeEmployee").disable();
+        }
+    )
+}
+
+export function AddEmployeeAssessment() {
+    var req = new Request();
+    if (typeof $$("EmployeesTable").getSelectedItem() != "undefined") {
+        req.Put('employee/'+$$("EmployeesTable").getSelectedItem().Id+'/assessment/'+lastId, "").then(
+            function (result) {
+                GetEmployees();
+                if (latestAction === "main") {
+                    GetTable();
+                } else{
+                    GetArchive();
+                }
+                $$("EmployeeWindow").hide();
+            }
+        )
+    }
+    else{
+        webix.message("Сотрудник не выбран");
+    }
+
+}
+
+export function GetAllEmployees() {
+    $$("EmployeeWindow").show();
+    var req = new Request();
+    req.Get('employee').then(function (res){
+        if (typeof res['Message'] == "undefined") {
+            $$("EmployeesTable").clearAll();
+            res.forEach(function(elem, index){
+                $$("EmployeesTable").add(elem)
+            });
+        }
+        else {
+            console.log(candidates.Message.value)
+        }
+    });
 }

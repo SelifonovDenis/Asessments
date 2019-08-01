@@ -5,6 +5,6 @@ type User struct {
 	Login     string `json:"login"`
 	Password  string `json:"password"`
 	Role      string
-	Id_employ int
+	Id_employee int
 }
 

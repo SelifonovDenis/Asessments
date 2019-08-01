@@ -7,4 +7,5 @@ type Employee struct {
 	Middle_name string
 	Phone       string
 	Email       string
+	Status      string
 }

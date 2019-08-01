@@ -16,21 +16,22 @@ GET     /candidate                                           CCandidate.GetCandi
 PUT     /candidate                                           CCandidate.AddCandidate
 POST    /candidate                                           CCandidate.UpdateCandidate
 GET     /candidate/:id                                       CCandidate.GetCandidate
+GET     /assessment/freeCandidates                           CCandidate.GetFreeCandidates
 GET     /employee                                            CEmployee.GetEmployees
 PUT     /employee                                            CEmployee.AddEmployee
 POST    /employee                                            CEmployee.UpdateEmployee
-DELETE  /employee/:id                                        CEmployee.RemoveEmployee
 GET     /employee/:id/assessment                             CAssessment.GetEmployeeAssessments
 PUT     /employee/:idEmployee/assessment/:idAssessment       CAssessment.AddEmployeeAssessment
 DELETE  /employee/:idEmployee/assessment/:idAssessment       CAssessment.RemoveEmployeeAssessment
 GET     /assessment                                          CAssessment.GetAssessments
 PUT     /assessment                                          CAssessment.AddAssessment
 POST    /assessment                                          CAssessment.UpdateAssessment
-GET     /assessment/freeCandidates                           CCandidate.GetFreeCandidates
 GET     /assessment/:id/                                     CAssessment.GetAssessment
 GET     /assessment/:id/candidate                            CCandidate.GetCandidates
+GET     /assessment/:id/employee                             CEmployee.GetAssessmentsEmployee
 GET     /archive/candidate                                   CCandidate.GetArchiveCandidates
 GET     /archive/assessment                                  CAssessment.GetArchiveAssessments
+GET     /archive/employee                                    CEmployee.GetArchiveEmployees
 
 
 

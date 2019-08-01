@@ -27,13 +27,11 @@ class Request{
         }).then(res => res.json())
     }
 
-    Delete(url){
+    Delete(url) {
         return fetch(url, {
             method: 'DELETE'
         }).then(res => res.json());
     }
-
-
 }
 
 export default Request;

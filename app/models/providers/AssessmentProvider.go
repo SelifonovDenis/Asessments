@@ -6,11 +6,11 @@ import (
 	"Asessments/app/models/mappers"
 )
 
-func GetAssessments() ([]*entity.Asessment, error)  {
+func GetAssessments() ([]*entity.Assessment, error)  {
 
 	db, err := connection.ConnectToDB()
 	if err != nil {
-		return []*entity.Asessment{},err
+		return []*entity.Assessment{},err
 	}
 	defer db.Close()
 	assessments, err := mappers.GetAssessments(db)
@@ -18,7 +18,7 @@ func GetAssessments() ([]*entity.Asessment, error)  {
 		return assessments,err
 	}
 
-	Assessments := []*entity.Asessment{}
+	Assessments := []*entity.Assessment{}
 
 	for i:=0;i< len(assessments); i++  {
 		Assessments = append(Assessments, assessments[i])
@@ -40,7 +40,7 @@ func GetAssessments() ([]*entity.Asessment, error)  {
 	return Assessments,err
 }
 
-func GetAssessment(assessment *entity.Asessment) (*entity.Asessment, error) {
+func GetAssessment(assessment *entity.Assessment) (*entity.Assessment, error) {
 
 	db, err := connection.ConnectToDB()
 	if err!=nil {
@@ -55,7 +55,7 @@ func GetAssessment(assessment *entity.Asessment) (*entity.Asessment, error) {
 	return assessment,err
 }
 
-func AddAssessment(assessment *entity.Asessment)(*entity.Asessment, error){
+func AddAssessment(assessment *entity.Assessment)(*entity.Assessment, error){
 	db, err := connection.ConnectToDB()
 	if err!=nil {
 		return assessment,err
@@ -70,7 +70,7 @@ func AddAssessment(assessment *entity.Asessment)(*entity.Asessment, error){
 	return assessment, err
 }
 
-func UpdateAssessment(assessment *entity.Asessment)(*entity.Asessment, error){
+func UpdateAssessment(assessment *entity.Assessment)(*entity.Assessment, error){
 	db, err := connection.ConnectToDB()
 	if err!=nil {
 		return assessment,err
@@ -82,11 +82,11 @@ func UpdateAssessment(assessment *entity.Asessment)(*entity.Asessment, error){
 	return assessment, err
 }
 
-func GetEmployeeAssessments(id int) ([]*entity.Asessment, error)  {
+func GetEmployeeAssessments(id int) ([]*entity.Assessment, error)  {
 
 	db, err := connection.ConnectToDB()
 	if err != nil {
-		return []*entity.Asessment{},err
+		return []*entity.Assessment{},err
 	}
 	defer db.Close()
 
@@ -97,7 +97,7 @@ func GetEmployeeAssessments(id int) ([]*entity.Asessment, error)  {
 	return assessments,err
 }
 
-func RemoveEmployeeAssessment(assessment *entity.Asessment,employee *entity.Employee) error{
+func RemoveEmployeeAssessment(assessment *entity.Assessment,employee *entity.Employee) error{
 	db, err := connection.ConnectToDB()
 	if err!=nil {
 		return err
@@ -109,19 +109,12 @@ func RemoveEmployeeAssessment(assessment *entity.Asessment,employee *entity.Empl
 	return err
 }
 
-func AddEmployeeAssessment(assessment *entity.Asessment,employee *entity.Employee) error{
+func AddEmployeeAssessment(assessment *entity.Assessment,employee *entity.Employee) error{
 	db, err := connection.ConnectToDB()
 	if err!=nil {
 		return err
 	}
 	defer db.Close()
-	fkass, fkem,err := mappers.CheckEmployeeAssessment(db, assessment, employee)
-	if err!=nil {
-		return err
-	}
-	if fkem.Valid && fkass.Valid {
-		return err
-	}
 
 
 	err = mappers.AddEmployeeAssessment(db,assessment, employee)
@@ -129,11 +122,11 @@ func AddEmployeeAssessment(assessment *entity.Asessment,employee *entity.Employe
 	return err
 }
 
-func GetArchiveAssessments() ([]*entity.Asessment, error)  {
+func GetArchiveAssessments() ([]*entity.Assessment, error)  {
 
 	db, err := connection.ConnectToDB()
 	if err != nil {
-		return []*entity.Asessment{},err
+		return []*entity.Assessment{},err
 	}
 	defer db.Close()
 	assessments, err := mappers.GetArchiveAssessments(db)
@@ -141,7 +134,7 @@ func GetArchiveAssessments() ([]*entity.Asessment, error)  {
 		return assessments,err
 	}
 
-	Assessments := []*entity.Asessment{}
+	Assessments := []*entity.Assessment{}
 
 	for i:=0;i< len(assessments); i++  {
 		Assessments = append(Assessments, assessments[i])

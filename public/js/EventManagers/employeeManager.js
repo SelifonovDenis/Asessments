@@ -1,14 +1,19 @@
-import {viewAdd} from "./component";
-import {redirect} from "./component";
-import {GetEmployeeAssessments} from "./component";
-import {viewAddDate} from "./component";
-import {viewChange} from "./component";
-import {RemoveEmployee} from "./component";
-import {AddEmployee} from "./component";
-import {RemoveAssessment} from "./component";
-import {GetAssessments} from "./component";
-import {AddEmployeeAssessment} from "./component";
-import {SaveChange} from "./component";
+import {viewAdd} from "../components/employeeComponent";
+import {redirect} from "../components/employeeComponent";
+import {GetEmployeeAssessments} from "../components/employeeComponent";
+import {viewAddDate} from "../components/employeeComponent";
+import {viewChange} from "../components/employeeComponent";
+import {RemoveEmployee} from "../components/employeeComponent";
+import {AddEmployee} from "../components/employeeComponent";
+import {RemoveAssessment} from "../components/employeeComponent";
+import {GetAssessments} from "../components/employeeComponent";
+import {AddEmployeeAssessment} from "../components/employeeComponent";
+import {SaveChange} from "../components/employeeComponent";
+import {GetTable} from "../components/employeeComponent";
+import {GetArchive} from "../components/employeeComponent";
+import {AddArchive} from "../components/employeeComponent";
+
+
 
 export function Manager(){
 
@@ -29,7 +34,7 @@ export function Manager(){
     });
 //клик по кнопке "изменить" на тулбаре
     $$("changeButton").attachEvent("onItemClick",function(){
-        viewChange($$("datatable").getSelectedItem().Id);
+        viewChange();
     });
 
 //клик по элементу таблицы
@@ -43,9 +48,7 @@ export function Manager(){
         GetAssessments();
     });
 
-    $$("removeEmployee").attachEvent("onItemClick",function(){
-        RemoveEmployee();
-    });
+
     $$("addEmployee").attachEvent("onItemClick",function(){
         AddEmployee();
     });
@@ -61,5 +64,22 @@ export function Manager(){
     $$("saveChange").attachEvent("onItemClick",function(){
         SaveChange();
     });
+    $$("getEmployee").attachEvent("onItemClick",function(){
+        GetTable();
+    });
+
+    $$("dates").attachEvent("onItemClick",function(){
+        $$("removeAssessment").enable();
+    });
+
+    $$("GetArchive").attachEvent("onItemClick",function(){
+        GetArchive();
+    });
+
+    $$("AddArchive").attachEvent("onItemClick",function(){
+        AddArchive();
+    });
+
+
 
 }

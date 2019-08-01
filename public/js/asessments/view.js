@@ -3,10 +3,13 @@ export function welcome(){
 	var widthScreen = document.body.clientWidth;
 	//Левая часть
     webix.ui({
+		id:"main",
 		type:"clean",
 		container:"leftPart",
 		cols:[
-			{ rows:[
+			{
+				gravity:3,
+				rows:[
 				{
 					view:"toolbar", elements:[
 						{view:"label",type:"clean", label:"Собеседования", height:40, css:"logo", align:"center", margin:0},
@@ -14,13 +17,14 @@ export function welcome(){
 					css:"nav"
 				},
 				{view:"toolbar", elements:[
-						{view:"button", id:"GetAssessments", value:"Собеседования"},
-						{view:"button", value:"Добавить собеседование", height:50, id:"viewAdd"},
-						{view:"button", id:"changeButton", value:"Изменить", disabled:true},
-						{view:"button", id:"getArchive", value:"Архив"},
 						{view:"button", value:"Учёт кандидатов", id:"redirect"},
 						{view:"button", value:"Учёт сотрудников", id:"redirect2"},
 						{view:"button", value:"Выход", id:"out"},
+						{},
+						{view:"button", id:"GetAssessments", value:"Собеседования"},
+						{view:"button", value:"Добавить собеседование", height:50, id:"viewAdd"},
+						{view:"button", id:"getArchive", value:"Архив"},
+
 					],
 					css:"nav"
 				},
@@ -51,9 +55,9 @@ export function welcome(){
 							columns:[
 
 								{ id:"Id",    header:"Id", width:50},
-								{ id:"Date",    header:"Дата", width:150},
+								{ id:"Date",    header:"Дата", width:200},
 								{ id:"Cabinet",    header:"Кабинет", width:150},
-								{ id:"Fio", header:"Проводит",fillspace:true},
+								{ id:"Fio", header:"Проводит",fillspace:true, minWidth:250},
 
 							],
 							select:"row",
@@ -62,8 +66,10 @@ export function welcome(){
 					]
 				
 				}
-			], width: widthScreen*0.75},
+			]
+			},
 			{
+				gravity:1,
 				rows:[				
 					{view:"label", label:"<img src=\"../../../public/img/logo.png\">",height:101, align:"center", css:"logotype"},	
 					{
@@ -72,16 +78,25 @@ export function welcome(){
 							{view:"label", label:"Кандидаты", height:20},
 							{
 								view:"list",
-								height:400,
+
 								template:"#title#",
 								select:true,
 								id:"candidates"
 							},
-							
-							{height:40},
+							{view:"label", label:"Проводит", height:20},
+							{
+								view:"list",
+
+								template:"#title#",
+								select:true,
+								id:"employees"
+							},
+							{view:"button", id:"changeButton", value:"Изменить собеседование", disabled:true},
+							{view:"button", id:"addToArchive",value:"Переместить в архив", disabled:true},
 							{view:"button", id:"butAddCandidate",value:"Добавить кандидата", disabled:true},
 							{view:"button", id:"removeCandidate", value:"Удалить кандидата", disabled:true},
-							{view:"button", id:"addToArchive",value:"Переместить в архив", disabled:true},
+							{view:"button", id:"butAddEmployee",value:"Добавить сотрудника", disabled:true},
+							{view:"button", id:"removeEmployee", value:"Удалить сотрудника", disabled:true},
 
 						],
 						height:heightScreen-101
@@ -90,7 +105,10 @@ export function welcome(){
 			}
 		]
 	});
-	
+
+	webix.event(window, "resize", function(){
+		$$("main").adjust();
+	})
 	//всплывающее окно "Добавить собеседование"
 	webix.ui({
 		view:"window",
@@ -127,7 +145,7 @@ export function welcome(){
 	}).hide();
 
 	webix.Date.startOnMonday = true;
-
+	webix.i18n.setLocale("ru-RU")
 	//всплывающее окно "изменить"
 	webix.ui({
 		view:"window",
@@ -201,6 +219,34 @@ export function welcome(){
             ]
         }
     }).hide();
+
+	webix.ui({
+		view:"window",
+		position:"center",
+		id:"EmployeeWindow",
+		width: 500,
+		modal: true,
+		head:"Добавить",
+		close:true,
+		body:{
+			type:"space",
+			rows:[
+				{
+					view:"datatable",
+					id:"EmployeesTable",
+					columns:[
+						{ id:"Id",    header:"Id", width:30},
+						{ id:"First_name",  header:"Фамилия",fillspace:true},
+						{ id:"Last_name", header:"Имя",fillspace:true},
+						{ id:"Middle_name", header:"Отчество",fillspace:true},
+					],
+					select:"row",
+					height: 400,
+				},
+				{view:"button",id:"AddEmployee", value:"Добавить сотрудника"},
+			]
+		}
+	}).hide();
 
 
 

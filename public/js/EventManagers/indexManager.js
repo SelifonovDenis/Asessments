@@ -1,16 +1,16 @@
-import {redirect} from "./component";
-import {viewAdd} from "./component";
-import {view} from "./component";
-import {viewAddDate} from "./component";
-import {GetTable} from "./component";
-import {AddCandidate} from "./component";
-import {SaveChange} from "./component";
-import {GetAssessments} from "./component";
-import {UpdateIdAssessment} from "./component";
-import {ChangeStatus} from "./component";
-import {GetArchive} from "./component";
-import {SetIdChangeAssessment} from "./component";
-import {SetIdAddAssessment} from "./component";
+import {redirect} from "../components/indexComponent";
+import {viewAdd} from "../components/indexComponent";
+import {view} from "../components/indexComponent";
+import {viewAddDate} from "../components/indexComponent";
+import {GetTable} from "../components/indexComponent";
+import {AddCandidate} from "../components/indexComponent";
+import {SaveChange} from "../components/indexComponent";
+import {GetAssessments} from "../components/indexComponent";
+import {UpdateIdAssessment} from "../components/indexComponent";
+import {ChangeStatus} from "../components/indexComponent";
+import {GetArchive} from "../components/indexComponent";
+import {SetIdChangeAssessment} from "../components/indexComponent";
+import {SetIdAddAssessment} from "../components/indexComponent";
 
 
 export function Manager(){

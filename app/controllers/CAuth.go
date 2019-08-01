@@ -15,14 +15,12 @@ func (c Login) Auth() revel.Result {
 	user := entity.User{}
 	err := c.Params.BindJSON(&user) //уточнить
 	if err != nil {
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	user, err = providers.Login(user)
 	if err != nil {
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	return c.RenderJSON(user)

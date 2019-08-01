@@ -1,4 +1,4 @@
-import Request from "./Provider";
+import Request from "../providers/Provider";
 
 var candidates;
 
@@ -19,6 +19,7 @@ export function viewAddDate(){
 
 var lastid = 0;
 var latestAction = "main";
+
 //отображение атрибутов выбранного кандидата в правой части
 export function view(){
     $$("saveChange").enable();
@@ -26,10 +27,12 @@ export function view(){
     $$("butRelocateArchive").enable();
     $$("successfully").enable();
     $$("notSuccessfully").enable();
-    lastid = $$("datatable").getSelectedItem().Id;
+    if (typeof $$("datatable").getSelectedItem() != "undefined") {
+        lastid = $$("datatable").getSelectedItem().Id;
+    }
     IdChangeAssessment = 0;
     var req = new Request();
-    req.Get('candidate/'+$$("datatable").getSelectedItem().Id).then(
+    req.Get('candidate/'+lastid).then(
         function (candidate) {
             if (typeof candidate['Message'] == "undefined") {
                 $$("changeFirstName").setValue(candidate.First_name);
@@ -146,7 +149,6 @@ export function SaveChange() {
                 } else{
                     GetArchive();
                 }
-
                 view();
             }
         )
@@ -184,7 +186,7 @@ export function UpdateIdAssessment(){
     assessments.forEach(function (assessment) {
         if (assessment.Id === IdChangeAssessment) {
             $$("changeDate").setValue(assessment.Date);
-            $$("changeStatus").setValue("Назначенно собеседование");
+            $$("changeStatus").setValue("Назначено собеседование");
         }
     });
 }
@@ -193,12 +195,12 @@ export function UpdateIdAssessment(){
 export function ChangeStatus(status){
     var id_assessment;
     candidates.forEach(function (elem) {
-        if (elem.Id === $$("datatable").getSelectedItem().Id) {
+        if (elem.Id === lastid) {
             id_assessment = elem.Asessment.Id;
         }
     })
     var data = {
-        Id: $$("datatable").getSelectedItem().Id,
+        Id: lastid,
         First_name: $$("changeFirstName").getValue(),
         Last_name: $$("changeLastName").getValue(),
         Middle_name: $$("changeMiddleName").getValue(),
@@ -218,6 +220,7 @@ export function ChangeStatus(status){
             } else{
                 GetArchive();
             }
+            view();
         }
     )
 

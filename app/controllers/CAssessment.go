@@ -3,7 +3,6 @@ package controllers
 import (
 	"Asessments/app/models/entity"
 	"Asessments/app/models/providers"
-	"fmt"
 	"github.com/revel/revel"
 )
 
@@ -16,40 +15,32 @@ func (c *CAssessment) GetAssessments() revel.Result {
 	assessments, err := providers.GetAssessments()
 
 	if err != nil {
-		fmt.Println()
-		fmt.Println(err)
-		fmt.Println()
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	return c.RenderJSON(assessments)
 }
 
 func (c *CAssessment) GetAssessment(id int64) revel.Result {
-	assessment, err := providers.GetAssessment(&entity.Asessment{
+	assessment, err := providers.GetAssessment(&entity.Assessment{
 		Id: int(id),
 	})
 	if err != nil {
-		fmt.Println(err)
 		return c.RenderError(err)
 	}
 	return c.RenderJSON(assessment)
 }
 
 func (c *CAssessment) AddAssessment() revel.Result {
-	assessment := new(entity.Asessment)
+	assessment := new(entity.Assessment)
 	err := c.Params.BindJSON(&assessment)
 	if err != nil {
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	assessment, err = providers.AddAssessment(assessment)
 	if err != nil {
-		fmt.Println(err)
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	return c.RenderJSON(assessment)
@@ -57,17 +48,15 @@ func (c *CAssessment) AddAssessment() revel.Result {
 
 func (c *CAssessment) UpdateAssessment() revel.Result {
 
-	assessment := new(entity.Asessment)
+	assessment := new(entity.Assessment)
 	err := c.Params.BindJSON(&assessment)
 	if err != nil {
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	assessment, err = providers.UpdateAssessment(assessment)
 	if err != nil {
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	return c.RenderJSON(assessment)
@@ -77,56 +66,44 @@ func (c *CAssessment) GetEmployeeAssessments(id int64) revel.Result {
 
 	assessments, err := providers.GetEmployeeAssessments(int(id))
 	if err != nil {
-		fmt.Println(err)
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 	return c.RenderJSON(assessments)
 }
 
 func (c *CAssessment) RemoveEmployeeAssessment(idEmployee, idAssessment int64) revel.Result {
 
-	assessment := new(entity.Asessment)
-	assessment.Id = int(idAssessment)
-	employee := new(entity.Employee)
-	employee.Id = int(idEmployee)
-
-	err := providers.RemoveEmployeeAssessment(assessment, employee)
+	err := providers.RemoveEmployeeAssessment(&entity.Assessment{
+		Id: int(idAssessment),
+	}, &entity.Employee{
+		Id: int(idEmployee),
+	})
 
 	if err != nil {
-		fmt.Println(err)
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
-	return c.RenderJSON(employee)
+	return c.RenderJSON(err)
 }
 
 func (c *CAssessment) AddEmployeeAssessment(idEmployee, idAssessment int64) revel.Result {
 
-	assessment := new(entity.Asessment)
-	assessment.Id = int(idAssessment)
-	employee := new(entity.Employee)
-	employee.Id = int(idEmployee)
-
-	err := providers.AddEmployeeAssessment(assessment, employee)
+	err := providers.AddEmployeeAssessment(&entity.Assessment{
+		Id: int(idAssessment),
+	}, &entity.Employee{
+		Id: int(idEmployee),
+	})
 
 	if err != nil {
-		fmt.Println(err)
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
-	return c.RenderJSON(employee)
+	return c.RenderJSON(err)
 }
 
 func (c *CAssessment) GetArchiveAssessments() revel.Result {
 	assessments, err := providers.GetArchiveAssessments()
 
 	if err != nil {
-		fmt.Println()
-		fmt.Println(err)
-		fmt.Println()
-		c.Response.Status = 500
-		return c.RenderJSON(err)
+		return c.RenderError(err)
 	}
 
 	return c.RenderJSON(assessments)

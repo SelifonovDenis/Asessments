@@ -3,10 +3,12 @@ export function welcome(){
 	var widthScreen = document.body.clientWidth;
 	//Левая часть
     webix.ui({
+		id:"main",
 		type:"clean",
 		container:"leftPart",
 		cols:[
-			{ rows:[
+			{ gravity:3,
+				rows:[
 				{
 					view:"toolbar", elements:[
 						{view:"label",type:"clean", label:"Сотрудники", height:40, css:"logo", align:"center", margin:0},
@@ -14,13 +16,14 @@ export function welcome(){
 					css:"nav"
 				},
 				{view:"toolbar", elements:[
-						{view:"button", value:"Сотрудники"},
-						{view:"button", value:"Добавить сотрудника", height:50, id:"viewAdd"},
-						{view:"button", id:"changeButton", value:"Изменить", disabled:true},
-						{view:"button", id:"removeEmployee", value:"Удалить",disabled:true},
 						{view:"button", value:"Учет кандидатов", id:"redirect"},
 						{view:"button", value:"Собеседования", id:"redirect2"},
 						{view:"button", value:"Выход", id:"out"},
+						{},
+						{view:"button", id:"getEmployee", value:"Сотрудники"},
+						{view:"button", value:"Добавить сотрудника", height:50, id:"viewAdd"},
+						{view:"button", id:"GetArchive", value:"Архив"},
+
 					],
 					css:"nav"
 				},
@@ -63,8 +66,9 @@ export function welcome(){
 					]
 				
 				}
-			], width: widthScreen*0.75},
+			]},
 			{
+				gravity:1,
 				rows:[				
 					{view:"label", label:"<img src=\"../../../public/img/logo.png\">",height:101, align:"center", css:"logotype"},
 					{
@@ -73,14 +77,14 @@ export function welcome(){
 							{view:"label", label:"Даты собеседований", height:20},
 							{
 								view:"list",
-								height:400,
 								template:"#title#",
 								select:true,
 								id:"dates",
 							},
-							{height:40},
 							{view:"button", id:"butAddDate",value:"Добавить дату собеседования", disabled:true},
 							{view:"button", id:"removeAssessment", value:"Удалить дату", disabled:true},
+							{view:"button", id:"AddArchive", value:"Добавить в архив", disabled:true},
+							{view:"button", id:"changeButton", value:"Изменить сотрудника", disabled:true},
 						],
 						height:heightScreen-101
 					}	
@@ -88,7 +92,10 @@ export function welcome(){
 			}
 		]
 	});
-	
+
+	webix.event(window, "resize", function(){
+		$$("main").adjust();
+	})
 	
 	//всплывающее окно "Добавить кандидата"
 	webix.ui({
@@ -142,6 +149,13 @@ export function welcome(){
 			{view: "text", name: "cmiddleName", id: "changeMiddleName", label: "Отчество"},
 			{view: "text", name: "cphone", id: "changePhone", label: "Телефон"},
 			{view: "text", name: "cemail", id: "changeEmail", label: "Почта"},
+			{
+				view:"combo",
+				id:"changeStatus",
+				label: 'Статус',
+				name:"cstatus",
+				options:["Активен","Архив"]
+			},
 			{view: "button", id: "saveChange", value: "Сохранить изменения"},
 		],
 		rules: {
@@ -150,6 +164,7 @@ export function welcome(){
 			"cmiddleName": webix.rules.isNotEmpty,
 			"cphone": webix.rules.isNotEmpty,
 			"cemail": webix.rules.isEmail,
+			"cstatus": webix.rules.isNotEmpty,
 		}
 	}
 	}).hide();

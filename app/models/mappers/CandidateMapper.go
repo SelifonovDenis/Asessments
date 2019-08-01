@@ -11,10 +11,10 @@ func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_asessment, date
+	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_assessment, date
 	  	FROM asessments.asessment.candidate
-		LEFT JOIN asessments.asessment.asessment
-		ON id_asessment = asessment.id
+		LEFT JOIN asessments.asessment.assessment
+		ON id_assessment = assessment.id
 		WHERE candidate.status != $1 
 		ORDER BY candidate.id
 	  	`, "Архив")
@@ -46,10 +46,10 @@ func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 //GetCandidate Прлучить кандидата по id
 func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, error) {
 	rows, err := db.Query(`
-		SELECT candidate.id, first_name, last_name, middle_name, phone, email, candidate.status, id_asessment, date
+		SELECT candidate.id, first_name, last_name, middle_name, phone, email, candidate.status, id_assessment, date
 	  	FROM asessments.asessment.candidate		
-		LEFT JOIN asessments.asessment.asessment
-		ON id_asessment = asessment.id
+		LEFT JOIN asessments.asessment.assessment
+		ON id_assessment = assessment.id
 		WHERE candidate.id = $1	
 		`, candidate.Id)
 	if err != nil {
@@ -75,7 +75,7 @@ func AddCandidate(db *sql.DB, candidate entity.Candidate) (err error){
 
 	_, err = db.Exec(`
 	INSERT INTO asessments.asessment.candidate
-		(first_name, last_name, middle_name, phone, email, status, id_asessment)
+		(first_name, last_name, middle_name, phone, email, status, id_assessment)
 	VALUES 
 		($1, $2, $3, $4, $5 ,$6, $7)
 	RETURNING id;
@@ -98,7 +98,7 @@ func UpdateCandidate(db *sql.DB, candidate *entity.Candidate) (err error){
 		    phone = $4,
 			email = $5,
 		    status = $6,
-		    id_asessment = $7
+		    id_assessment = $7
 		WHERE 
 			id = $8
 	`,candidate.First_name, candidate.Last_name, candidate.Middle_name, candidate.Phone, candidate.Email, candidate.Status, candidate.Asessment.Id, candidate.Id)
@@ -115,10 +115,10 @@ func GetArchiveCandidate(db *sql.DB) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_asessment, date
+	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_assessment, date
 	  	FROM asessments.asessment.candidate
-		LEFT JOIN asessments.asessment.asessment
-		ON id_asessment = asessment.id 
+		LEFT JOIN asessments.asessment.assessment
+		ON id_assessment = assessment.id 
 	  	WHERE candidate.status = $1 
 		ORDER BY candidate.id
 	  	`,"Архив")
@@ -151,7 +151,7 @@ func GetCandidates(db *sql.DB, candidate *entity.Candidate) ([]*entity.Candidate
 	rows, err := db.Query(`
 		SELECT id, first_name, last_name, middle_name, phone, email, status
 	  	FROM asessments.asessment.candidate		
-		WHERE id_asessment = $1	
+		WHERE id_assessment = $1	
 		`, candidate.Asessment.Id)
 	if err != nil {
 		return Candidates,err
@@ -176,7 +176,7 @@ func GetFreeCandidates(db *sql.DB) ([]*entity.Candidate, error) {
 	rows, err := db.Query(`
 	  	SELECT id, first_name, last_name, middle_name, phone, email, status
 	  	FROM asessments.asessment.candidate
-		WHERE status != $1 AND id_asessment = $2
+		WHERE status != $1 AND id_assessment = $2
 	  	`, "Архив", 0)
 	if err != nil {
 		return Candidates, err
