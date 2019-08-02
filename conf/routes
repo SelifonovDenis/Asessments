@@ -21,8 +21,8 @@ GET     /employee                                            CEmployee.GetEmploy
 PUT     /employee                                            CEmployee.AddEmployee
 POST    /employee                                            CEmployee.UpdateEmployee
 GET     /employee/:id/assessment                             CAssessment.GetEmployeeAssessments
-PUT     /employee/:idEmployee/assessment/:idAssessment       CAssessment.AddEmployeeAssessment
-DELETE  /employee/:idEmployee/assessment/:idAssessment       CAssessment.RemoveEmployeeAssessment
+PUT     /employee/:EmployeeId/assessment/:AssessmentId       CAssessment.AddEmployeeAssessment
+DELETE  /employee/:EmployeeId/assessment/:AssessmentId       CAssessment.RemoveEmployeeAssessment
 GET     /assessment                                          CAssessment.GetAssessments
 PUT     /assessment                                          CAssessment.AddAssessment
 POST    /assessment                                          CAssessment.UpdateAssessment
@@ -32,7 +32,8 @@ GET     /assessment/:id/employee                             CEmployee.GetAssess
 GET     /archive/candidate                                   CCandidate.GetArchiveCandidates
 GET     /archive/assessment                                  CAssessment.GetArchiveAssessments
 GET     /archive/employee                                    CEmployee.GetArchiveEmployees
-
+POST    /candidate/search                                    CCandidate.SearchCandidate
+POST    /assessment/search                                   CAssessment.SearchAssessment
 
 
 # Ignore favicon requests

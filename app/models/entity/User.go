@@ -7,4 +7,3 @@ type User struct {
 	Role      string
 	Id_employee int
 }
-

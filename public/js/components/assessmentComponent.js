@@ -205,8 +205,12 @@ export function SaveChange() {
             function (result) {
                 if (latestAction === "main") {
                     GetTable();
-                } else{
+                }
+                if(latestAction === "archive"){
                     GetArchive();
+                }
+                if (latestAction === "search"){
+                    Search();
                 }
                 $$("changeWindow").hide();
             }
@@ -215,7 +219,6 @@ export function SaveChange() {
         webix.message("Заполните все поля")
     }
 }
-
 
 export function GetArchive() {
     latestAction = "archive";
@@ -253,8 +256,12 @@ export function AddToArchive() {
         function (result) {
             if (latestAction === "main") {
                 GetTable();
-            } else{
+            }
+            if(latestAction === "archive"){
                 GetArchive();
+            }
+            if (latestAction === "search"){
+                Search();
             }
             $$("changeWindow").hide();
         }
@@ -290,8 +297,12 @@ export function RemoveEmployee() {
             GetEmployees();
             if (latestAction === "main") {
                 GetTable();
-            } else{
+            }
+            if(latestAction === "archive"){
                 GetArchive();
+            }
+            if (latestAction === "search"){
+                Search();
             }
             $$("removeEmployee").disable();
         }
@@ -306,8 +317,12 @@ export function AddEmployeeAssessment() {
                 GetEmployees();
                 if (latestAction === "main") {
                     GetTable();
-                } else{
+                }
+                if(latestAction === "archive"){
                     GetArchive();
+                }
+                if (latestAction === "search"){
+                    Search();
                 }
                 $$("EmployeeWindow").hide();
             }
@@ -331,6 +346,32 @@ export function GetAllEmployees() {
         }
         else {
             console.log(candidates.Message.value)
+        }
+    });
+}
+
+export function Search(){
+    latestAction = "search";
+    var data = {
+        Id: 0,
+        Status: $$("searchStatus").getValue(),
+        Date: $$("searchDate").getText(),
+        Cabinet:$$("searchCabinet").getValue()
+
+    };
+    clearRightPart();
+    var req = new Request();
+    req.Post('assessment/search', data).then(function (res){
+        assessments = res;
+        if (typeof assessments['Message'] == "undefined") {
+            $$("datatable").clearAll();
+            assessments.forEach(function(elem, index){
+                $$("datatable").add(elem)
+
+            });
+        }
+        else {
+            console.log(assessments.Message.value)
         }
     });
 }

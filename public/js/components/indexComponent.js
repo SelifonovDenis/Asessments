@@ -258,3 +258,34 @@ export  function SetIdAddAssessment() {
     }
 
 }
+
+//получить и вывести кандидатов в таблицу
+export function Search(){
+    latestAction = "search";
+    var data = {
+        Id: 0,
+        First_name: $$("searchFirstName").getValue(),
+        Last_name: $$("searchLastName").getValue(),
+        Middle_name: $$("searchMiddleName").getValue(),
+        Phone:$$("searchPhone").getValue(),
+        Email:$$("searchEmail").getValue(),
+        Status: $$("searchStatus").getValue(),
+        Asessment: {
+            Date: $$("searchDate").getText(),
+        }
+    };
+    clearRightPart();
+    var req = new Request();
+    req.Post('candidate/search', data).then(function (res){
+        candidates = res;
+        if (typeof candidates['Message'] == "undefined") {
+            $$("datatable").clearAll();
+            candidates.forEach(function(elem, index){
+                $$("datatable").add(elem)
+            });
+        }
+        else {
+            console.log(candidates.Message.value)
+        }
+    });
+}

@@ -11,6 +11,7 @@ import {ChangeStatus} from "../components/indexComponent";
 import {GetArchive} from "../components/indexComponent";
 import {SetIdChangeAssessment} from "../components/indexComponent";
 import {SetIdAddAssessment} from "../components/indexComponent";
+import {Search} from "../components/indexComponent";
 
 
 export function Manager(){
@@ -79,8 +80,6 @@ export function Manager(){
         $$("DateWindow").hide();
     });
 
-
-
     //клик по кнопке переместить в архив
     $$("butRelocateArchive").attachEvent("onItemClick",function(){
         ChangeStatus("Архив");
@@ -96,5 +95,9 @@ export function Manager(){
 
     $$("archive").attachEvent("onItemClick",function(){
         GetArchive();
+    });
+
+    $$("find").attachEvent("onItemClick",function(){
+        Search();
     });
 }

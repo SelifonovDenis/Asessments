@@ -44,7 +44,7 @@ func AddEmployee(employee *entity.Employee)(*entity.Employee, error){
 	}
 	defer db.Close()
 
-	err = mappers.AddEmployee(db,*employee)
+	err = mappers.AddEmployee(db,employee)
 	if err != nil {
 		return employee, err
 	}

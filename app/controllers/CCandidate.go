@@ -98,3 +98,18 @@ func (c *CCandidate) GetFreeCandidates()revel.Result  {
 
 	return c.RenderJSON(candidatesTable)
 }
+
+func (c *CCandidate) SearchCandidate()revel.Result  {
+
+	candidate := new(entity.Candidate)
+	err := c.Params.BindJSON(&candidate)
+
+	searchResult, err:=providers.SearchCandidate(candidate)
+
+	if err!=nil {
+		return c.RenderError(err)
+	}
+
+	return c.RenderJSON(searchResult)
+}
+

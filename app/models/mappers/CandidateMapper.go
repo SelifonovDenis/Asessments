@@ -71,7 +71,7 @@ func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, e
 }
 
 //AddCandidate Добавить кандидата
-func AddCandidate(db *sql.DB, candidate entity.Candidate) (err error){
+func AddCandidate(db *sql.DB, candidate *entity.Candidate) (err error){
 
 	_, err = db.Exec(`
 	INSERT INTO asessments.asessment.candidate
@@ -190,6 +190,40 @@ func GetFreeCandidates(db *sql.DB) ([]*entity.Candidate, error) {
 
 		if err != nil {
 			return Candidates, err
+		}
+
+		Candidates = append(Candidates,&candidate)
+	}
+	return Candidates, err
+}
+
+func GetAllCandidates(db *sql.DB) ([]*entity.Candidate, error) {
+
+	Candidates := []*entity.Candidate{}
+
+	rows, err := db.Query(`
+	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_assessment, date
+	  	FROM asessments.asessment.candidate
+		LEFT JOIN asessments.asessment.assessment
+		ON id_assessment = assessment.id
+		ORDER BY candidate.id
+	  	`, )
+	if err != nil {
+		return Candidates, err
+	}
+	defer rows.Close()
+
+
+	for rows.Next() {
+		candidate := entity.Candidate{}
+		date := sql.NullString{}
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Asessment.Id, &date)
+
+		if err != nil {
+			return Candidates, err
+		}
+		if date.Valid{
+			candidate.Asessment.Date = date.String
 		}
 
 		Candidates = append(Candidates,&candidate)

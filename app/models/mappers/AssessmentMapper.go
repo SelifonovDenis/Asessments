@@ -38,10 +38,10 @@ func GetAssessments(db *sql.DB) ([]*entity.Assessment, error) {
 			assessment.Fio = assessment.Fio + firstName.String
 		}
 		if lastName.Valid{
-			assessment.Fio = assessment.Fio + " "+lastName.String
+			assessment.Fio = assessment.Fio + " "+string([]rune(lastName.String)[0]) + "."
 		}
 		if middleName.Valid{
-			assessment.Fio = assessment.Fio + " "+middleName.String
+			assessment.Fio = assessment.Fio + " " +string([]rune(middleName.String)[0]) + "."
 		}
 
 		Assessments = append(Assessments,&assessment)
@@ -71,7 +71,7 @@ func GetAssessment(db *sql.DB, assessment *entity.Assessment) (*entity.Assessmen
 }
 
 //AddAssessment Добавить кандидата
-func AddAssessment(db *sql.DB, assessment entity.Assessment) (err error){
+func AddAssessment(db *sql.DB, assessment *entity.Assessment) (err error){
 
 	_, err = db.Exec(`
 	INSERT INTO asessments.asessment.assessment
@@ -198,6 +198,48 @@ func GetArchiveAssessments(db *sql.DB) ([]*entity.Assessment, error) {
 		}
 		if middleName.Valid{
 			assessment.Fio = assessment.Fio + " "+middleName.String
+		}
+
+		Assessments = append(Assessments,&assessment)
+	}
+	return Assessments, err
+}
+
+func SearchAssessments(db *sql.DB) ([]*entity.Assessment, error) {
+
+	Assessments := []*entity.Assessment{}
+
+	rows, err := db.Query(`
+		SELECT assessment.id, date, cabinet, first_name, last_name, middle_name, assessment.status 
+		FROM asessments.asessment.assessment 
+  		LEFT JOIN asessments.asessment.employee_assessment 
+   		ON fk_assessment = assessment.id 
+  		LEFT JOIN asessments.asessment.employee 
+    	ON fk_employee = employee.id 
+		ORDER BY assessment.id
+`, )
+	if err != nil {
+		return Assessments, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		assessment := entity.Assessment{}
+		firstName := sql.NullString{}
+		lastName := sql.NullString{}
+		middleName := sql.NullString{}
+		err = rows.Scan(&assessment.Id, &assessment.Date, &assessment.Cabinet, &firstName, &lastName, &middleName, &assessment.Status )
+		if err != nil {
+			return Assessments, err
+		}
+		if firstName.Valid{
+			assessment.Fio = assessment.Fio + firstName.String
+		}
+		if lastName.Valid{
+			assessment.Fio = assessment.Fio + " "+string([]rune(lastName.String)[0]) + "."
+		}
+		if middleName.Valid{
+			assessment.Fio = assessment.Fio + " " +string([]rune(middleName.String)[0]) + "."
 		}
 
 		Assessments = append(Assessments,&assessment)

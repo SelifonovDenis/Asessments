@@ -4,6 +4,7 @@ import (
 	"Asessments/app/models/connection"
 	"Asessments/app/models/entity"
 	"Asessments/app/models/mappers"
+	s "strings"
 )
 
 func GetAssessments() ([]*entity.Assessment, error)  {
@@ -62,7 +63,7 @@ func AddAssessment(assessment *entity.Assessment)(*entity.Assessment, error){
 	}
 	defer db.Close()
 
-	err = mappers.AddAssessment(db,*assessment)
+	err = mappers.AddAssessment(db,assessment)
 	if err != nil {
 		return assessment, err
 	}
@@ -148,6 +149,47 @@ func GetArchiveAssessments() ([]*entity.Assessment, error)  {
 				break
 			}
 		}
+	}
+
+	return Assessments,err
+}
+
+func SearchAssessments(assessment *entity.Assessment) ([]*entity.Assessment, error)  {
+
+	db, err := connection.ConnectToDB()
+	if err != nil {
+		return []*entity.Assessment{},err
+	}
+	defer db.Close()
+	assessments, err := mappers.SearchAssessments(db)
+	if err != nil {
+		return assessments,err
+	}
+
+	searchResult := []*entity.Assessment{}
+
+	for _, elem := range assessments {
+		if s.HasPrefix(s.ToLower(elem.Date), s.ToLower(assessment.Date)) && s.HasPrefix(s.ToLower(elem.Cabinet), s.ToLower(assessment.Cabinet)) && s.HasPrefix(s.ToLower(elem.Status), s.ToLower(assessment.Status)) {
+			searchResult = append(searchResult, elem)
+		}
+	}
+
+	Assessments := []*entity.Assessment{}
+
+	for i:=0;i< len(searchResult); i++  {
+		Assessments = append(Assessments, searchResult[i])
+		step :=0
+
+		for j := i+1; j < len(searchResult); j++ {
+
+			if searchResult[i].Id == searchResult[j].Id {
+				Assessments[len(Assessments)-1].Fio = Assessments[len(Assessments)-1].Fio +", " + searchResult[j].Fio
+				step = step + 1
+			} else {
+				break
+			}
+		}
+		i =  i + step
 	}
 
 	return Assessments,err

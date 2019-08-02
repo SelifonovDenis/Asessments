@@ -7,3 +7,4 @@ type Assessment struct {
 	Fio     string
 	Status  string
 }
+

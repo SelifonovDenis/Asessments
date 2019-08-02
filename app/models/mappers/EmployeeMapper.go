@@ -56,7 +56,7 @@ func GetEmployee(db *sql.DB, employee *entity.Employee) (*entity.Employee, error
 }
 
 //AddEmployee Добавить кандидата
-func AddEmployee(db *sql.DB, employee entity.Employee) (err error){
+func AddEmployee(db *sql.DB, employee *entity.Employee) (err error){
 
 	_, err = db.Exec(`
 	INSERT INTO asessments.asessment.employee

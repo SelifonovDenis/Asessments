@@ -30,26 +30,43 @@ export function welcome(){
 				},
 				{
 					cols:[
-						{view:"accordion",
+						{
+							id:"searchPanel",
+							view:"accordion",
 						multi:true,
 						collapsed: true,
 						cols:[
-							{ header:"Поиск", body:{
+							{
+								gravity:1,
+								header:"Поиск",
+								body:{
 								type:"space",	
-								rows:[
-										{view:"text", id:"searchFamily", label:"Фамилия"},
-										{view:"text", id:"searchName", label:"Имя"},
-										{view:"text", id:"searchSubname", label:"Отчество"},
-										{view:"text", id:"searchRoom", label:"Кабинет"},
-										{view:"text", id:"searchDate", label:"Дата собеседования", labelWidth: 150},
+									rows:[
+										{
+											view:"datepicker",
+											value: "",
+											format: webix.Date.dateToStr("%d.%m.%Y"),
+											label: "Дата",
+											id:"searchDate",
+											timepicker: true,
+										},
+										{view:"text", id:"searchCabinet", label:"Кабинет"},
+										{
+											view:"combo",
+											id:"searchStatus",
+											label:"Статус",
+											options:["","Активно","Архив"]
+										},
+
 										{height:20},
-										{view:"button", value:"Найти"},	
+										{view:"button", id:"find", value:"Найти"},
 									]
 								},				
-							width: widthScreen*0.2 
+
 							}
 						]},
 						{
+							gravity:2.5,
 							view:"datatable",
 							id:"datatable",
 							columns:[
@@ -247,9 +264,6 @@ export function welcome(){
 			]
 		}
 	}).hide();
-
-
-
 }
 
 

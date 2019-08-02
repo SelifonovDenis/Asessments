@@ -71,12 +71,12 @@ func (c *CAssessment) GetEmployeeAssessments(id int64) revel.Result {
 	return c.RenderJSON(assessments)
 }
 
-func (c *CAssessment) RemoveEmployeeAssessment(idEmployee, idAssessment int64) revel.Result {
+func (c *CAssessment) RemoveEmployeeAssessment(EmployeeId, AssessmentId int64) revel.Result {
 
 	err := providers.RemoveEmployeeAssessment(&entity.Assessment{
-		Id: int(idAssessment),
+		Id: int(AssessmentId),
 	}, &entity.Employee{
-		Id: int(idEmployee),
+		Id: int(EmployeeId),
 	})
 
 	if err != nil {
@@ -85,12 +85,12 @@ func (c *CAssessment) RemoveEmployeeAssessment(idEmployee, idAssessment int64) r
 	return c.RenderJSON(err)
 }
 
-func (c *CAssessment) AddEmployeeAssessment(idEmployee, idAssessment int64) revel.Result {
+func (c *CAssessment) AddEmployeeAssessment(EmployeeId, AssessmentId int64) revel.Result {
 
 	err := providers.AddEmployeeAssessment(&entity.Assessment{
-		Id: int(idAssessment),
+		Id: int(AssessmentId),
 	}, &entity.Employee{
-		Id: int(idEmployee),
+		Id: int(EmployeeId),
 	})
 
 	if err != nil {
@@ -107,4 +107,19 @@ func (c *CAssessment) GetArchiveAssessments() revel.Result {
 	}
 
 	return c.RenderJSON(assessments)
+}
+
+
+func (c *CAssessment) SearchAssessment()revel.Result  {
+
+	assessment := new(entity.Assessment)
+	err := c.Params.BindJSON(&assessment)
+
+	searchResult, err:=providers.SearchAssessments(assessment)
+
+	if err!=nil {
+		return c.RenderError(err)
+	}
+
+	return c.RenderJSON(searchResult)
 }

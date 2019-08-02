@@ -35,25 +35,41 @@ export function welcome(){
 								collapsed: true,
 								cols:[ //or rows
 									{
+										gravity:1,
 										header:"Поиск",
 										body:{
 											type:"space",
 											rows:[
-												{view:"text", id:"searchFamily", label:"Фамилия"},
-												{view:"text", id:"searchName", label:"Имя"},
-												{view:"text", id:"searchSubname", label:"Отчество"},
+												{view:"text", id:"searchFirstName", label:"Фамилия"},
+												{view:"text", id:"searchLastName", label:"Имя"},
+												{view:"text", id:"searchMiddleName", label:"Отчество"},
 												{view:"text", id:"searchPhone", label:"Телефон"},
 												{view:"text", id:"searchEmail", label:"Почта"},
-												{view:"text", id:"searchStatus", label:"Статус"},
-												{view:"text", id:"searchDate", label:"Дата собеседования", labelWidth: 150},
+												{
+													view:"combo",
+													id:"searchStatus",
+													label:"Статус",
+													options:["","Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования","Архив"]
+												},
+
+												{
+													view:"datepicker",
+													value: "",
+													format: webix.Date.dateToStr("%d.%m.%Y"),
+													label: "Дата",
+													id:"searchDate",
+													timepicker: true,
+												},
+
 												{height:20},
-												{view:"button", value:"Найти"},
+												{view:"button", id:"find", value:"Найти"},
 											]
 										},
-										width: widthScreen*0.2
+
 									}
 								]},
 							{
+								gravity:2.5,
 								view:"datatable",
 								id:"datatable",
 								columns:[
@@ -135,6 +151,8 @@ export function welcome(){
 	});
 
 
+	webix.Date.startOnMonday = true;
+	webix.i18n.setLocale("ru-RU")
 
 	webix.event(window, "resize", function(){
 		$$("main").adjust();

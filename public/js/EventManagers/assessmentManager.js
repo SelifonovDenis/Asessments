@@ -17,7 +17,7 @@ import {GetEmployees} from "../components/assessmentComponent";
 import {AddEmployeeAssessment} from "../components/assessmentComponent";
 import {RemoveEmployee} from "../components/assessmentComponent";
 import {GetAllEmployees} from "../components/assessmentComponent";
-
+import {Search} from "../components/assessmentComponent";
 
 export function Manager(){
     //клик по кнопке "справочная информация"
@@ -98,5 +98,8 @@ export function Manager(){
         GetAllEmployees();
     });
 
+    $$("find").attachEvent("onItemClick",function(){
+        Search();
+    });
 
 }
