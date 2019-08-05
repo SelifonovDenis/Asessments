@@ -63,16 +63,6 @@ func (c *CCandidate) UpdateCandidate()revel.Result  {
 	return c.RenderJSON(candidate)
 }
 
-func (c *CCandidate) GetArchiveCandidates()revel.Result  {
-
-	candidates, err:=providers.GetArchiveCandidate()
-
-	if err!=nil {
-		return c.RenderError(err)
-	}
-
-	return c.RenderJSON(candidates)
-}
 
 func (c *CCandidate) GetCandidates(id int64)revel.Result  {
 

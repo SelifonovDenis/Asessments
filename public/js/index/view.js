@@ -21,9 +21,8 @@ export function welcome(){
 							{view:"button", value:"Собеседования", id:"redirect2"},
 							{view:"button", value:"Выход", id:"out"},
 							{},
-							{view:"button", id:"getTable", value:"Кандидаты"},
-							{view:"button", id:"archive", value:"Архив"},
 							{view:"button", value:"Добавить кандидата", height:50, id:"viewAdd"},
+							{view:"button", id:"butRelocateArchive", value:"Переместить в архив", disabled:true},
 
 						],
 						css:"nav"
@@ -33,6 +32,7 @@ export function welcome(){
 							{view:"accordion",
 								multi:true,
 								collapsed: true,
+								id:"searchPanel",
 								cols:[ //or rows
 									{
 										gravity:1,
@@ -49,7 +49,7 @@ export function welcome(){
 													view:"combo",
 													id:"searchStatus",
 													label:"Статус",
-													options:["","Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования","Архив"]
+													options:["","Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования"]
 												},
 
 												{
@@ -60,9 +60,14 @@ export function welcome(){
 													id:"searchDate",
 													timepicker: true,
 												},
-
+												{
+													view:"checkbox",
+													id:"archive",
+													label:"Архив",
+													value:0,
+												},
 												{height:20},
-												{view:"button", id:"find", value:"Найти"},
+												{view:"button", id:"find", value:"Подтвердить"},
 											]
 										},
 
@@ -74,19 +79,18 @@ export function welcome(){
 								id:"datatable",
 								columns:[
 
-									{ id:"Id",    header:"Id", width:30},
-									{ id:"First_name",  header:"Фамилия",fillspace:true},
-									{ id:"Last_name", header:"Имя",fillspace:true},
-									{ id:"Middle_name", header:"Отчество",fillspace:true},
-									{ id:"Status", header:"Статус", width:250},
+									{ id:"Id",    header:"Id", width:30, sort:"int"},
+									{ id:"First_name",  header:"Фамилия",fillspace:true, sort:"string"},
+									{ id:"Last_name", header:"Имя",fillspace:true, sort:"string"},
+									{ id:"Middle_name", header:"Отчество",fillspace:true, sort:"string"},
+									{ id:"Status", header:"Статус", width:250, sort:"string"},
 									{
 										id:"Asessment",
 										header:"Дата собеседования",
-										template: function(candidate){
+										format: webix.Date.dateToStr("%d.%m.%Y %H:%i"),
+										sort:"date",
+										width:200,
 
-											return candidate.Asessment.Date
-										},
-										width:200
 									}
 								],
 								select:"row",
@@ -118,9 +122,15 @@ export function welcome(){
 										view:"combo",
 										id:"changeStatus",
 										label: 'Статус',
-										options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования","Архив"]
+										options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования"]
 									},
 									{view:"text", id:"changeDate", label:"Дата собеседования", labelWidth: 150, readonly:true},
+									{
+										view:"checkbox",
+										id:"changeArchive",
+										label:"Архив",
+										value:0,
+									},
 								],
 								rules:{
 									"cfirstName":webix.rules.isNotEmpty,
@@ -133,7 +143,6 @@ export function welcome(){
 
 							{view:"button", id:"saveChange", value:"Сохранить изменения", disabled:true},
 							{view:"button",id:"butAddDate", value:"Назначить дату собеседования", disabled:true},
-							{view:"button", id:"butRelocateArchive", value:"Переместить в архив", disabled:true},
 							{view:"label", label:"Собеседование пройдено", align:"center"},
 							{
 								cols:[

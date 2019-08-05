@@ -233,5 +233,32 @@ export function AddArchive() {
             $$("changeWindow").hide();
         }
     )
+}
 
+
+export function Search(){
+    latestAction = "search";
+    var data = {
+        Id: 0,
+        First_name: $$("searchFirstName").getValue(),
+        Last_name: $$("searchLastName").getValue(),
+        Middle_name: $$("searchMiddleName").getValue(),
+        Phone:$$("searchPhone").getValue(),
+        Email:$$("searchEmail").getValue(),
+        Status: $$("searchStatus").getValue(),
+    };
+    clearRightPart();
+    var req = new Request();
+    req.Post('employee/search', data).then(function (res){
+        employees = res;
+        if (typeof employees['Message'] == "undefined") {
+            $$("datatable").clearAll();
+            employees.forEach(function(elem, index){
+                $$("datatable").add(elem)
+            });
+        }
+        else {
+            console.log(candidates.Message.value)
+        }
+    });
 }

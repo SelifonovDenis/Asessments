@@ -42,6 +42,11 @@ export function view(){
                 $$("changeEmail").setValue(candidate.Email);
                 $$("changeStatus").setValue(candidate.Status);
                 $$("changeDate").setValue(candidate.Asessment.Date);
+                if (candidate.Archive == true){
+                    $$("changeArchive").setValue(1);
+                } else {
+                    $$("changeArchive").setValue(0);
+                }
             }
             else {
                 console.log(candidates.Message);
@@ -77,8 +82,16 @@ export function GetTable(){
         candidates = res;
         if (typeof candidates['Message'] == "undefined") {
             $$("datatable").clearAll();
+            var myparse = webix.Date.strToDate("%d.%m.%Y %H:%i");
             candidates.forEach(function(elem, index){
-                $$("datatable").add(elem)
+                $$("datatable").add({
+                    Id: elem.Id,
+                    First_name: elem.First_name,
+                    Last_name: elem.Last_name,
+                    Middle_name: elem.Middle_name,
+                    Status: elem.Status,
+                    Asessment: myparse(elem.Asessment.Date),
+                })
             });
         }
         else {
@@ -127,6 +140,12 @@ export function SaveChange() {
             }
         })
     }
+    var archive;
+    if ($$("changeArchive").getValue() == 0){
+        archive = false;
+    } else {
+        archive = true;
+    }
     var data = {
         Id: lastid,
         First_name: $$("changeFirstName").getValue(),
@@ -135,6 +154,7 @@ export function SaveChange() {
         Phone: $$("changePhone").getValue(),
         Email: $$("changeEmail").getValue(),
         Status: $$("changeStatus").getValue(),
+        Archive: archive,
         Asessment: {
             Id: IdChangeAssessment,
         }
@@ -147,7 +167,7 @@ export function SaveChange() {
                 if (latestAction === "main") {
                     GetTable();
                 } else{
-                    GetArchive();
+                    Search();
                 }
                 view();
             }
@@ -158,6 +178,7 @@ export function SaveChange() {
 }
 
 var assessments;
+
 
 //получить собеседования
 export function GetAssessments() {
@@ -194,9 +215,11 @@ export function UpdateIdAssessment(){
 //Изменить статус
 export function ChangeStatus(status){
     var id_assessment;
+    var archive;
     candidates.forEach(function (elem) {
         if (elem.Id === lastid) {
             id_assessment = elem.Asessment.Id;
+            archive = elem.Archive;
         }
     })
     var data = {
@@ -207,6 +230,7 @@ export function ChangeStatus(status){
         Phone:$$("changePhone").getValue(),
         Email:$$("changeEmail").getValue(),
         Status:status,
+        Archive: archive,
         Asessment: {
             Id: id_assessment,
         }
@@ -218,33 +242,55 @@ export function ChangeStatus(status){
             if (latestAction === "main") {
                 GetTable();
             } else{
-                GetArchive();
+                Search();
             }
             view();
         }
     )
-
 }
 
 
-//получить кандидатов из архива
-export function GetArchive(){
-    latestAction = "archive";
-    clearRightPart();
+//Добавить или удалить из архива
+export function AddArchive(){
+    var id_assessment;
+    var archive;
+    var status;
+    candidates.forEach(function (elem) {
+        if (elem.Id === lastid) {
+            id_assessment = elem.Asessment.Id;
+            status = elem.Status;
+            archive = true;
+
+        }
+    })
+    var data = {
+        Id: lastid,
+        First_name: $$("changeFirstName").getValue(),
+        Last_name: $$("changeLastName").getValue(),
+        Middle_name: $$("changeMiddleName").getValue(),
+        Phone:$$("changePhone").getValue(),
+        Email:$$("changeEmail").getValue(),
+        Status:status,
+        Archive: archive,
+        Asessment: {
+            Id: id_assessment,
+        }
+    };
+
     var req = new Request();
-    req.Get('archive/candidate').then(function (res){
-        candidates = res;
-        if (typeof candidates['Message'] == "undefined") {
-            $$("datatable").clearAll();
-            candidates.forEach(function(elem, index){
-                $$("datatable").add(elem)
-            });
+    req.Post('candidate',data).then(
+        function (result) {
+            if (latestAction === "main") {
+                GetTable();
+            } else{
+                Search();
+            }
+            view();
         }
-        else {
-            console.log(candidates.Message.value)
-        }
-    });
+    )
 }
+
+
 
 export  function SetIdChangeAssessment() {
     if (typeof $$("Date").getSelectedItem() != "undefined") {
@@ -259,9 +305,17 @@ export  function SetIdAddAssessment() {
 
 }
 
-//получить и вывести кандидатов в таблицу
+
 export function Search(){
     latestAction = "search";
+    var archive;
+    if ($$("archive").getValue() == 0){
+        archive = false;
+
+    } else{
+        archive = true;
+    }
+
     var data = {
         Id: 0,
         First_name: $$("searchFirstName").getValue(),
@@ -270,19 +324,31 @@ export function Search(){
         Phone:$$("searchPhone").getValue(),
         Email:$$("searchEmail").getValue(),
         Status: $$("searchStatus").getValue(),
+        Archive: archive,
         Asessment: {
             Date: $$("searchDate").getText(),
         }
     };
+
     clearRightPart();
     var req = new Request();
     req.Post('candidate/search', data).then(function (res){
         candidates = res;
         if (typeof candidates['Message'] == "undefined") {
             $$("datatable").clearAll();
+            var myparse = webix.Date.strToDate("%d.%m.%Y %H:%i");
             candidates.forEach(function(elem, index){
-                $$("datatable").add(elem)
+                $$("datatable").add({
+                    Id: elem.Id,
+                    First_name: elem.First_name,
+                    Last_name: elem.Last_name,
+                    Middle_name: elem.Middle_name,
+                    Status: elem.Status,
+                    Asessment: myparse(elem.Asessment.Date),
+                });
             });
+            $$("searchPanel").define("collapsed", true);
+            //$$("searchPanel").reconstruct();
         }
         else {
             console.log(candidates.Message.value)

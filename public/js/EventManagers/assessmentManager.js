@@ -4,12 +4,10 @@ import {view} from "../components/assessmentComponent";
 import {viewAddDate} from "../components/assessmentComponent";
 import {viewChange} from "../components/assessmentComponent";
 import {GetCandidates} from "../components/assessmentComponent";
-import {GetTable} from "../components/assessmentComponent";
 import {AddAssessment} from "../components/assessmentComponent";
 import {SaveChange} from "../components/assessmentComponent";
 import {GetFreeCandidates} from "../components/assessmentComponent";
 import {AddCandidate} from "../components/assessmentComponent";
-import {GetArchive} from "../components/assessmentComponent";
 import {AddToArchive} from "../components/assessmentComponent";
 import {RemoveCandidate} from "../components/assessmentComponent";
 import {clearRightPart} from "../components/assessmentComponent";
@@ -36,21 +34,15 @@ export function Manager(){
     $$("viewAdd").attachEvent("onItemClick",function(){
         viewAdd();
     });
-    //клик по кнопке "изменить" на тулбаре
+
     $$("changeButton").attachEvent("onItemClick",function(){
-        viewChange($$("datatable").getSelectedItem().id);
+        viewChange();
     });
 
     //клик по элементу таблицы
     $$("datatable").attachEvent("onItemClick",function(id){
         GetCandidates();
         GetEmployees();
-    });
-
-
-    $$("GetAssessments").attachEvent("onItemClick",function(){
-        clearRightPart();
-        GetTable();
     });
 
     $$("addAssessment").attachEvent("onItemClick",function(){
@@ -66,9 +58,6 @@ export function Manager(){
 
     $$("AddCandidate").attachEvent("onItemClick",function(){
         AddCandidate();
-    });
-    $$("getArchive").attachEvent("onItemClick",function(){
-        GetArchive();
     });
     $$("addToArchive").attachEvent("onItemClick",function(){
         AddToArchive();

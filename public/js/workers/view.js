@@ -20,43 +20,53 @@ export function welcome(){
 						{view:"button", value:"Собеседования", id:"redirect2"},
 						{view:"button", value:"Выход", id:"out"},
 						{},
-						{view:"button", id:"getEmployee", value:"Сотрудники"},
+
 						{view:"button", value:"Добавить сотрудника", height:50, id:"viewAdd"},
-						{view:"button", id:"GetArchive", value:"Архив"},
+						{view:"button", id:"AddArchive", value:"Переместить в архив", disabled:true},
+
 
 					],
 					css:"nav"
 				},
 				{
 					cols:[
-						{view:"accordion",
-						multi:true,
-						collapsed: true,
-						cols:[
-							{ header:"Поиск", body:{
+						{
+							gravity:1,
+							view:"accordion",
+							multi:true,
+							collapsed: true,
+							cols:[
+							{
+								header:"Поиск", body:{
 								type:"space",	
 								rows:[
-										{view:"text", id:"searchFamily", label:"Фамилия"},
-										{view:"text", id:"searchName", label:"Имя"},
-										{view:"text", id:"searchSubname", label:"Отчество"},
+										{view:"text", id:"searchFirstName", label:"Фамилия"},
+										{view:"text", id:"searchLastName", label:"Имя"},
+										{view:"text", id:"searchMiddleName", label:"Отчество"},
 										{view:"text", id:"searchPhone", label:"Телефон"},
 										{view:"text", id:"searchEmail", label:"Почта"},
-										{view:"text", id:"searchDate", label:"Дата собеседования", labelWidth: 150},
+										{
+											view:"combo",
+											id:"searchStatus",
+											label:"Статус",
+											options:["","Активен","Архив"]
+										},
+
 										{height:20},
-										{view:"button", value:"Найти"},	
+									 	{view:"button", id:"find", value:"Подтвердить"},
 									]
-								},				
-							width: widthScreen*0.2 
+								},
 							}
 						]},
 						{
+							gravity:2.5,
 							view:"datatable",
 							id:"datatable",
 							columns:[
-								{ id:"Id",    header:"Id", width:30},
-								{ id:"First_name", header:"Фамилия",fillspace:true},
-								{ id:"Last_name", header:"Имя",fillspace:true},
-								{ id:"Middle_name", header:"Отчество",fillspace:true},
+								{ id:"Id",    header:"Id", width:30, sort:"int"},
+								{ id:"First_name", header:"Фамилия",fillspace:true, sort:"string"},
+								{ id:"Last_name", header:"Имя",fillspace:true, sort:"string"},
+								{ id:"Middle_name", header:"Отчество",fillspace:true, sort:"string"},
 								{ id:"Phone", header:"Телефон", width:250},
 								{ id:"Email", header:"Почта", width:200}
 							],
@@ -83,7 +93,6 @@ export function welcome(){
 							},
 							{view:"button", id:"butAddDate",value:"Добавить дату собеседования", disabled:true},
 							{view:"button", id:"removeAssessment", value:"Удалить дату", disabled:true},
-							{view:"button", id:"AddArchive", value:"Добавить в архив", disabled:true},
 							{view:"button", id:"changeButton", value:"Изменить сотрудника", disabled:true},
 						],
 						height:heightScreen-101

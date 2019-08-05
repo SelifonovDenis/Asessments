@@ -9,10 +9,8 @@ import {RemoveAssessment} from "../components/employeeComponent";
 import {GetAssessments} from "../components/employeeComponent";
 import {AddEmployeeAssessment} from "../components/employeeComponent";
 import {SaveChange} from "../components/employeeComponent";
-import {GetTable} from "../components/employeeComponent";
-import {GetArchive} from "../components/employeeComponent";
 import {AddArchive} from "../components/employeeComponent";
-
+import {Search} from "../components/employeeComponent";
 
 
 export function Manager(){
@@ -64,22 +62,18 @@ export function Manager(){
     $$("saveChange").attachEvent("onItemClick",function(){
         SaveChange();
     });
-    $$("getEmployee").attachEvent("onItemClick",function(){
-        GetTable();
-    });
 
     $$("dates").attachEvent("onItemClick",function(){
         $$("removeAssessment").enable();
-    });
-
-    $$("GetArchive").attachEvent("onItemClick",function(){
-        GetArchive();
     });
 
     $$("AddArchive").attachEvent("onItemClick",function(){
         AddArchive();
     });
 
+    $$("find").attachEvent("onItemClick",function(){
+        Search();
+    });
 
 
 }

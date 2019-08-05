@@ -8,9 +8,9 @@ export function redirect(str){
 }
 
 
-export function viewChange(id){
+export function viewChange(){
     assessments.forEach(function(elem, index){
-        if(id === elem.id)
+        if($$("datatable").getSelectedItem().Id === elem.Id)
         {
             var myparse = webix.Date.strToDate("%d.%m.%Y %H:%i");
             var date = myparse(elem.Date);
@@ -160,8 +160,15 @@ export function GetTable() {
         assessments = res;
         if (typeof assessments['Message'] == "undefined") {
             $$("datatable").clearAll();
+            var myparse = webix.Date.strToDate("%d.%m.%Y %H:%i");
             assessments.forEach(function(elem, index){
-                $$("datatable").add(elem);
+                $$("datatable").add({
+                    Id: elem.Id,
+                    Date: myparse(elem.Date),
+                    Cabinet: elem.Cabinet,
+                    Fio: elem.Fio,
+                    Status: elem.Status
+                });
             });
         }
         else {
@@ -206,9 +213,6 @@ export function SaveChange() {
                 if (latestAction === "main") {
                     GetTable();
                 }
-                if(latestAction === "archive"){
-                    GetArchive();
-                }
                 if (latestAction === "search"){
                     Search();
                 }
@@ -218,24 +222,6 @@ export function SaveChange() {
     } else {
         webix.message("Заполните все поля")
     }
-}
-
-export function GetArchive() {
-    latestAction = "archive";
-    clearRightPart();
-    var req = new Request();
-    req.Get('archive/assessment').then(function (res){
-        assessments = res;
-        if (typeof assessments['Message'] == "undefined") {
-            $$("datatable").clearAll();
-            assessments.forEach(function(elem, index){
-                $$("datatable").add(elem);
-            });
-        }
-        else {
-            console.log(assessments.Message.value)
-        }
-    });
 }
 
 export function AddToArchive() {
@@ -257,9 +243,7 @@ export function AddToArchive() {
             if (latestAction === "main") {
                 GetTable();
             }
-            if(latestAction === "archive"){
-                GetArchive();
-            }
+
             if (latestAction === "search"){
                 Search();
             }
@@ -298,9 +282,6 @@ export function RemoveEmployee() {
             if (latestAction === "main") {
                 GetTable();
             }
-            if(latestAction === "archive"){
-                GetArchive();
-            }
             if (latestAction === "search"){
                 Search();
             }
@@ -318,9 +299,7 @@ export function AddEmployeeAssessment() {
                 if (latestAction === "main") {
                     GetTable();
                 }
-                if(latestAction === "archive"){
-                    GetArchive();
-                }
+
                 if (latestAction === "search"){
                     Search();
                 }
@@ -365,9 +344,15 @@ export function Search(){
         assessments = res;
         if (typeof assessments['Message'] == "undefined") {
             $$("datatable").clearAll();
+            var myparse = webix.Date.strToDate("%d.%m.%Y %H:%i");
             assessments.forEach(function(elem, index){
-                $$("datatable").add(elem)
-
+                $$("datatable").add({
+                    Id: elem.Id,
+                    Date: myparse(elem.Date),
+                    Cabinet: elem.Cabinet,
+                    Fio: elem.Fio,
+                    Status: elem.Status
+                })
             });
         }
         else {

@@ -29,11 +29,9 @@ POST    /assessment                                          CAssessment.UpdateA
 GET     /assessment/:id/                                     CAssessment.GetAssessment
 GET     /assessment/:id/candidate                            CCandidate.GetCandidates
 GET     /assessment/:id/employee                             CEmployee.GetAssessmentsEmployee
-GET     /archive/candidate                                   CCandidate.GetArchiveCandidates
-GET     /archive/assessment                                  CAssessment.GetArchiveAssessments
-GET     /archive/employee                                    CEmployee.GetArchiveEmployees
 POST    /candidate/search                                    CCandidate.SearchCandidate
 POST    /assessment/search                                   CAssessment.SearchAssessment
+POST    /employee/search                                     CEmployee.SearchEmployee
 
 
 # Ignore favicon requests

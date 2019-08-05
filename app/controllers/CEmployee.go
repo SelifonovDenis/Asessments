@@ -90,3 +90,17 @@ func (c *CEmployee) GetArchiveEmployees() revel.Result {
 
 	return c.RenderJSON(employees)
 }
+
+func (c *CEmployee) SearchEmployee()revel.Result  {
+
+	employee := new(entity.Employee)
+	err := c.Params.BindJSON(&employee)
+
+	searchResult, err:=providers.SearchEmployee(employee)
+
+	if err!=nil {
+		return c.RenderError(err)
+	}
+
+	return c.RenderJSON(searchResult)
+}

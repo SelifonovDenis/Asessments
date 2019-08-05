@@ -4,6 +4,7 @@ import (
 	"Asessments/app/models/connection"
 	"Asessments/app/models/entity"
 	"Asessments/app/models/mappers"
+	s "strings"
 	)
 
 func GetEmployees() ([]*entity.Employee, error)  {
@@ -93,4 +94,33 @@ func GetAssessmentsEmployee(id int) ([]*entity.Employee, error) {
 		return employee,err
 	}
 	return employee,err
+}
+
+func SearchEmployee(employee *entity.Employee) ([]*entity.Employee, error) {
+
+	db, err := connection.ConnectToDB()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	Employees, err := mappers.GetAllEmployees(db)
+
+	if err != nil {
+		return Employees, err
+	}
+
+	searchResult := []*entity.Employee{}
+
+	for _, elem := range Employees {
+		if s.HasPrefix(s.ToLower(elem.First_name), s.ToLower(employee.First_name)) &&
+			s.HasPrefix(s.ToLower(elem.Last_name), s.ToLower(employee.Last_name)) &&
+			s.HasPrefix(s.ToLower(elem.Middle_name), s.ToLower(employee.Middle_name)) &&
+			s.HasPrefix(s.ToLower(elem.Phone), s.ToLower(employee.Phone)) &&
+			s.HasPrefix(s.ToLower(elem.Email), s.ToLower(employee.Email)) &&
+			s.HasPrefix(elem.Status, employee.Status) {
+			searchResult = append(searchResult, elem)
+		}
+	}
+	return searchResult, err
 }

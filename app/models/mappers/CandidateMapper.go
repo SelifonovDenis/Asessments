@@ -11,13 +11,13 @@ func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_assessment, date
-	  	FROM asessments.asessment.candidate
+	  	SELECT c.id, c.first_name, c.last_name, c.middle_name, c.status, c.archive, c.id_assessment, date
+	  	FROM asessments.asessment.candidate c
 		LEFT JOIN asessments.asessment.assessment
 		ON id_assessment = assessment.id
-		WHERE candidate.status != $1 
-		ORDER BY candidate.id
-	  	`, "Архив")
+		WHERE c.archive != $1 
+		ORDER BY c.id
+	  	`, true)
 	if err != nil {
 		return Candidates, err
 	}
@@ -27,7 +27,7 @@ func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 	for rows.Next() {
 		candidate := entity.Candidate{}
 		date := sql.NullString{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Asessment.Id, &date)
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Archive, &candidate.Asessment.Id, &date)
 
 		if err != nil {
 			return Candidates, err
@@ -46,11 +46,11 @@ func GetCandidateTable(db *sql.DB) ([]*entity.Candidate, error) {
 //GetCandidate Прлучить кандидата по id
 func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, error) {
 	rows, err := db.Query(`
-		SELECT candidate.id, first_name, last_name, middle_name, phone, email, candidate.status, id_assessment, date
-	  	FROM asessments.asessment.candidate		
+		SELECT c.id, c.first_name, c.last_name, c.middle_name, c.phone, c.email, c.status,c.archive, c.id_assessment, date
+	  	FROM asessments.asessment.candidate	c	
 		LEFT JOIN asessments.asessment.assessment
 		ON id_assessment = assessment.id
-		WHERE candidate.id = $1	
+		WHERE c.id = $1	
 		`, candidate.Id)
 	if err != nil {
 		return candidate,err
@@ -59,7 +59,7 @@ func GetCandidate(db *sql.DB, candidate *entity.Candidate) (*entity.Candidate, e
 
 	for rows.Next() {
 		date := sql.NullString{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status, &candidate.Asessment.Id, &date)
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status, &candidate.Archive, &candidate.Asessment.Id, &date)
 		if err != nil {
 			return candidate,err
 		}
@@ -98,10 +98,11 @@ func UpdateCandidate(db *sql.DB, candidate *entity.Candidate) (err error){
 		    phone = $4,
 			email = $5,
 		    status = $6,
-		    id_assessment = $7
+		    archive = $7,
+		    id_assessment = $8
 		WHERE 
-			id = $8
-	`,candidate.First_name, candidate.Last_name, candidate.Middle_name, candidate.Phone, candidate.Email, candidate.Status, candidate.Asessment.Id, candidate.Id)
+			id = $9
+	`,candidate.First_name, candidate.Last_name, candidate.Middle_name, candidate.Phone, candidate.Email, candidate.Status,candidate.Archive, candidate.Asessment.Id, candidate.Id)
 
 	if err != nil{
 		return
@@ -109,41 +110,6 @@ func UpdateCandidate(db *sql.DB, candidate *entity.Candidate) (err error){
 	return
 }
 
-
-func GetArchiveCandidate(db *sql.DB) ([]*entity.Candidate, error) {
-
-	Candidates := []*entity.Candidate{}
-
-	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_assessment, date
-	  	FROM asessments.asessment.candidate
-		LEFT JOIN asessments.asessment.assessment
-		ON id_assessment = assessment.id 
-	  	WHERE candidate.status = $1 
-		ORDER BY candidate.id
-	  	`,"Архив")
-	if err != nil {
-		return Candidates, err
-	}
-	defer rows.Close()
-
-
-	for rows.Next() {
-		candidate := entity.Candidate{}
-		date := sql.NullString{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Asessment.Id, &date)
-
-		if err != nil {
-			return Candidates, err
-		}
-		if date.Valid{
-			candidate.Asessment.Date = date.String
-		}
-
-		Candidates = append(Candidates,&candidate)
-	}
-	return Candidates, err
-}
 
 func GetCandidates(db *sql.DB, candidate *entity.Candidate) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
@@ -174,10 +140,10 @@ func GetFreeCandidates(db *sql.DB) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT id, first_name, last_name, middle_name, phone, email, status
+	  	SELECT id, first_name, last_name, middle_name, phone, email, status, archive
 	  	FROM asessments.asessment.candidate
-		WHERE status != $1 AND id_assessment = $2
-	  	`, "Архив", 0)
+		WHERE archive != $1 AND id_assessment = $2
+	  	`, true, 0)
 	if err != nil {
 		return Candidates, err
 	}
@@ -186,7 +152,7 @@ func GetFreeCandidates(db *sql.DB) ([]*entity.Candidate, error) {
 
 	for rows.Next() {
 		candidate := entity.Candidate{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status)
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Phone, &candidate.Email, &candidate.Status,  &candidate.Archive)
 
 		if err != nil {
 			return Candidates, err
@@ -202,11 +168,11 @@ func GetAllCandidates(db *sql.DB) ([]*entity.Candidate, error) {
 	Candidates := []*entity.Candidate{}
 
 	rows, err := db.Query(`
-	  	SELECT candidate.id, first_name, last_name, middle_name, candidate.status, id_assessment, date
-	  	FROM asessments.asessment.candidate
+	  	SELECT c.id, c.first_name, c.last_name, c.middle_name, c.status, c.archive, c.id_assessment, date
+	  	FROM asessments.asessment.candidate c
 		LEFT JOIN asessments.asessment.assessment
 		ON id_assessment = assessment.id
-		ORDER BY candidate.id
+		ORDER BY c.id
 	  	`, )
 	if err != nil {
 		return Candidates, err
@@ -217,7 +183,7 @@ func GetAllCandidates(db *sql.DB) ([]*entity.Candidate, error) {
 	for rows.Next() {
 		candidate := entity.Candidate{}
 		date := sql.NullString{}
-		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status, &candidate.Asessment.Id, &date)
+		err = rows.Scan(&candidate.Id, &candidate.First_name, &candidate.Last_name, &candidate.Middle_name, &candidate.Status,&candidate.Archive, &candidate.Asessment.Id, &date)
 
 		if err != nil {
 			return Candidates, err

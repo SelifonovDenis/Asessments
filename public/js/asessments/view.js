@@ -21,9 +21,9 @@ export function welcome(){
 						{view:"button", value:"Учёт сотрудников", id:"redirect2"},
 						{view:"button", value:"Выход", id:"out"},
 						{},
-						{view:"button", id:"GetAssessments", value:"Собеседования"},
 						{view:"button", value:"Добавить собеседование", height:50, id:"viewAdd"},
-						{view:"button", id:"getArchive", value:"Архив"},
+						{view:"button", id:"addToArchive",value:"Переместить в архив", disabled:true},
+
 
 					],
 					css:"nav"
@@ -59,7 +59,7 @@ export function welcome(){
 										},
 
 										{height:20},
-										{view:"button", id:"find", value:"Найти"},
+										{view:"button", id:"find", value:"Подтвердить"},
 									]
 								},				
 
@@ -70,11 +70,18 @@ export function welcome(){
 							view:"datatable",
 							id:"datatable",
 							columns:[
-
-								{ id:"Id",    header:"Id", width:50},
-								{ id:"Date",    header:"Дата", width:200},
-								{ id:"Cabinet",    header:"Кабинет", width:150},
+								{ id:"Id",    header:"Id", width:50, sort:"int"},
+								{
+									id:"Date",
+									header:"Дата",
+									width:200,
+									//format:webix.i18n.dateFormatStr,
+									format: webix.Date.dateToStr("%d.%m.%Y %H:%i"),
+									sort:"date"
+								},
+								{ id:"Cabinet",    header:"Кабинет", width:150, sort:"int"},
 								{ id:"Fio", header:"Проводит",fillspace:true, minWidth:250},
+								{ id:"Status", header:"Статус",fillspace:true},
 
 							],
 							select:"row",
@@ -108,8 +115,8 @@ export function welcome(){
 								select:true,
 								id:"employees"
 							},
+
 							{view:"button", id:"changeButton", value:"Изменить собеседование", disabled:true},
-							{view:"button", id:"addToArchive",value:"Переместить в архив", disabled:true},
 							{view:"button", id:"butAddCandidate",value:"Добавить кандидата", disabled:true},
 							{view:"button", id:"removeCandidate", value:"Удалить кандидата", disabled:true},
 							{view:"button", id:"butAddEmployee",value:"Добавить сотрудника", disabled:true},

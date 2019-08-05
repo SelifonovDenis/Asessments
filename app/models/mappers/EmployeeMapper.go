@@ -150,3 +150,31 @@ func GetAssessmentsEmployee(db *sql.DB, id int) ([]*entity.Employee, error) {
 	}
 	return Employees, err
 }
+
+
+func GetAllEmployees(db *sql.DB) ([]*entity.Employee, error) {
+
+	employees := []*entity.Employee{}
+
+	rows, err := db.Query(`
+	  	SELECT id, first_name, last_name, middle_name, phone, email, status
+	  	FROM asessments.asessment.employee
+		ORDER BY id
+	  	`)
+	if err != nil {
+		return employees, err
+	}
+	defer rows.Close()
+
+
+	for rows.Next() {
+		employee := entity.Employee{}
+		err = rows.Scan(&employee.Id, &employee.First_name, &employee.Last_name, &employee.Middle_name, &employee.Phone, &employee.Email, &employee.Status)
+
+		if err != nil {
+			return employees, err
+		}
+		employees = append(employees,&employee)
+	}
+	return employees, err
+}

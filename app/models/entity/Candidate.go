@@ -8,5 +8,6 @@ type Candidate struct {
 	Phone        string
 	Email        string
 	Status       string
+	Archive		 bool
 	Asessment    Assessment
 }

@@ -2,17 +2,15 @@ import {redirect} from "../components/indexComponent";
 import {viewAdd} from "../components/indexComponent";
 import {view} from "../components/indexComponent";
 import {viewAddDate} from "../components/indexComponent";
-import {GetTable} from "../components/indexComponent";
 import {AddCandidate} from "../components/indexComponent";
 import {SaveChange} from "../components/indexComponent";
 import {GetAssessments} from "../components/indexComponent";
 import {UpdateIdAssessment} from "../components/indexComponent";
 import {ChangeStatus} from "../components/indexComponent";
-import {GetArchive} from "../components/indexComponent";
 import {SetIdChangeAssessment} from "../components/indexComponent";
 import {SetIdAddAssessment} from "../components/indexComponent";
 import {Search} from "../components/indexComponent";
-
+import {AddRemoveArchive} from "../components/indexComponent";
 
 export function Manager(){
 
@@ -36,12 +34,6 @@ export function Manager(){
 //клик по элементу таблицы
     $$("datatable").attachEvent("onItemClick",function(id){
         view()
-    });
-
-
-    //клик по кнопке кандидаты
-    $$("getTable").attachEvent("onItemClick",function(){
-        GetTable();
     });
     //клик по кнопке Добавить кандидата в окне Добавить
     $$("addCandidat").attachEvent("onItemClick",function(){
@@ -82,7 +74,7 @@ export function Manager(){
 
     //клик по кнопке переместить в архив
     $$("butRelocateArchive").attachEvent("onItemClick",function(){
-        ChangeStatus("Архив");
+        AddArchive();
     });
     //клик по кнопке успешно
     $$("successfully").attachEvent("onItemClick",function(){
@@ -93,9 +85,6 @@ export function Manager(){
         ChangeStatus("Не принят на стажировку");
     });
 
-    $$("archive").attachEvent("onItemClick",function(){
-        GetArchive();
-    });
 
     $$("find").attachEvent("onItemClick",function(){
         Search();
