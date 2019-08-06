@@ -118,7 +118,8 @@ func SearchEmployee(employee *entity.Employee) ([]*entity.Employee, error) {
 			s.HasPrefix(s.ToLower(elem.Middle_name), s.ToLower(employee.Middle_name)) &&
 			s.HasPrefix(s.ToLower(elem.Phone), s.ToLower(employee.Phone)) &&
 			s.HasPrefix(s.ToLower(elem.Email), s.ToLower(employee.Email)) &&
-			s.HasPrefix(elem.Status, employee.Status) {
+			s.HasPrefix(elem.Status, employee.Status) &&
+			elem.Archive == employee.Archive{
 			searchResult = append(searchResult, elem)
 		}
 	}

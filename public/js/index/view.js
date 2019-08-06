@@ -83,14 +83,13 @@ export function welcome(){
 									{ id:"First_name",  header:"Фамилия",fillspace:true, sort:"string"},
 									{ id:"Last_name", header:"Имя",fillspace:true, sort:"string"},
 									{ id:"Middle_name", header:"Отчество",fillspace:true, sort:"string"},
-									{ id:"Status", header:"Статус", width:250, sort:"string"},
+									{ id:"Status", header:"Статус", fillspace:true, sort:"string"},
 									{
 										id:"Asessment",
-										header:"Дата собеседования",
+										header:"Последнее собеседование",
 										format: webix.Date.dateToStr("%d.%m.%Y %H:%i"),
 										sort:"date",
-										width:200,
-
+										fillspace:true,
 									}
 								],
 								select:"row",
@@ -108,42 +107,20 @@ export function welcome(){
 					{
 						type:"space",
 						rows:[
+
+							{view:"label", label:"Собеседования", height:20},
 							{
-								type:"space",
-								view:"form",
-								id:"changeForm",
-								elements:[
-									{view:"text",name:"cfirstName", id:"changeFirstName", label:"Фамилия"},
-									{view:"text",name:"clastName",  id:"changeLastName", label:"Имя"},
-									{view:"text",name:"cmiddleName", id:"changeMiddleName", label:"Отчество"},
-									{view:"text",name:"cphone",  id:"changePhone", label:"Телефон"},
-									{view:"text",name:"cemail",  id:"changeEmail", label:"Почта"},
-									{
-										view:"combo",
-										id:"changeStatus",
-										label: 'Статус',
-										options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования"]
-									},
-									{view:"text", id:"changeDate", label:"Дата собеседования", labelWidth: 150, readonly:true},
-									{
-										view:"checkbox",
-										id:"changeArchive",
-										label:"Архив",
-										value:0,
-									},
-								],
-								rules:{
-									"cfirstName":webix.rules.isNotEmpty,
-									"clastName":webix.rules.isNotEmpty,
-									"cmiddleName":webix.rules.isNotEmpty,
-									"cphone":webix.rules.isNotEmpty,
-									"cemail":webix.rules.isEmail,
-								}
+								view:"list",
+
+								template:"#title#",
+								select:true,
+								id:"allDate"
 							},
 
-							{view:"button", id:"saveChange", value:"Сохранить изменения", disabled:true},
-							{view:"button",id:"butAddDate", value:"Назначить дату собеседования", disabled:true},
-							{view:"label", label:"Собеседование пройдено", align:"center"},
+							{view:"button",id:"butAddDate", value:"Назначить собеседование", disabled:true},
+							{view:"button", id:"removeDate", value:"Удалить собеседование",disabled:true},
+							{view:"button", id:"сhange", value:"Изменить кандидата", disabled:true},
+							{view:"label", label:"Собеседование пройдено", align:"center", height:15},
 							{
 								cols:[
 									{view:"button", id:"successfully", value:"Успешно", disabled:true},
@@ -192,7 +169,6 @@ export function welcome(){
 					height: 400
 				},
 				{view:"button",id:"UpdateIdAsessment", value:"Назначить дату собеседования"},
-				{view:"button", id:"AddIdAsessment", value:"Назначить дату собеседования"},
 			]
 		}
 	}).hide();
@@ -225,7 +201,6 @@ export function welcome(){
 					options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку"]
 				},
 				{height:20},
-				{view:"button", id:"AddDateAsessment", value:"Назначить дату собеседования"},
 				{view:"button", id:"addCandidat", value:"Добавить кандидата"},
 			],
 			rules:{
@@ -238,4 +213,63 @@ export function welcome(){
 			}
 		}
 	}).hide();
+
+	//всплывающее окно "Изменить"
+	webix.ui({
+		view:"window",
+		position:"center",
+		id:"changeWindow",
+		width: 500,
+		modal: true,
+		close:true,
+		head:"Изменить",
+		body:{
+			view:"form",
+			id:"addForm",
+			type:"space",
+			rows:[
+				{
+					type:"space",
+					view:"form",
+					id:"changeForm",
+					elements:[
+						{view:"text",name:"cfirstName", id:"changeFirstName", label:"Фамилия"},
+						{view:"text",name:"clastName",  id:"changeLastName", label:"Имя"},
+						{view:"text",name:"cmiddleName", id:"changeMiddleName", label:"Отчество"},
+						{view:"text",name:"cphone",  id:"changePhone", label:"Телефон"},
+						{view:"text",name:"cemail",  id:"changeEmail", label:"Почта"},
+						{
+							view:"combo",
+							id:"changeStatus",
+							label: 'Статус',
+							options:["Ожидаем ответа","Назначено собеседование", "Принят на стажировку", "Отправлен оффер", "Не принят на стажировку", "Удален из собеседования"]
+						},
+						{
+							view:"checkbox",
+							id:"changeArchive",
+							label:"Архив",
+							value:0,
+						},
+					],
+					rules:{
+						"cfirstName":webix.rules.isNotEmpty,
+						"clastName":webix.rules.isNotEmpty,
+						"cmiddleName":webix.rules.isNotEmpty,
+						"cphone":webix.rules.isNotEmpty,
+						"cemail":webix.rules.isEmail,
+					}
+				},
+				{view:"button", id:"saveChange", value:"Сохранить изменения"},
+			],
+			rules:{
+				"firstName":webix.rules.isNotEmpty,
+				"lastName":webix.rules.isNotEmpty,
+				"middleName":webix.rules.isNotEmpty,
+				"phone":webix.rules.isNotEmpty,
+				"email":webix.rules.isEmail,
+				"status":webix.rules.isNotEmpty,
+			}
+		}
+	}).hide();
+
 }

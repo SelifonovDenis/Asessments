@@ -55,7 +55,13 @@ export function welcome(){
 											view:"combo",
 											id:"searchStatus",
 											label:"Статус",
-											options:["","Активно","Архив"]
+											options:["","Прошло успешно","Отменено","Никто не пришел :-("]
+										},
+										{
+											view:"checkbox",
+											id:"archive",
+											label:"Архив",
+											value:0,
 										},
 
 										{height:20},
@@ -202,8 +208,14 @@ export function welcome(){
                     name:"changeStatus",
                     id:"changeStatus",
                     labelPosition:"top",
-                    options:["Активно","Архив"],
+                    options:["Прошло успешно","Отменено","Никто не пришел :-("],
                 },
+				{
+					view:"checkbox",
+					id:"changeArchive",
+					label:"Архив",
+					value:0,
+				},
 				{height:20},
 				{view:"button", id:"saveChange", value:"Сохранить изменения"},
 			],

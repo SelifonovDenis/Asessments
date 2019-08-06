@@ -8,4 +8,5 @@ type Employee struct {
 	Phone       string
 	Email       string
 	Status      string
+	Archive		int
 }

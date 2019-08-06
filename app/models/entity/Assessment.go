@@ -1,10 +1,10 @@
 package entity
 
 type Assessment struct {
-	Id      int
-	Date    string
-	Cabinet string
-	Fio     string
-	Status  string
+	Id      	int
+	Date    	string
+	Cabinet 	string
+	Fio     	string
+	Status  	string
+	Archive 	int
 }
-

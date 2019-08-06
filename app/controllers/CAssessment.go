@@ -3,6 +3,7 @@ package controllers
 import (
 	"Asessments/app/models/entity"
 	"Asessments/app/models/providers"
+	"fmt"
 	"github.com/revel/revel"
 )
 
@@ -99,17 +100,8 @@ func (c *CAssessment) AddEmployeeAssessment(EmployeeId, AssessmentId int64) reve
 	return c.RenderJSON(err)
 }
 
-func (c *CAssessment) GetArchiveAssessments() revel.Result {
-	assessments, err := providers.GetArchiveAssessments()
 
-	if err != nil {
-		return c.RenderError(err)
-	}
-
-	return c.RenderJSON(assessments)
-}
-
-
+//SearchAssessment поиск собеседования по заданным параметрам
 func (c *CAssessment) SearchAssessment()revel.Result  {
 
 	assessment := new(entity.Assessment)
@@ -122,4 +114,45 @@ func (c *CAssessment) SearchAssessment()revel.Result  {
 	}
 
 	return c.RenderJSON(searchResult)
+}
+
+
+func (c *CAssessment) RemoveCandidateAssessment(CandidateId, AssessmentId int64) revel.Result {
+
+	err := providers.RemoveCandidateAssessment(&entity.Candidate{
+		Id: int(CandidateId),
+	}, &entity.Assessment{
+		Id: int(AssessmentId),
+	})
+	fmt.Println()
+	fmt.Println()
+	fmt.Println()
+	fmt.Println()
+	if err != nil {
+		return c.RenderError(err)
+	}
+	return c.RenderJSON(err)
+}
+
+func (c *CAssessment) AddCandidateAssessment(CandidateId, AssessmentId int64) revel.Result {
+
+	err := providers.AddCandidateAssessment(&entity.Candidate{
+		Id: int(CandidateId),
+	}, &entity.Assessment{
+		Id: int(AssessmentId),
+	})
+
+	if err != nil {
+		return c.RenderError(err)
+	}
+	return c.RenderJSON(err)
+}
+
+func (c *CAssessment) GetCandidateAssessments(id int64) revel.Result {
+
+	assessments, err := providers.GetCandidateAssessments(int(id))
+	if err != nil {
+		return c.RenderError(err)
+	}
+	return c.RenderJSON(assessments)
 }

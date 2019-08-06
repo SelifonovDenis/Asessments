@@ -25,6 +25,7 @@ export function viewChange(){
             $$("changePhone").setValue(elem.Phone);
             $$("changeEmail").setValue(elem.Email);
             $$("changeStatus").setValue(elem.Status);
+            $$("changeArchive").setValue(elem.Archive);
             $$("changeWindow").show();
         }
     });
@@ -143,6 +144,7 @@ export function SaveChange() {
         Phone: $$("changePhone").getValue(),
         Email: $$("changeEmail").getValue(),
         Status: $$("changeStatus").getValue(),
+        Archive: $$("changeArchive").getValue(),
     };
 
     if ($$("changeForm").validate()) {
@@ -152,7 +154,7 @@ export function SaveChange() {
                 if (latestAction === "main") {
                     GetTable();
                 } else{
-                    GetArchive();
+                    Search();
                 }
                 $$("changeWindow").hide();
             }
@@ -188,23 +190,6 @@ export function AddEmployeeAssessment() {
 
 }
 
-export function GetArchive() {
-    latestAction = "archive";
-    var req = new Request();
-    req.Get('archive/employee').then(function (res){
-        employees = res;
-        if (typeof employees['Message'] == "undefined") {
-            $$("datatable").clearAll();
-            employees.forEach(function(elem, index){
-                $$("datatable").add(elem)
-            });
-        }
-        else {
-            console.log(candidates.Message.value)
-        }
-    });
-}
-
 export function AddArchive() {
     var data;
     employees.forEach(function (elem) {
@@ -216,7 +201,8 @@ export function AddArchive() {
                 Middle_name: elem.Middle_name,
                 Phone: elem.Phone,
                 Email: elem.Email,
-                Status: "Архив",
+                Status: elem.Status,
+                Archive: 1,
             };
         }
     })
@@ -228,7 +214,7 @@ export function AddArchive() {
             if (latestAction === "main") {
                 GetTable();
             } else{
-                GetArchive();
+                Search();
             }
             $$("changeWindow").hide();
         }
@@ -246,6 +232,7 @@ export function Search(){
         Phone:$$("searchPhone").getValue(),
         Email:$$("searchEmail").getValue(),
         Status: $$("searchStatus").getValue(),
+        Archive: $$("archive").getValue(),
     };
     clearRightPart();
     var req = new Request();

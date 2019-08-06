@@ -32,6 +32,9 @@ GET     /assessment/:id/employee                             CEmployee.GetAssess
 POST    /candidate/search                                    CCandidate.SearchCandidate
 POST    /assessment/search                                   CAssessment.SearchAssessment
 POST    /employee/search                                     CEmployee.SearchEmployee
+GET     /candidate/:id/assessment                            CAssessment.GetCandidateAssessments
+PUT     /candidate/:CandidateId/assessment/:AssessmentId     CAssessment.AddCandidateAssessment
+DELETE  /candidate/:CandidateId/assessment/:AssessmentId     CAssessment.RemoveCandidateAssessment
 
 
 # Ignore favicon requests

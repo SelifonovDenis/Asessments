@@ -10,7 +10,12 @@ import {ChangeStatus} from "../components/indexComponent";
 import {SetIdChangeAssessment} from "../components/indexComponent";
 import {SetIdAddAssessment} from "../components/indexComponent";
 import {Search} from "../components/indexComponent";
-import {AddRemoveArchive} from "../components/indexComponent";
+import {AddArchive} from "../components/indexComponent";
+import {GetCandidateAssessments} from "../components/indexComponent";
+import {AddCandidateAssessment} from "../components/indexComponent";
+import {RemoveCandidateAssessment} from "../components/indexComponent";
+import {clearRightPart} from "../components/indexComponent";
+
 
 export function Manager(){
 
@@ -33,7 +38,7 @@ export function Manager(){
 
 //клик по элементу таблицы
     $$("datatable").attachEvent("onItemClick",function(id){
-        view()
+        GetCandidateAssessments()
     });
     //клик по кнопке Добавить кандидата в окне Добавить
     $$("addCandidat").attachEvent("onItemClick",function(){
@@ -44,37 +49,22 @@ export function Manager(){
         SaveChange();
     });
 
-    $$("AddDateAsessment").attachEvent("onItemClick",function(){
-        $$("UpdateIdAsessment").hide();
-        $$("AddIdAsessment").show();
-        viewAddDate();
-        GetAssessments();
-    });
-
     //клик по кнопке "назначить дату собеседования"
     $$("butAddDate").attachEvent("onItemClick",function(){
-        $$("UpdateIdAsessment").show();
-        $$("AddIdAsessment").hide();
         viewAddDate();
         GetAssessments();
     });
 
     //клик по кнопке назначить собеседование
     $$("UpdateIdAsessment").attachEvent("onItemClick",function(){
-        SetIdChangeAssessment();
-        UpdateIdAssessment();
-        SaveChange();
-        $$("DateWindow").hide();
-    });
-
-    $$("AddIdAsessment").attachEvent("onItemClick",function(){
-        SetIdAddAssessment();
+        AddCandidateAssessment();
         $$("DateWindow").hide();
     });
 
     //клик по кнопке переместить в архив
     $$("butRelocateArchive").attachEvent("onItemClick",function(){
         AddArchive();
+        clearRightPart();
     });
     //клик по кнопке успешно
     $$("successfully").attachEvent("onItemClick",function(){
@@ -85,8 +75,20 @@ export function Manager(){
         ChangeStatus("Не принят на стажировку");
     });
 
-
     $$("find").attachEvent("onItemClick",function(){
+        clearRightPart();
         Search();
+    });
+
+    $$("removeDate").attachEvent("onItemClick",function(){
+        RemoveCandidateAssessment();
+    });
+
+    $$("allDate").attachEvent("onItemClick",function(){
+        $$("removeDate").enable();
+    });
+
+    $$("сhange").attachEvent("onItemClick",function(){
+        view();
     });
 }

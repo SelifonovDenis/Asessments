@@ -23,18 +23,7 @@ func (c *Login) Auth() revel.Result {
 		return c.RenderError(err)
 	}
 
-	if user.Id != 0 {
-		c.Session["userId"] = user.Id
-	}
-
 	return c.RenderJSON(user)
 }
 
-
-func (c *Login) Logout() revel.Result {
-	for k := range c.Session {
-		delete(c.Session, k)
-	}
-	return c.Redirect("/")
-}
 

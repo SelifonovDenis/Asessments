@@ -18,8 +18,28 @@ func GetCandidateTable() ([]*entity.Candidate, error) {
 	if err != nil {
 		return candidatesTable, err
 	}
+	result := []*entity.Candidate{}
 
-	return candidatesTable, err
+	for i:=0;i< len(candidatesTable); i++  {
+		result = append(result, candidatesTable[i])
+		step :=0
+
+		for j := i+1; j < len(candidatesTable); j++ {
+
+			if candidatesTable[i].Id == candidatesTable[j].Id {
+				if candidatesTable[i].Id_c_a < candidatesTable[j].Id_c_a {
+					result[len(result)-1].Id_c_a = candidatesTable[j].Id_c_a
+					result[len(result)-1].Asessment.Date = candidatesTable[j].Asessment.Date
+				}
+				step = step + 1
+			} else {
+				break
+			}
+		}
+		i =  i + step
+	}
+
+	return result, err
 
 }
 
@@ -125,5 +145,27 @@ func SearchCandidate(candidate *entity.Candidate) ([]*entity.Candidate, error) {
 			searchResult = append(searchResult, elem)
 		}
 	}
-	return searchResult, err
+
+	result := []*entity.Candidate{}
+
+	for i:=0;i< len(searchResult); i++  {
+		result = append(result, searchResult[i])
+		step :=0
+
+		for j := i+1; j < len(searchResult); j++ {
+
+			if searchResult[i].Id == searchResult[j].Id {
+				if searchResult[i].Id_c_a < searchResult[j].Id_c_a {
+					result[len(result)-1].Id_c_a = searchResult[j].Id_c_a
+					result[len(result)-1].Asessment.Date = searchResult[j].Asessment.Date
+				}
+				step = step + 1
+			} else {
+				break
+			}
+		}
+		i =  i + step
+	}
+
+	return result, err
 }

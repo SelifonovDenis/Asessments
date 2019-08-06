@@ -3,6 +3,7 @@ import Request from "../providers/Provider";
 export function viewAdd(){
     $$("add").show();
 }
+
 export function redirect(str){
     window.location.href = str;
 }
@@ -10,13 +11,14 @@ export function redirect(str){
 
 export function viewChange(){
     assessments.forEach(function(elem, index){
-        if($$("datatable").getSelectedItem().Id === elem.Id)
+        if(lastId === elem.Id)
         {
             var myparse = webix.Date.strToDate("%d.%m.%Y %H:%i");
             var date = myparse(elem.Date);
             $$("changeDate").setValue(date);
             $$("changeCabinet").setValue(elem.Cabinet);
             $$("changeStatus").setValue(elem.Status);
+            $$("changeArchive").setValue(elem.Archive);
             $$("changeWindow").show();
         }
     });
@@ -77,67 +79,33 @@ export function GetFreeCandidates(){
 
 //Добавить кандидата к assessment
 export function AddCandidate() {
+    var req = new Request();
     if (typeof $$("CandidatesTable").getSelectedItem() != "undefined") {
-        var data;
-
-        freeCandidates.forEach(function (elem) {
-            if (elem.Id === $$("CandidatesTable").getSelectedItem().Id) {
-                data = {
-                    Id: elem.Id,
-                    First_name: elem.First_name,
-                    Last_name: elem.Last_name,
-                    Middle_name: elem.Middle_name,
-                    Phone:elem.Phone,
-                    Email:elem.Email,
-                    Status:"Назначено собеседование",
-                    Asessment: {
-                        Id: lastId,
-                    }
-                }
-            }
-        });
-
-        var req = new Request();
-        req.Post('candidate', data).then(
+        req.Put('candidate/'+$$("CandidatesTable").getSelectedItem().Id+'/assessment/'+lastId, "").then(
             function (result) {
                 $$("CandidateWindow").hide();
                 GetCandidates();
             }
         )
     }
-    else {
+    else{
         webix.message("Кандидат не выбран");
     }
 }
 
 export function RemoveCandidate() {
-    var data;
-
-    candidates.forEach(function (elem) {
-        if (elem.Id === $$("candidates").getSelectedItem().Id) {
-            data = {
-                Id: elem.Id,
-                First_name: elem.First_name,
-                Last_name: elem.Last_name,
-                Middle_name: elem.Middle_name,
-                Phone:elem.Phone,
-                Email:elem.Email,
-                Status:"Удален из собеседования",
-                Asessment: {
-                    Id: 0,
-                }
-            }
-        }
-    });
-
     var req = new Request();
-    req.Post('candidate', data).then(
-        function (result) {
-            GetCandidates();
-        }
-    )
+    if (typeof $$("candidates").getSelectedItem() != "undefined") {
+        req.Delete('candidate/'+$$("candidates").getSelectedItem().Id+'/assessment/'+lastId, "").then(
+            function (result) {
+                GetCandidates();
+            }
+        )
+    }
+    else{
+        webix.message("Кандидат не выбран");
+    }
 }
-
 
 export function clearRightPart() {
     $$("changeButton").disable();
@@ -204,6 +172,7 @@ export function SaveChange() {
         Date: $$("changeDate").getText(),
         Cabinet: $$("changeCabinet").getValue(),
         Status: $$("changeStatus").getValue(),
+        Archive: $$("changeArchive").getValue(),
     };
 
     if ($$("changeForm").validate()) {
@@ -232,7 +201,8 @@ export function AddToArchive() {
                 Id: elem.Id,
                 Date: elem.Date,
                 Cabinet: elem.Cabinet,
-                Status: "Архив",
+                Status: elem.Status,
+                Archive: 1,
             }
         }
     });
@@ -335,7 +305,8 @@ export function Search(){
         Id: 0,
         Status: $$("searchStatus").getValue(),
         Date: $$("searchDate").getText(),
-        Cabinet:$$("searchCabinet").getValue()
+        Cabinet:$$("searchCabinet").getValue(),
+        Archive: $$("archive").getValue(),
 
     };
     clearRightPart();

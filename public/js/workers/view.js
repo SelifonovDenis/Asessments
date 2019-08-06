@@ -49,7 +49,13 @@ export function welcome(){
 											view:"combo",
 											id:"searchStatus",
 											label:"Статус",
-											options:["","Активен","Архив"]
+											options:["","В отпуске","На больничном","Трудоспособен"]
+										},
+										{
+											view:"checkbox",
+											id:"archive",
+											label:"Архив",
+											value:0,
 										},
 
 										{height:20},
@@ -164,6 +170,12 @@ export function welcome(){
 				label: 'Статус',
 				name:"cstatus",
 				options:["Активен","Архив"]
+			},
+			{
+				view:"checkbox",
+				id:"changeArchive",
+				label:"Архив",
+				value:0,
 			},
 			{view: "button", id: "saveChange", value: "Сохранить изменения"},
 		],

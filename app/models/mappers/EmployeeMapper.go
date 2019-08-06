@@ -13,9 +13,9 @@ func GetEmployees(db *sql.DB) ([]*entity.Employee, error) {
 	rows, err := db.Query(`
 	  	SELECT id, first_name, last_name, middle_name, phone, email, status
 	  	FROM asessments.asessment.employee
-	  	WHERE status != $1
+	  	WHERE archive = $1
 		ORDER BY id
-	  	`, "Архив")
+	  	`, 0)
 	if err != nil {
 		return employees, err
 	}
@@ -55,7 +55,7 @@ func GetEmployee(db *sql.DB, employee *entity.Employee) (*entity.Employee, error
 	return employee,err
 }
 
-//AddEmployee Добавить кандидата
+//AddEmployee Добавить сотрудника
 func AddEmployee(db *sql.DB, employee *entity.Employee) (err error){
 
 	_, err = db.Exec(`
@@ -72,7 +72,7 @@ func AddEmployee(db *sql.DB, employee *entity.Employee) (err error){
 	return nil
 }
 
-// UpdateEmployee изсенить данные о кандидате
+// UpdateEmployee изсенить данные о сотруднике
 func UpdateEmployee(db *sql.DB, employee *entity.Employee) (err error){
 	_, err = db.Exec(`
 		UPDATE asessments.asessment.employee
@@ -82,10 +82,11 @@ func UpdateEmployee(db *sql.DB, employee *entity.Employee) (err error){
 		    middle_name = $3,
 		    phone = $4,
 			email = $5,
-			status = $6
+			status = $6,
+			archive = $7
 		WHERE 
-			id = $7
-	`, employee.First_name,  employee.Last_name,  employee.Middle_name,  employee.Phone,  employee.Email, employee.Status, employee.Id)
+			id = $8
+	`, employee.First_name,  employee.Last_name,  employee.Middle_name,  employee.Phone,  employee.Email, employee.Status,employee.Archive, employee.Id)
 
 	if err != nil{
 		return
@@ -157,7 +158,7 @@ func GetAllEmployees(db *sql.DB) ([]*entity.Employee, error) {
 	employees := []*entity.Employee{}
 
 	rows, err := db.Query(`
-	  	SELECT id, first_name, last_name, middle_name, phone, email, status
+	  	SELECT id, first_name, last_name, middle_name, phone, email, status, archive
 	  	FROM asessments.asessment.employee
 		ORDER BY id
 	  	`)
@@ -169,7 +170,7 @@ func GetAllEmployees(db *sql.DB) ([]*entity.Employee, error) {
 
 	for rows.Next() {
 		employee := entity.Employee{}
-		err = rows.Scan(&employee.Id, &employee.First_name, &employee.Last_name, &employee.Middle_name, &employee.Phone, &employee.Email, &employee.Status)
+		err = rows.Scan(&employee.Id, &employee.First_name, &employee.Last_name, &employee.Middle_name, &employee.Phone, &employee.Email, &employee.Status, &employee.Archive)
 
 		if err != nil {
 			return employees, err

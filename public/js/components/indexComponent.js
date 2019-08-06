@@ -2,8 +2,7 @@ import Request from "../providers/Provider";
 
 var candidates;
 
-var IdChangeAssessment = 0;
-var IdAddAssessment = 0;
+
 
 export function redirect(str){
     window.location.href = str;
@@ -18,19 +17,13 @@ export function viewAddDate(){
 }
 
 var lastid = 0;
+
 var latestAction = "main";
 
 //отображение атрибутов выбранного кандидата в правой части
 export function view(){
-    $$("saveChange").enable();
-    $$("butAddDate").enable();
-    $$("butRelocateArchive").enable();
-    $$("successfully").enable();
-    $$("notSuccessfully").enable();
-    if (typeof $$("datatable").getSelectedItem() != "undefined") {
-        lastid = $$("datatable").getSelectedItem().Id;
-    }
-    IdChangeAssessment = 0;
+
+
     var req = new Request();
     req.Get('candidate/'+lastid).then(
         function (candidate) {
@@ -41,12 +34,8 @@ export function view(){
                 $$("changePhone").setValue(candidate.Phone);
                 $$("changeEmail").setValue(candidate.Email);
                 $$("changeStatus").setValue(candidate.Status);
-                $$("changeDate").setValue(candidate.Asessment.Date);
-                if (candidate.Archive == true){
-                    $$("changeArchive").setValue(1);
-                } else {
-                    $$("changeArchive").setValue(0);
-                }
+                $$("changeArchive").setValue(candidate.Archive);
+                $$("changeWindow").show();
             }
             else {
                 console.log(candidates.Message);
@@ -55,13 +44,13 @@ export function view(){
     );
 }
 
-function clearRightPart() {
-    $$("saveChange").disable();
+export function clearRightPart() {
+    $$("сhange").disable();
     $$("butAddDate").disable();
     $$("butRelocateArchive").disable();
     $$("successfully").disable();
     $$("notSuccessfully").disable();
-    IdChangeAssessment = 0;
+    $$("removeDate").disable();
 
     $$("changeFirstName").setValue("");
     $$("changeLastName").setValue("");
@@ -69,14 +58,12 @@ function clearRightPart() {
     $$("changePhone").setValue("");
     $$("changeEmail").setValue("");
     $$("changeStatus").setValue("");
-    $$("changeDate").setValue("");
 
 }
 
 //получить и вывести кандидатов в таблицу
 export function GetTable(){
     latestAction = "main";
-    clearRightPart();
     var req = new Request();
     req.Get('candidate').then(function (res){
         candidates = res;
@@ -109,9 +96,7 @@ export function AddCandidate(){
         Phone:$$("addPhone").getValue(),
         Email:$$("addEmail").getValue(),
         Status:$$("addStatus").getValue(),
-        Asessment:{
-            Id:IdAddAssessment,
-        }
+
     };
 
     if ($$("addForm").validate())
@@ -120,7 +105,6 @@ export function AddCandidate(){
         req.Put('candidate', data).then(
             function (result) {
                 $$("add").hide();
-                IdAddAssessment = 0;
                 GetTable();
             }
         )
@@ -133,19 +117,7 @@ export function AddCandidate(){
 
 //изменить канидата
 export function SaveChange() {
-    if (IdChangeAssessment === 0) {
-        candidates.forEach(function (elem) {
-            if (elem.Id === lastid) {
-                IdChangeAssessment = elem.Asessment.Id;
-            }
-        })
-    }
-    var archive;
-    if ($$("changeArchive").getValue() == 0){
-        archive = false;
-    } else {
-        archive = true;
-    }
+
     var data = {
         Id: lastid,
         First_name: $$("changeFirstName").getValue(),
@@ -154,22 +126,18 @@ export function SaveChange() {
         Phone: $$("changePhone").getValue(),
         Email: $$("changeEmail").getValue(),
         Status: $$("changeStatus").getValue(),
-        Archive: archive,
-        Asessment: {
-            Id: IdChangeAssessment,
-        }
+        Archive: $$("changeArchive").getValue(),
     };
     if ($$("changeForm").validate()) {
         var req = new Request();
         req.Post('candidate', data).then(
             function (result) {
-                IdChangeAssessment = 0;
                 if (latestAction === "main") {
                     GetTable();
                 } else{
                     Search();
                 }
-                view();
+                $$("changeWindow").hide();
             }
         )
     } else {
@@ -182,6 +150,7 @@ var assessments;
 
 //получить собеседования
 export function GetAssessments() {
+
     var req = new Request();
     req.Get('assessment').then(function (res){
         assessments = res;
@@ -199,18 +168,7 @@ export function GetAssessments() {
 
 
 
-//назначить кандидату собеседование
-export function UpdateIdAssessment(){
-    if (IdChangeAssessment == 0){
-        return
-    }
-    assessments.forEach(function (assessment) {
-        if (assessment.Id === IdChangeAssessment) {
-            $$("changeDate").setValue(assessment.Date);
-            $$("changeStatus").setValue("Назначено собеседование");
-        }
-    });
-}
+
 
 //Изменить статус
 export function ChangeStatus(status){
@@ -244,7 +202,6 @@ export function ChangeStatus(status){
             } else{
                 Search();
             }
-            view();
         }
     )
 }
@@ -253,14 +210,11 @@ export function ChangeStatus(status){
 //Добавить или удалить из архива
 export function AddArchive(){
     var id_assessment;
-    var archive;
     var status;
     candidates.forEach(function (elem) {
         if (elem.Id === lastid) {
             id_assessment = elem.Asessment.Id;
             status = elem.Status;
-            archive = true;
-
         }
     })
     var data = {
@@ -271,7 +225,7 @@ export function AddArchive(){
         Phone:$$("changePhone").getValue(),
         Email:$$("changeEmail").getValue(),
         Status:status,
-        Archive: archive,
+        Archive: 1,
         Asessment: {
             Id: id_assessment,
         }
@@ -285,37 +239,14 @@ export function AddArchive(){
             } else{
                 Search();
             }
-            view();
+
         }
     )
 }
 
 
-
-export  function SetIdChangeAssessment() {
-    if (typeof $$("Date").getSelectedItem() != "undefined") {
-        IdChangeAssessment = $$("Date").getSelectedItem().Id;
-    }
-}
-
-export  function SetIdAddAssessment() {
-    if (typeof $$("Date").getSelectedItem() != "undefined") {
-        IdAddAssessment = $$("Date").getSelectedItem().Id;
-    }
-
-}
-
-
 export function Search(){
     latestAction = "search";
-    var archive;
-    if ($$("archive").getValue() == 0){
-        archive = false;
-
-    } else{
-        archive = true;
-    }
-
     var data = {
         Id: 0,
         First_name: $$("searchFirstName").getValue(),
@@ -324,13 +255,11 @@ export function Search(){
         Phone:$$("searchPhone").getValue(),
         Email:$$("searchEmail").getValue(),
         Status: $$("searchStatus").getValue(),
-        Archive: archive,
+        Archive: $$("archive").getValue(),
         Asessment: {
             Date: $$("searchDate").getText(),
         }
     };
-
-    clearRightPart();
     var req = new Request();
     req.Post('candidate/search', data).then(function (res){
         candidates = res;
@@ -354,4 +283,76 @@ export function Search(){
             console.log(candidates.Message.value)
         }
     });
+}
+
+
+export function GetCandidateAssessments() {
+
+
+    $$("butAddDate").enable();
+    $$("butRelocateArchive").enable();
+    $$("сhange").enable();
+    $$("successfully").enable();
+    $$("notSuccessfully").enable();
+    if (typeof $$("datatable").getSelectedItem() != "undefined") {
+        lastid = $$("datatable").getSelectedItem().Id;
+    }
+
+    var req = new Request();
+    $$("allDate").clearAll();
+    req.Get('candidate/'+lastid+'/assessment').then(function (res){
+        assessments = res;
+        if (assessments!=null) {
+            assessments.forEach(function(elem, index){
+                $$("allDate").add({
+                    Id:elem.Id,
+                    title: elem.Date,
+                })
+            });
+        }
+    });
+}
+
+export function AddCandidateAssessment() {
+    var req = new Request();
+    if (typeof $$("Date").getSelectedItem() != "undefined") {
+        req.Put('candidate/'+lastid+'/assessment/'+$$("Date").getSelectedItem().Id, "").then(
+            function (result) {
+                GetCandidateAssessments();
+                if (latestAction === "main") {
+                    GetTable();
+                }
+
+                if (latestAction === "search"){
+                    Search();
+                }
+            }
+        )
+    }
+    else{
+        webix.message("Собеседование не выбрано");
+    }
+}
+
+export function RemoveCandidateAssessment() {
+    var req = new Request();
+    if (typeof $$("allDate").getSelectedItem() != "undefined") {
+        req.Delete('candidate/'+lastid+'/assessment/'+$$("allDate").getSelectedItem().Id, "").then(
+            function (result) {
+
+                GetCandidateAssessments();
+                if (latestAction === "main") {
+                    GetTable();
+                }
+
+                if (latestAction === "search"){
+                    Search();
+                }
+
+            }
+        )
+    }
+    else{
+        webix.message("Собеседование не выбрано");
+    }
 }
